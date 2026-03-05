@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Compliance Training Module - Data Center 101</title>
+    <title>IT Training Module - Network Infrastructure 101</title>
     <style>
         * {
             margin: 0;
@@ -313,15 +313,15 @@
             .container {
                 padding: 10px;
             }
-            
+
             .content-wrapper {
                 padding: 20px;
             }
-            
+
             .header h1 {
                 font-size: 1.8em;
             }
-            
+
             .slide h2 {
                 font-size: 1.5em;
             }
@@ -331,8 +331,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Code Compliance Training Module</h1>
-            <p>Data Center 101 - Fire Safety Codes and Regulatory Requirements</p>
+            <h1>IT Training Module</h1>
+            <p>Network Infrastructure 101 - Fundamentals, Standards, and Best Practices</p>
         </div>
 
         <div class="progress-bar">
@@ -340,989 +340,1039 @@
         </div>
 
         <div class="content-wrapper">
+
             <!-- Slide 1: Welcome -->
             <div class="slide active">
-                <h2>Welcome to Code Compliance Training</h2>
-                <p>Welcome to this comprehensive training module on Fire Safety Code Compliance for data centers. This course will provide you with essential knowledge about the codes, standards, and regulatory requirements that govern fire protection and life safety in data center facilities.</p>
-                
+                <h2>Welcome to Network Infrastructure Training</h2>
+                <p>Welcome to this comprehensive training module on Network Infrastructure fundamentals. This course provides essential knowledge about the components, standards, design principles, and operational best practices that form the backbone of modern enterprise IT networks.</p>
+
                 <div class="info-box">
                     <h3>🎯 Learning Objectives</h3>
                     <ul>
-                        <li>Understand the hierarchy of codes and standards</li>
-                        <li>Learn key NFPA codes for data center fire safety</li>
-                        <li>Recognize building code requirements (IBC/IFC)</li>
-                        <li>Understand local amendments and AHJ requirements</li>
-                        <li>Learn documentation and inspection requirements</li>
-                        <li>Understand ongoing compliance obligations</li>
+                        <li>Understand network topology types and their use cases</li>
+                        <li>Learn the OSI and TCP/IP reference models</li>
+                        <li>Identify core network hardware components and their roles</li>
+                        <li>Understand LAN, WAN, and wireless network concepts</li>
+                        <li>Learn IP addressing, subnetting, and routing fundamentals</li>
+                        <li>Understand network security principles and best practices</li>
+                        <li>Recognize network monitoring, management, and documentation standards</li>
                         <li>Test your knowledge with a comprehensive quiz</li>
                     </ul>
                 </div>
 
-                <p><strong>Duration:</strong> Approximately 30-45 minutes</p>
-                <p><strong>Prerequisites:</strong> Basic understanding of fire safety systems</p>
+                <p><strong>Duration:</strong> Approximately 30–45 minutes</p>
+                <p><strong>Prerequisites:</strong> Basic computer literacy and familiarity with IT terminology</p>
             </div>
 
-            <!-- Slide 2: Code Hierarchy and Authority -->
+            <!-- Slide 2: Network Models and Standards -->
             <div class="slide">
-                <h2>Code Hierarchy and Authority</h2>
-                
-                <p>Understanding the hierarchy of codes and standards is essential for ensuring proper compliance in data center fire protection.</p>
+                <h2>Network Models and Standards</h2>
 
-                <h3>Regulatory Hierarchy</h3>
-                
+                <p>A solid understanding of networking begins with the reference models that define how data travels from one device to another across a network.</p>
+
+                <h3>The OSI Reference Model</h3>
+
                 <div class="diagram">
-                    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Code Hierarchy Pyramid -->
-                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">Code and Standard Hierarchy</text>
-                        
-                        <!-- Federal Level -->
-                        <polygon points="400,60 250,120 550,120" fill="#1976D2" stroke="#0D47A1" stroke-width="2"/>
-                        <text x="400" y="95" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Federal</text>
-                        <text x="400" y="110" text-anchor="middle" fill="white" font-size="12">OSHA, EPA</text>
-                        
-                        <!-- State Level -->
-                        <polygon points="250,120 150,200 650,200 550,120" fill="#1E88E5" stroke="#1565C0" stroke-width="2"/>
-                        <text x="400" y="155" text-anchor="middle" fill="white" font-size="14" font-weight="bold">State Codes</text>
-                        <text x="400" y="170" text-anchor="middle" fill="white" font-size="12">State Fire Marshal</text>
-                        
-                        <!-- Local Level -->
-                        <polygon points="150,200 50,280 750,280 650,200" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
-                        <text x="400" y="235" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Local Codes</text>
-                        <text x="400" y="250" text-anchor="middle" fill="white" font-size="12">City/County Amendments</text>
-                        
-                        <!-- Standards -->
-                        <rect x="50" y="280" width="700" height="80" fill="#64B5F6" stroke="#42A5F5" stroke-width="2"/>
-                        <text x="400" y="310" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Industry Standards</text>
-                        <text x="400" y="330" text-anchor="middle" fill="white" font-size="12">NFPA, ICC, FM Global, UL</text>
-                        <text x="400" y="345" text-anchor="middle" fill="white" font-size="12">Referenced by Codes</text>
-                        
-                        <!-- Arrow showing enforcement -->
-                        <path d="M 100 380 L 100 50" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
-                        <text x="120" y="220" font-size="12" fill="#333" transform="rotate(-90 120 220)">Enforcement Authority</text>
-                        
-                        <!-- Arrowhead marker -->
-                        <defs>
-                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
-                                <polygon points="0 0, 10 5, 0 10" fill="#333"/>
-                            </marker>
-                        </defs>
+                    <svg viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">OSI Model — 7 Layers</text>
+
+                        <!-- Layer bars -->
+                        <!-- Layer 7 -->
+                        <rect x="60" y="45" width="680" height="48" rx="6" fill="#1565c0"/>
+                        <text x="200" y="74" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Layer 7 — Application</text>
+                        <text x="560" y="74" text-anchor="middle" fill="white" font-size="13">HTTP, FTP, DNS, SMTP</text>
+
+                        <!-- Layer 6 -->
+                        <rect x="60" y="100" width="680" height="48" rx="6" fill="#1976D2"/>
+                        <text x="200" y="129" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Layer 6 — Presentation</text>
+                        <text x="560" y="129" text-anchor="middle" fill="white" font-size="13">SSL/TLS, Encryption, Encoding</text>
+
+                        <!-- Layer 5 -->
+                        <rect x="60" y="155" width="680" height="48" rx="6" fill="#1E88E5"/>
+                        <text x="200" y="184" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Layer 5 — Session</text>
+                        <text x="560" y="184" text-anchor="middle" fill="white" font-size="13">NetBIOS, RPC, Session Control</text>
+
+                        <!-- Layer 4 -->
+                        <rect x="60" y="210" width="680" height="48" rx="6" fill="#2196F3"/>
+                        <text x="200" y="239" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Layer 4 — Transport</text>
+                        <text x="560" y="239" text-anchor="middle" fill="white" font-size="13">TCP, UDP, Port Numbers</text>
+
+                        <!-- Layer 3 -->
+                        <rect x="60" y="265" width="680" height="48" rx="6" fill="#42A5F5"/>
+                        <text x="200" y="294" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Layer 3 — Network</text>
+                        <text x="560" y="294" text-anchor="middle" fill="white" font-size="13">IP, ICMP, Routing Protocols</text>
+
+                        <!-- Layer 2 -->
+                        <rect x="60" y="320" width="680" height="48" rx="6" fill="#64B5F6"/>
+                        <text x="200" y="349" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Layer 2 — Data Link</text>
+                        <text x="560" y="349" text-anchor="middle" fill="white" font-size="13">Ethernet, MAC Addresses, Switches</text>
+
+                        <!-- Layer 1 -->
+                        <rect x="60" y="375" width="680" height="38" rx="6" fill="#90CAF9"/>
+                        <text x="200" y="399" text-anchor="middle" fill="#1565c0" font-size="15" font-weight="bold">Layer 1 — Physical</text>
+                        <text x="560" y="399" text-anchor="middle" fill="#1565c0" font-size="13">Cables, Fiber, Wireless Signals</text>
                     </svg>
                 </div>
 
-                <h3>Authority Having Jurisdiction (AHJ)</h3>
-                
+                <h3>TCP/IP Model</h3>
+
                 <div class="info-box">
-                    <h4>Key AHJ Entities:</h4>
+                    <h4>TCP/IP Four-Layer Model:</h4>
                     <ul>
-                        <li><strong>Fire Marshal:</strong> Primary fire code enforcement</li>
-                        <li><strong>Building Official:</strong> Building code compliance</li>
-                        <li><strong>Electrical Inspector:</strong> Electrical code enforcement</li>
-                        <li><strong>Insurance Carrier:</strong> Additional requirements</li>
-                        <li><strong>Federal Agencies:</strong> Special facilities (DOD, DOE)</li>
+                        <li><strong>Application Layer:</strong> End-user protocols (HTTP, DNS, DHCP, SMTP)</li>
+                        <li><strong>Transport Layer:</strong> TCP (reliable) and UDP (connectionless) communication</li>
+                        <li><strong>Internet Layer:</strong> IP addressing, routing, and packet forwarding</li>
+                        <li><strong>Network Access Layer:</strong> Physical transmission over media (Ethernet, Wi-Fi)</li>
+                    </ul>
+                </div>
+
+                <div class="reference-box">
+                    <h4>📋 Key Standards Bodies</h4>
+                    <ul>
+                        <li>📌 <strong>IEEE</strong> — Ethernet (802.3), Wireless LAN (802.11), VLAN (802.1Q)</li>
+                        <li>📌 <strong>IETF</strong> — TCP/IP suite, routing protocols (RFCs)</li>
+                        <li>📌 <strong>ANSI/TIA</strong> — Structured cabling standards (TIA-568)</li>
+                        <li>📌 <strong>ISO/IEC</strong> — Network management and cabling (ISO 11801)</li>
+                        <li>📌 <strong>ITU-T</strong> — Telecommunications and WAN standards</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 3: Network Topologies and Architecture -->
+            <div class="slide">
+                <h2>Network Topologies and Architecture</h2>
+
+                <p>Network topology defines the physical or logical arrangement of devices and connections. Choosing the right topology is critical for performance, redundancy, and scalability.</p>
+
+                <h3>Common Network Topologies</h3>
+
+                <div class="diagram">
+                    <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#1565c0">Common Network Topology Types</text>
+
+                        <!-- Star -->
+                        <circle cx="130" cy="170" r="18" fill="#1565c0"/>
+                        <text x="130" y="175" text-anchor="middle" fill="white" font-size="11">SW</text>
+                        <circle cx="80" cy="110" r="14" fill="#42a5f5"/>
+                        <circle cx="130" cy="90" r="14" fill="#42a5f5"/>
+                        <circle cx="180" cy="110" r="14" fill="#42a5f5"/>
+                        <circle cx="80" cy="230" r="14" fill="#42a5f5"/>
+                        <circle cx="180" cy="230" r="14" fill="#42a5f5"/>
+                        <line x1="130" y1="152" x2="80" y2="124" stroke="#1565c0" stroke-width="2"/>
+                        <line x1="130" y1="152" x2="130" y2="104" stroke="#1565c0" stroke-width="2"/>
+                        <line x1="130" y1="152" x2="180" y2="124" stroke="#1565c0" stroke-width="2"/>
+                        <line x1="130" y1="188" x2="80" y2="216" stroke="#1565c0" stroke-width="2"/>
+                        <line x1="130" y1="188" x2="180" y2="216" stroke="#1565c0" stroke-width="2"/>
+                        <text x="130" y="265" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Star</text>
+                        <text x="130" y="282" text-anchor="middle" font-size="11" fill="#666">Central switch</text>
+
+                        <!-- Ring -->
+                        <circle cx="400" cy="165" r="65" fill="none" stroke="#42a5f5" stroke-width="2" stroke-dasharray="6,3"/>
+                        <circle cx="400" cy="100" r="14" fill="#1565c0"/>
+                        <circle cx="455" cy="140" r="14" fill="#1565c0"/>
+                        <circle cx="455" cy="200" r="14" fill="#1565c0"/>
+                        <circle cx="400" cy="230" r="14" fill="#1565c0"/>
+                        <circle cx="345" cy="200" r="14" fill="#1565c0"/>
+                        <circle cx="345" cy="140" r="14" fill="#1565c0"/>
+                        <text x="400" y="265" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Ring</text>
+                        <text x="400" y="282" text-anchor="middle" font-size="11" fill="#666">Token ring / SONET</text>
+
+                        <!-- Mesh -->
+                        <circle cx="640" cy="110" r="14" fill="#1565c0"/>
+                        <circle cx="700" cy="150" r="14" fill="#1565c0"/>
+                        <circle cx="700" cy="220" r="14" fill="#1565c0"/>
+                        <circle cx="640" cy="240" r="14" fill="#1565c0"/>
+                        <circle cx="580" cy="200" r="14" fill="#1565c0"/>
+                        <circle cx="580" cy="130" r="14" fill="#1565c0"/>
+                        <line x1="640" y1="110" x2="700" y2="150" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="640" y1="110" x2="700" y2="220" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="640" y1="110" x2="640" y2="240" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="640" y1="110" x2="580" y2="200" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="640" y1="110" x2="580" y2="130" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="700" y1="150" x2="700" y2="220" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="700" y1="150" x2="640" y2="240" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="700" y1="150" x2="580" y2="200" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="700" y1="220" x2="640" y2="240" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="700" y1="220" x2="580" y2="200" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="640" y1="240" x2="580" y2="200" stroke="#42a5f5" stroke-width="1.5"/>
+                        <line x1="580" y1="130" x2="580" y2="200" stroke="#42a5f5" stroke-width="1.5"/>
+                        <text x="640" y="265" text-anchor="middle" font-size="13" fill="#333" font-weight="bold">Full Mesh</text>
+                        <text x="640" y="282" text-anchor="middle" font-size="11" fill="#666">Fully redundant</text>
+                    </svg>
+                </div>
+
+                <h3>Enterprise Three-Tier Architecture</h3>
+
+                <table>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Role</th>
+                        <th>Key Devices</th>
+                        <th>Key Feature</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Core</strong></td>
+                        <td>High-speed backbone</td>
+                        <td>Core switches, routers</td>
+                        <td>Maximum throughput</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Distribution</strong></td>
+                        <td>Policy and aggregation</td>
+                        <td>Layer 3 switches</td>
+                        <td>Routing, redundancy</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Access</strong></td>
+                        <td>End-device connectivity</td>
+                        <td>Access switches, APs</td>
+                        <td>Port security, PoE</td>
+                    </tr>
+                </table>
+
+                <div class="success-box">
+                    <h4>Modern Alternatives:</h4>
+                    <ul>
+                        <li><strong>Collapsed Core:</strong> Two-tier design for smaller environments</li>
+                        <li><strong>Spine-Leaf:</strong> Low-latency data center fabric architecture</li>
+                        <li><strong>SD-WAN:</strong> Software-defined wide area networking for branch offices</li>
+                        <li><strong>Cloud-First:</strong> Hybrid architectures leveraging public cloud interconnects</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 4: Core Network Hardware -->
+            <div class="slide">
+                <h2>Core Network Hardware</h2>
+
+                <p>Understanding the role of each hardware component is essential for designing, deploying, and troubleshooting enterprise networks.</p>
+
+                <h3>Primary Network Devices</h3>
+
+                <div class="info-box">
+                    <h4>Switches (Layer 2 / Layer 3):</h4>
+                    <ul>
+                        <li><strong>Layer 2 Switch:</strong> Forwards frames using MAC address tables; creates collision domains per port</li>
+                        <li><strong>Layer 3 Switch:</strong> Performs inter-VLAN routing at wire speed; replaces routers in campus LANs</li>
+                        <li><strong>Managed vs. Unmanaged:</strong> Managed switches support VLANs, SNMP, STP, QoS, and port mirroring</li>
+                        <li><strong>PoE Switches:</strong> Provide power over Ethernet to IP phones, cameras, and wireless APs</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h4>Routers:</h4>
+                    <ul>
+                        <li><strong>Function:</strong> Route packets between different IP networks using routing tables</li>
+                        <li><strong>Protocols:</strong> OSPF, BGP, EIGRP, IS-IS for dynamic route exchange</li>
+                        <li><strong>Edge Routers:</strong> Connect enterprise LAN to ISP/WAN; typically run NAT and ACLs</li>
+                        <li><strong>Core Routers:</strong> High-capacity devices used in ISP backbones and large DCs</li>
+                    </ul>
+                </div>
+
+                <h3>Supporting Infrastructure</h3>
+
+                <table>
+                    <tr>
+                        <th>Device</th>
+                        <th>Layer</th>
+                        <th>Function</th>
+                        <th>Common Use</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Firewall</strong></td>
+                        <td>3–7</td>
+                        <td>Traffic inspection &amp; policy enforcement</td>
+                        <td>Perimeter, DMZ, segmentation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Load Balancer</strong></td>
+                        <td>4–7</td>
+                        <td>Distribute traffic across servers</td>
+                        <td>Web farms, application tiers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Wireless AP</strong></td>
+                        <td>1–2</td>
+                        <td>802.11 wireless access</td>
+                        <td>Office, warehouse, campus</td>
+                    </tr>
+                    <tr>
+                        <td><strong>WLC</strong></td>
+                        <td>2–3</td>
+                        <td>Centralized AP management</td>
+                        <td>Enterprise WLAN deployments</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Patch Panel</strong></td>
+                        <td>1</td>
+                        <td>Cable termination &amp; management</td>
+                        <td>MDF/IDF wiring closets</td>
+                    </tr>
+                </table>
+
+                <div class="warning-box">
+                    <h4>⚠️ Hardware Selection Considerations:</h4>
+                    <ul>
+                        <li>Always check port density, throughput capacity, and backplane bandwidth</li>
+                        <li>Ensure hardware supports required standards (IEEE 802.3, 802.11ax, etc.)</li>
+                        <li>Confirm EOL/EOS timelines before procurement</li>
+                        <li>Plan for N+1 redundancy on critical switching and routing equipment</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 5: IP Addressing and Subnetting -->
+            <div class="slide">
+                <h2>IP Addressing and Subnetting</h2>
+
+                <p>IP addressing is the foundation of network communication. Every device on a network requires a unique IP address to send and receive data.</p>
+
+                <h3>IPv4 Address Classes</h3>
+
+                <table>
+                    <tr>
+                        <th>Class</th>
+                        <th>Range</th>
+                        <th>Default Subnet</th>
+                        <th>Typical Use</th>
+                    </tr>
+                    <tr>
+                        <td><strong>A</strong></td>
+                        <td>1.0.0.0 – 126.255.255.255</td>
+                        <td>/8 (255.0.0.0)</td>
+                        <td>Large enterprises, ISPs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B</strong></td>
+                        <td>128.0.0.0 – 191.255.255.255</td>
+                        <td>/16 (255.255.0.0)</td>
+                        <td>Medium-large organizations</td>
+                    </tr>
+                    <tr>
+                        <td><strong>C</strong></td>
+                        <td>192.0.0.0 – 223.255.255.255</td>
+                        <td>/24 (255.255.255.0)</td>
+                        <td>Small networks</td>
+                    </tr>
+                </table>
+
+                <h3>RFC 1918 Private Address Space</h3>
+
+                <div class="info-box">
+                    <h4>Reserved Private Ranges (Non-routable on internet):</h4>
+                    <ul>
+                        <li><strong>10.0.0.0/8</strong> — Up to 16,777,216 hosts; used in large enterprises and data centers</li>
+                        <li><strong>172.16.0.0/12</strong> — Up to 1,048,576 hosts; common in mid-size environments</li>
+                        <li><strong>192.168.0.0/16</strong> — Up to 65,536 hosts; common in branch offices and home networks</li>
+                    </ul>
+                </div>
+
+                <h3>CIDR and Subnetting</h3>
+
+                <div class="diagram">
+                    <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#1565c0">Subnet Division Example — 192.168.1.0/24</text>
+                        <!-- Parent block -->
+                        <rect x="150" y="45" width="500" height="42" rx="6" fill="#1565c0"/>
+                        <text x="400" y="71" text-anchor="middle" fill="white" font-size="14" font-weight="bold">192.168.1.0 /24  —  254 usable hosts</text>
+
+                        <!-- Arrow down -->
+                        <line x1="400" y1="87" x2="400" y2="108" stroke="#555" stroke-width="2" marker-end="url(#arr2)"/>
+                        <defs>
+                            <marker id="arr2" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+                                <polygon points="0 0, 8 4, 0 8" fill="#555"/>
+                            </marker>
+                        </defs>
+
+                        <!-- Sub 1 -->
+                        <rect x="60" y="113" width="290" height="40" rx="6" fill="#1976D2"/>
+                        <text x="205" y="138" text-anchor="middle" fill="white" font-size="13">192.168.1.0 /25  —  126 hosts</text>
+
+                        <!-- Sub 2 -->
+                        <rect x="450" y="113" width="290" height="40" rx="6" fill="#1976D2"/>
+                        <text x="595" y="138" text-anchor="middle" fill="white" font-size="13">192.168.1.128 /25  —  126 hosts</text>
+
+                        <!-- Arrow sub 1 -->
+                        <line x1="205" y1="153" x2="205" y2="170" stroke="#555" stroke-width="2"/>
+                        <!-- Sub 1a -->
+                        <rect x="60" y="173" width="135" height="36" rx="6" fill="#42a5f5"/>
+                        <text x="127" y="195" text-anchor="middle" fill="white" font-size="12">192.168.1.0 /26</text>
+                        <!-- Sub 1b -->
+                        <rect x="205" y="173" width="135" height="36" rx="6" fill="#42a5f5"/>
+                        <text x="272" y="195" text-anchor="middle" fill="white" font-size="12">192.168.1.64 /26</text>
+
+                        <text x="400" y="218" text-anchor="middle" font-size="11" fill="#666">Each /26 subnet provides 62 usable host addresses</text>
+                    </svg>
+                </div>
+
+                <h3>IPv6 Overview</h3>
+
+                <div class="success-box">
+                    <h4>Why IPv6 Matters:</h4>
+                    <ul>
+                        <li><strong>Address Space:</strong> 128-bit addresses — 340 undecillion unique addresses</li>
+                        <li><strong>No NAT Required:</strong> Every device can have a globally routable address</li>
+                        <li><strong>Auto-configuration:</strong> SLAAC enables stateless address assignment</li>
+                        <li><strong>Dual-Stack:</strong> Transitional environments run IPv4 and IPv6 simultaneously</li>
+                        <li><strong>Security:</strong> IPSec support is built into the IPv6 specification</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 6: LAN and VLAN Design -->
+            <div class="slide">
+                <h2>LAN and VLAN Design</h2>
+
+                <p>Proper LAN design ensures performance, security, and manageability across the enterprise. VLANs are a fundamental tool for network segmentation.</p>
+
+                <h3>VLAN Fundamentals</h3>
+
+                <div class="info-box">
+                    <h4>What VLANs Provide:</h4>
+                    <ul>
+                        <li><strong>Broadcast Domain Control:</strong> Limit broadcast traffic to within a VLAN segment</li>
+                        <li><strong>Security Segmentation:</strong> Isolate sensitive traffic (HR, Finance, IoT) from general users</li>
+                        <li><strong>Flexibility:</strong> Group users logically regardless of physical location</li>
+                        <li><strong>Simplified Management:</strong> Apply consistent QoS and ACL policies per VLAN</li>
+                    </ul>
+                </div>
+
+                <h3>Common VLAN Assignments</h3>
+
+                <table>
+                    <tr>
+                        <th>VLAN ID</th>
+                        <th>Name</th>
+                        <th>Typical Use</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Default</td>
+                        <td>Native/untagged (avoid in production)</td>
+                        <td>Security risk if left as native</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10</strong></td>
+                        <td>Management</td>
+                        <td>Switch/router OOB management</td>
+                        <td>Restrict access via ACL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>20</strong></td>
+                        <td>Data / Users</td>
+                        <td>General workstation traffic</td>
+                        <td>DHCP-assigned</td>
+                    </tr>
+                    <tr>
+                        <td><strong>30</strong></td>
+                        <td>Voice</td>
+                        <td>VoIP phones</td>
+                        <td>Requires QoS (EF DSCP)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>40</strong></td>
+                        <td>Servers</td>
+                        <td>Internal application servers</td>
+                        <td>Tighten firewall rules</td>
+                    </tr>
+                    <tr>
+                        <td><strong>50</strong></td>
+                        <td>Guest / IoT</td>
+                        <td>Visitor Wi-Fi, IoT devices</td>
+                        <td>Internet-only, no internal access</td>
+                    </tr>
+                </table>
+
+                <h3>Spanning Tree Protocol (STP)</h3>
+
+                <div class="warning-box">
+                    <h4>⚠️ STP and Loop Prevention:</h4>
+                    <ul>
+                        <li><strong>STP (802.1D):</strong> Classic spanning tree; slow convergence (30–50 seconds)</li>
+                        <li><strong>RSTP (802.1w):</strong> Rapid STP; typical convergence under 6 seconds</li>
+                        <li><strong>MSTP (802.1s):</strong> Multiple spanning tree for VLAN-based load balancing</li>
+                        <li><strong>Best Practice:</strong> Always configure root bridge placement; enable PortFast on access ports</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>Trunking and 802.1Q:</h4>
+                    <ul>
+                        <li>Trunk ports carry multiple VLANs between switches using 802.1Q tagging</li>
+                        <li>Always change the native VLAN away from VLAN 1 to prevent VLAN hopping attacks</li>
+                        <li>LACP (802.3ad) Link Aggregation can bundle multiple trunk links for bandwidth and redundancy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 7: WAN and Connectivity Technologies -->
+            <div class="slide">
+                <h2>WAN and Connectivity Technologies</h2>
+
+                <p>Wide Area Networks connect geographically dispersed sites. Choosing the right WAN technology balances cost, bandwidth, latency, and reliability requirements.</p>
+
+                <h3>WAN Technology Comparison</h3>
+
+                <table>
+                    <tr>
+                        <th>Technology</th>
+                        <th>Bandwidth</th>
+                        <th>Latency</th>
+                        <th>Typical Use Case</th>
+                    </tr>
+                    <tr>
+                        <td><strong>MPLS</strong></td>
+                        <td>1 Mbps – 10 Gbps</td>
+                        <td>Low (5–20 ms)</td>
+                        <td>Enterprise branch, voice/video</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SD-WAN</strong></td>
+                        <td>Variable</td>
+                        <td>Low–Medium</td>
+                        <td>Cloud-first branches, hybrid WAN</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Broadband Internet</strong></td>
+                        <td>10 Mbps – 1 Gbps+</td>
+                        <td>Medium (10–50 ms)</td>
+                        <td>SMB, backup WAN links</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dark Fiber</strong></td>
+                        <td>Up to 100 Gbps+</td>
+                        <td>Very Low</td>
+                        <td>Campus/metro interconnects</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4G/5G Cellular</strong></td>
+                        <td>10 Mbps – 1 Gbps</td>
+                        <td>Medium–High</td>
+                        <td>OOB management, failover</td>
+                    </tr>
+                </table>
+
+                <h3>VPN Technologies</h3>
+
+                <div class="info-box">
+                    <h4>Common VPN Types:</h4>
+                    <ul>
+                        <li><strong>IPSec Site-to-Site:</strong> Encrypted tunnel between two fixed endpoints; common for branch connectivity</li>
+                        <li><strong>SSL/TLS Remote Access:</strong> Client-based VPN for remote workers (e.g., Cisco AnyConnect, GlobalProtect)</li>
+                        <li><strong>DMVPN:</strong> Dynamic Multipoint VPN; scalable hub-and-spoke with spoke-to-spoke capability</li>
+                        <li><strong>ZTNA:</strong> Zero Trust Network Access; replaces traditional VPN with identity and context-aware access</li>
                     </ul>
                 </div>
 
                 <div class="warning-box">
-                    <h4>⚠️ Important Concepts:</h4>
+                    <h4>⚠️ WAN Design Considerations:</h4>
                     <ul>
-                        <li>Most restrictive requirement applies</li>
-                        <li>Local amendments can modify model codes</li>
-                        <li>AHJ interpretation is final</li>
-                        <li>Variances require formal approval</li>
-                        <li>Code updates occur on cycles (3-5 years)</li>
+                        <li>Always provision redundant WAN circuits from diverse carriers and physical paths</li>
+                        <li>Calculate bandwidth requirements including peak usage, video conferencing, and cloud application traffic</li>
+                        <li>Implement QoS policies to prioritize voice and critical application traffic on congested links</li>
+                        <li>Define RPO and RTO targets for WAN failover in your BCP/DRP documentation</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Slide 3: NFPA Standards Overview -->
+            <!-- Slide 8: Wireless Networking -->
             <div class="slide">
-                <h2>NFPA Standards for Data Centers</h2>
-                
-                <p>The National Fire Protection Association (NFPA) develops consensus standards that form the basis for most fire codes in the United States.</p>
+                <h2>Wireless Networking (WLAN)</h2>
 
-                <h3>Key NFPA Standards</h3>
-                
+                <p>Wireless networks are now a primary access method in enterprise environments. A well-designed WLAN provides seamless, secure, and reliable connectivity across the facility.</p>
+
+                <h3>IEEE 802.11 Standards Evolution</h3>
+
                 <table>
                     <tr>
                         <th>Standard</th>
-                        <th>Title</th>
-                        <th>Key Requirements</th>
-                    </tr>
-                    <tr>
-                        <td><strong>NFPA 1</strong></td>
-                        <td>Fire Code</td>
-                        <td>General fire safety, maintenance, operations</td>
-                    </tr>
-                    <tr>
-                        <td><strong>NFPA 13</strong></td>
-                        <td>Sprinkler Systems</td>
-                        <td>Design, installation, water supplies</td>
-                    </tr>
-                    <tr>
-                        <td><strong>NFPA 72</strong></td>
-                        <td>Fire Alarm Code</td>
-                        <td>Detection, notification, integration</td>
-                    </tr>
-                    <tr>
-                        <td><strong>NFPA 75</strong></td>
-                        <td>IT Equipment Protection</td>
-                        <td>Data center specific requirements</td>
-                    </tr>
-                    <tr>
-                        <td><strong>NFPA 101</strong></td>
-                        <td>Life Safety Code</td>
-                        <td>Egress, emergency lighting, exits</td>
-                    </tr>
-                    <tr>
-                        <td><strong>NFPA 2001</strong></td>
-                        <td>Clean Agent Systems</td>
-                        <td>Gaseous suppression design</td>
-                    </tr>
-                </table>
-
-                <h3>NFPA 75 - Data Center Specific</h3>
-                
-                <div class="info-box">
-                    <h4>Critical Requirements:</h4>
-                    <ul>
-                        <li><strong>Room Construction:</strong> 1-hour fire rating minimum</li>
-                        <li><strong>Detection:</strong> Early warning smoke detection</li>
-                        <li><strong>Suppression:</strong> Automatic suppression required</li>
-                        <li><strong>EPO:</strong> Emergency power off coordination</li>
-                        <li><strong>Cable Management:</strong> Limited combustibles</li>
-                        <li><strong>Documentation:</strong> Risk assessment required</li>
-                    </ul>
-                </div>
-
-                <h3>NFPA 72 Requirements</h3>
-                
-                <div class="success-box">
-                    <h4>Fire Alarm System Requirements:</h4>
-                    <ul>
-                        <li>Smoke detection at return air openings</li>
-                        <li>Heat detection in electrical spaces</li>
-                        <li>Manual pull stations at exits</li>
-                        <li>Audible/visible notification devices</li>
-                        <li>Fire alarm control panel with battery backup</li>
-                        <li>Monitoring by approved central station</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Slide 4: Building Codes (IBC/IFC) -->
-            <div class="slide">
-                <h2>International Building and Fire Codes</h2>
-                
-                <p>The International Code Council (ICC) publishes model codes adopted by most US jurisdictions with local amendments.</p>
-
-                <h3>International Building Code (IBC)</h3>
-                
-                <div class="info-box">
-                    <h4>IBC Chapter 3 - Occupancy Classification:</h4>
-                    <ul>
-                        <li><strong>Group B:</strong> Business occupancy (typical data centers)</li>
-                        <li><strong>Group F-1:</strong> Moderate hazard factory (large facilities)</li>
-                        <li><strong>Mixed Use:</strong> Multiple occupancies in same building</li>
-                        <li><strong>Accessory:</strong> Support spaces <10% of area</li>
-                    </ul>
-                </div>
-
-                <h3>Construction Requirements</h3>
-                
-                <table>
-                    <tr>
-                        <th>Element</th>
-                        <th>Type II-B</th>
-                        <th>Type II-A</th>
-                        <th>Type I-A</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Structural Frame</strong></td>
-                        <td>0 hours</td>
-                        <td>1 hour</td>
-                        <td>3 hours</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Exterior Walls</strong></td>
-                        <td>0 hours</td>
-                        <td>1 hour</td>
-                        <td>3 hours</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Floor Construction</strong></td>
-                        <td>0 hours</td>
-                        <td>1 hour</td>
-                        <td>2 hours</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Roof Construction</strong></td>
-                        <td>0 hours</td>
-                        <td>1 hour</td>
-                        <td>1.5 hours</td>
-                    </tr>
-                </table>
-
-                <h3>International Fire Code (IFC)</h3>
-                
-                <div class="warning-box">
-                    <h4>IFC Operational Requirements:</h4>
-                    <ul>
-                        <li>Fire safety and evacuation plans</li>
-                        <li>Hot work permits and procedures</li>
-                        <li>Hazardous materials management</li>
-                        <li>Fire department access and water supply</li>
-                        <li>Inspection, testing, and maintenance</li>
-                        <li>Emergency planning and drills</li>
-                    </ul>
-                </div>
-
-                <h3>Special Requirements</h3>
-                
-                <div class="success-box">
-                    <h4>High-Rise Provisions (>75 feet):</h4>
-                    <ul>
-                        <li>Fire command center required</li>
-                        <li>Smoke control systems</li>
-                        <li>Stairway pressurization</li>
-                        <li>Emergency voice/alarm system</li>
-                        <li>Fire department communication system</li>
-                        <li>Automatic sprinklers throughout</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Slide 5: Local Amendments and Variations -->
-            <div class="slide">
-                <h2>Local Amendments and Variations</h2>
-                
-                <p>Local jurisdictions often modify model codes to address specific regional concerns, climate conditions, or local practices.</p>
-
-                <h3>Common Local Amendments</h3>
-                
-                <div class="info-box">
-                    <h4>Typical Local Modifications:</h4>
-                    <ul>
-                        <li><strong>Seismic Requirements:</strong> Earthquake bracing and anchorage</li>
-                        <li><strong>Wind Requirements:</strong> Hurricane or tornado provisions</li>
-                        <li><strong>Water Supply:</strong> Local fire flow requirements</li>
-                        <li><strong>Alarm Monitoring:</strong> Direct fire department connection</li>
-                        <li><strong>Permitting:</strong> Additional inspections or approvals</li>
-                        <li><strong>Contractor Licensing:</strong> Local certification requirements</li>
-                    </ul>
-                </div>
-
-                <h3>Regional Examples</h3>
-                
-                <table>
-                    <tr>
-                        <th>Region</th>
-                        <th>Common Amendments</th>
-                        <th>Specific Requirements</th>
-                    </tr>
-                    <tr>
-                        <td><strong>California</strong></td>
-                        <td>Title 24, seismic</td>
-                        <td>Energy efficiency, bracing</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Florida</strong></td>
-                        <td>Wind, flood</td>
-                        <td>Hurricane protection</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Chicago</strong></td>
-                        <td>High-rise</td>
-                        <td>Enhanced fire pumps</td>
-                    </tr>
-                    <tr>
-                        <td><strong>New York City</strong></td>
-                        <td>Local Law 26</td>
-                        <td>Unique sprinkler rules</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Texas</strong></td>
-                        <td>State amendments</td>
-                        <td>Modified egress widths</td>
-                    </tr>
-                </table>
-
-                <h3>Identifying Local Requirements</h3>
-                
-                <div class="warning-box">
-                    <h4>Research Methods:</h4>
-                    <ul>
-                        <li>Contact local fire marshal early in design</li>
-                        <li>Review jurisdiction's adopted codes and amendments</li>
-                        <li>Check for local technical bulletins or interpretations</li>
-                        <li>Attend pre-construction meetings</li>
-                        <li>Consult with local fire protection contractors</li>
-                        <li>Review similar project approvals</li>
-                    </ul>
-                </div>
-
-                <h3>Variance Process</h3>
-                
-                <div class="success-box">
-                    <h4>When Compliance is Challenging:</h4>
-                    <ul>
-                        <li><strong>Equivalency:</strong> Propose alternative methods</li>
-                        <li><strong>Performance-Based:</strong> Engineering analysis</li>
-                        <li><strong>Hardship:</strong> Technical infeasibility</li>
-                        <li><strong>Documentation:</strong> Detailed justification required</li>
-                        <li><strong>Review Process:</strong> Board of appeals hearing</li>
-                        <li><strong>Conditions:</strong> Additional requirements may apply</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Slide 6: Documentation Requirements -->
-            <div class="slide">
-                <h2>Documentation Requirements</h2>
-                
-                <p>Proper documentation is essential for code compliance, from design through ongoing operations.</p>
-
-                <h3>Design Phase Documentation</h3>
-                
-                <div class="info-box">
-                    <h4>Required Submittal Documents:</h4>
-                    <ul>
-                        <li><strong>Site Plan:</strong> Access roads, water supply, building location</li>
-                        <li><strong>Floor Plans:</strong> Occupancy, egress paths, fire ratings</li>
-                        <li><strong>Fire Alarm Drawings:</strong> Device locations, zones, sequences</li>
-                        <li><strong>Sprinkler Drawings:</strong> Hydraulic calculations, coverage</li>
-                        <li><strong>Specifications:</strong> Equipment listings, installation standards</li>
-                        <li><strong>Details:</strong> Penetrations, fire-stopping, rated assemblies</li>
-                    </ul>
-                </div>
-
-                <h3>Construction Documentation</h3>
-                
-                <table>
-                    <tr>
-                        <th>Document Type</th>
-                        <th>Purpose</th>
-                        <th>Retention Period</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Permits</strong></td>
-                        <td>Legal authorization</td>
-                        <td>Life of building</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Inspection Reports</strong></td>
-                        <td>Compliance verification</td>
-                        <td>3-5 years minimum</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Test Reports</strong></td>
-                        <td>System acceptance</td>
-                        <td>Life of system</td>
-                    </tr>
-                    <tr>
-                        <td><strong>As-Built Drawings</strong></td>
-                        <td>Actual installation</td>
-                        <td>Life of building</td>
-                    </tr>
-                    <tr>
-                        <td><strong>O&M Manuals</strong></td>
-                        <td>Maintenance guidance</td>
-                        <td>Life of equipment</td>
-                    </tr>
-                </table>
-
-                <h3>Operational Documentation</h3>
-                
-                <div class="warning-box">
-                    <h4>Ongoing Records:</h4>
-                    <ul>
-                        <li><strong>ITM Records:</strong> Inspection, testing, maintenance logs</li>
-                        <li><strong>Impairment Records:</strong> System outages and restorations</li>
-                        <li><strong>Training Records:</strong> Staff certifications and drills</li>
-                        <li><strong>Incident Reports:</strong> Alarms, activations, false alarms</li>
-                        <li><strong>Change Management:</strong> Modifications and updates</li>
-                    </ul>
-                </div>
-
-                <h3>Record Keeping Best Practices</h3>
-                
-                <div class="success-box">
-                    <h4>Documentation Management:</h4>
-                    <ul>
-                        <li>Maintain both physical and digital copies</li>
-                        <li>Organize by system and date</li>
-                        <li>Ensure accessibility during inspections</li>
-                        <li>Regular review and updates</li>
-                        <li>Secure storage with backup</li>
-                        <li>Clear retention policy</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Slide 7: Inspection and Testing Requirements -->
-            <div class="slide">
-                <h2>Inspection and Testing Requirements</h2>
-                
-                <p>Regular inspection and testing ensures ongoing code compliance and system reliability.</p>
-
-                <h3>Initial Acceptance Testing</h3>
-                
-                <div class="info-box">
-                    <h4>Commissioning Requirements:</h4>
-                    <ul>
-                        <li><strong>100% Testing:</strong> All devices tested at installation</li>
-                        <li><strong>Integrated Testing:</strong> All systems tested together</li>
-                        <li><strong>Witnessed Testing:</strong> AHJ observation required</li>
-                        <li><strong>Documentation:</strong> Detailed test reports</li>
-                        <li><strong>Deficiency Correction:</strong> Before final approval</li>
-                        <li><strong>Certificate of Occupancy:</strong> Final authorization</li>
-                    </ul>
-                </div>
-
-                <h3>Periodic Testing Requirements</h3>
-                
-                <table>
-                    <tr>
-                        <th>System/Component</th>
+                        <th>Generation</th>
+                        <th>Max Speed</th>
                         <th>Frequency</th>
-                        <th>NFPA Reference</th>
                     </tr>
                     <tr>
-                        <td><strong>Fire Alarm Panel</strong></td>
-                        <td>Annual</td>
-                        <td>NFPA 72 Ch. 14</td>
+                        <td><strong>802.11g</strong></td>
+                        <td>Wi-Fi 3</td>
+                        <td>54 Mbps</td>
+                        <td>2.4 GHz</td>
                     </tr>
                     <tr>
-                        <td><strong>Smoke Detectors</strong></td>
-                        <td>Annual/Semi-annual</td>
-                        <td>NFPA 72 14.4.3</td>
+                        <td><strong>802.11n</strong></td>
+                        <td>Wi-Fi 4</td>
+                        <td>600 Mbps</td>
+                        <td>2.4 / 5 GHz</td>
                     </tr>
                     <tr>
-                        <td><strong>Sprinkler Systems</strong></td>
-                        <td>Quarterly/Annual</td>
-                        <td>NFPA 25</td>
+                        <td><strong>802.11ac</strong></td>
+                        <td>Wi-Fi 5</td>
+                        <td>3.5 Gbps</td>
+                        <td>5 GHz</td>
                     </tr>
                     <tr>
-                        <td><strong>Fire Pumps</strong></td>
-                        <td>Weekly/Annual</td>
-                        <td>NFPA 25 Ch. 8</td>
+                        <td><strong>802.11ax</strong></td>
+                        <td>Wi-Fi 6/6E</td>
+                        <td>9.6 Gbps</td>
+                        <td>2.4 / 5 / 6 GHz</td>
                     </tr>
                     <tr>
-                        <td><strong>Clean Agent Systems</strong></td>
-                        <td>Semi-annual</td>
-                        <td>NFPA 2001</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Emergency Lighting</strong></td>
-                        <td>Monthly/Annual</td>
-                        <td>NFPA 101</td>
+                        <td><strong>802.11be</strong></td>
+                        <td>Wi-Fi 7</td>
+                        <td>46 Gbps</td>
+                        <td>2.4 / 5 / 6 GHz</td>
                     </tr>
                 </table>
 
-                <h3>Testing Documentation</h3>
-                
-                <div class="warning-box">
-                    <h4>Required Test Records:</h4>
+                <h3>WLAN Security Standards</h3>
+
+                <div class="info-box">
+                    <h4>Authentication and Encryption:</h4>
                     <ul>
-                        <li>Date and time of test</li>
-                        <li>Name of person performing test</li>
-                        <li>Components tested</li>
-                        <li>Test results (pass/fail)</li>
-                        <li>Deficiencies found</li>
-                        <li>Corrective actions taken</li>
-                        <li>Signature of qualified person</li>
+                        <li><strong>WPA3-Enterprise:</strong> 192-bit security suite; mandatory for high-security environments</li>
+                        <li><strong>WPA3-Personal:</strong> SAE replaces PSK; resistant to offline dictionary attacks</li>
+                        <li><strong>802.1X/EAP:</strong> RADIUS-based user/device authentication for enterprise WLANs</li>
+                        <li><strong>Avoid WEP/WPA:</strong> Legacy protocols are cryptographically broken; do not use</li>
                     </ul>
                 </div>
 
-                <h3>Third-Party Inspections</h3>
-                
+                <h3>RF Planning Principles</h3>
+
                 <div class="success-box">
-                    <h4>Special Inspections:</h4>
+                    <h4>Site Survey Best Practices:</h4>
                     <ul>
-                        <li><strong>Insurance Carrier:</strong> Risk assessment and requirements</li>
-                        <li><strong>Commissioning Agent:</strong> Independent verification</li>
-                        <li><strong>Special Inspector:</strong> Structural and seismic</li>
-                        <li><strong>Federal Compliance:</strong> OSHA, EPA requirements</li>
-                        <li><strong>Certification Bodies:</strong> Uptime Institute, etc.</li>
+                        <li>Conduct predictive RF planning before deployment using heat-mapping tools</li>
+                        <li>Perform a post-installation active survey to verify signal strength (&gt;-67 dBm for voice/video)</li>
+                        <li>Use non-overlapping channels: 1, 6, 11 on 2.4 GHz; auto-channel on 5/6 GHz</li>
+                        <li>Deploy in controller or cloud-managed mode for seamless roaming (802.11r/k/v)</li>
+                        <li>Separate corporate SSID from guest using dedicated VLANs and firewall rules</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Slide 8: Certificate of Occupancy Process -->
+            <!-- Slide 9: Network Security Fundamentals -->
             <div class="slide">
-                <h2>Certificate of Occupancy Process</h2>
-                
-                <p>The Certificate of Occupancy (CO) is the final approval allowing building occupation and operation.</p>
+                <h2>Network Security Fundamentals</h2>
 
-                <h3>Prerequisites for CO</h3>
-                
-                <div class="info-box">
-                    <h4>Required Completions:</h4>
-                    <ul>
-                        <li><strong>All Inspections:</strong> Building, fire, electrical, mechanical</li>
-                        <li><strong>System Testing:</strong> 100% operational verification</li>
-                        <li><strong>Life Safety:</strong> Egress, emergency lighting, exits</li>
-                        <li><strong>Fire Systems:</strong> Detection, suppression, alarms</li>
-                        <li><strong>Documentation:</strong> As-builts, O&M manuals</li>
-                        <li><strong>Corrections:</strong> All deficiencies resolved</li>
-                    </ul>
-                </div>
+                <p>Network security is not an add-on — it must be designed into the infrastructure from the ground up. A layered defense-in-depth strategy reduces risk across all network tiers.</p>
 
-                <h3>Final Inspection Process</h3>
-                
+                <h3>Defense-in-Depth Architecture</h3>
+
                 <div class="diagram">
-                    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-                        <!-- CO Process Flow -->
-                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">Certificate of Occupancy Process</text>
-                        
-                        <!-- Steps -->
-                        <rect x="50" y="60" width="140" height="60" fill="#1976D2" stroke="#0D47A1" stroke-width="2" rx="5"/>
-                        <text x="120" y="85" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Request Final</text>
-                        <text x="120" y="100" text-anchor="middle" fill="white" font-size="12">Inspections</text>
-                        
-                        <rect x="230" y="60" width="140" height="60" fill="#1E88E5" stroke="#1565C0" stroke-width="2" rx="5"/>
-                        <text x="300" y="85" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Multi-Discipline</text>
-                        <text x="300" y="100" text-anchor="middle" fill="white" font-size="12">Inspections</text>
-                        
-                        <rect x="410" y="60" width="140" height="60" fill="#2196F3" stroke="#1976D2" stroke-width="2" rx="5"/>
-                        <text x="480" y="85" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Deficiency</text>
-                        <text x="480" y="100" text-anchor="middle" fill="white" font-size="12">Resolution</text>
-                        
-                        <rect x="590" y="60" width="140" height="60" fill="#42A5F5" stroke="#2196F3" stroke-width="2" rx="5"/>
-                        <text x="660" y="85" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Final</text>
-                        <text x="660" y="100" text-anchor="middle" fill="white" font-size="12">Approval</text>
-                        
-                        <!-- Arrows -->
-                        <path d="M 190 90 L 230 90" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
-                        <path d="M 370 90 L 410 90" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
-                        <path d="M 550 90 L 590 90" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
-                        
-                        <!-- Details boxes -->
-                        <rect x="50" y="160" width="140" height="80" fill="#E3F2FD" stroke="#1976D2" stroke-width="1" rx="5"/>
-                        <text x="120" y="180" text-anchor="middle" font-size="11">• Submit request</text>
-                        <text x="120" y="195" text-anchor="middle" font-size="11">• Schedule inspections</text>
-                        <text x="120" y="210" text-anchor="middle" font-size="11">• Prepare documents</text>
-                        <text x="120" y="225" text-anchor="middle" font-size="11">• Notify parties</text>
-                        
-                        <rect x="230" y="160" width="140" height="80" fill="#E3F2FD" stroke="#1976D2" stroke-width="1" rx="5"/>
-                        <text x="300" y="180" text-anchor="middle" font-size="11">• Building official</text>
-                        <text x="300" y="195" text-anchor="middle" font-size="11">• Fire marshal</text>
-                        <text x="300" y="210" text-anchor="middle" font-size="11">• Electrical inspector</text>
-                        <text x="300" y="225" text-anchor="middle" font-size="11">• Health department</text>
-                        
-                        <rect x="410" y="160" width="140" height="80" fill="#E3F2FD" stroke="#1976D2" stroke-width="1" rx="5"/>
-                        <text x="480" y="180" text-anchor="middle" font-size="11">• Correct deficiencies</text>
-                        <text x="480" y="195" text-anchor="middle" font-size="11">• Re-inspection</text>
-                        <text x="480" y="210" text-anchor="middle" font-size="11">• Documentation</text>
-                        <text x="480" y="225" text-anchor="middle" font-size="11">• Sign-offs</text>
-                        
-                        <rect x="590" y="160" width="140" height="80" fill="#E3F2FD" stroke="#1976D2" stroke-width="1" rx="5"/>
-                        <text x="660" y="180" text-anchor="middle" font-size="11">• CO issued</text>
-                        <text x="660" y="195" text-anchor="middle" font-size="11">• Occupancy allowed</text>
-                        <text x="660" y="210" text-anchor="middle" font-size="11">• Operations begin</text>
-                        <text x="660" y="225" text-anchor="middle" font-size="11">• File documents</text>
-                        
-                        <!-- TCO Option -->
-                        <rect x="300" y="280" width="200" height="60" fill="#FFF9C4" stroke="#F9A825" stroke-width="2" rx="5"/>
-                        <text x="400" y="305" text-anchor="middle" font-size="12" font-weight="bold">Temporary CO Option</text>
-                        <text x="400" y="320" text-anchor="middle" font-size="11">Limited occupancy with conditions</text>
-                        
-                        <!-- Arrow marker -->
-                        <defs>
-                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
-                                <polygon points="0 0, 10 5, 0 10" fill="#333"/>
-                            </marker>
-                        </defs>
+                    <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#1565c0">Defense-in-Depth Security Layers</text>
+
+                        <!-- Concentric rings -->
+                        <circle cx="400" cy="190" r="145" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                        <circle cx="400" cy="190" r="110" fill="#bbdefb" stroke="#1976D2" stroke-width="2"/>
+                        <circle cx="400" cy="190" r="78" fill="#90caf9" stroke="#1E88E5" stroke-width="2"/>
+                        <circle cx="400" cy="190" r="48" fill="#42a5f5" stroke="#2196F3" stroke-width="2"/>
+                        <circle cx="400" cy="190" r="22" fill="#1565c0" stroke="#0D47A1" stroke-width="2"/>
+
+                        <text x="400" y="195" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Data</text>
+                        <text x="400" y="152" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Application</text>
+                        <text x="400" y="122" text-anchor="middle" fill="#1565c0" font-size="11" font-weight="bold">Endpoint</text>
+                        <text x="400" y="94" text-anchor="middle" fill="#1565c0" font-size="11" font-weight="bold">Network</text>
+                        <text x="400" y="60" text-anchor="middle" fill="#1565c0" font-size="11" font-weight="bold">Perimeter / Physical</text>
+
+                        <!-- Labels right -->
+                        <text x="565" y="190" text-anchor="start" fill="#333" font-size="12">← Firewall, IDS/IPS, DDoS</text>
+                        <text x="535" y="120" text-anchor="start" fill="#333" font-size="12">← NAC, 802.1X</text>
+                        <text x="495" y="80" text-anchor="start" fill="#333" font-size="12">← EDR, Patching</text>
+                        <text x="220" y="60" text-anchor="end" fill="#333" font-size="12">WAF, App Segmentation →</text>
+                        <text x="340" y="200" text-anchor="end" fill="white" font-size="10">Encrypt</text>
                     </svg>
                 </div>
 
-                <h3>Common CO Delays</h3>
-                
-                <div class="danger-box">
-                    <h4>Typical Issues:</h4>
+                <h3>Key Security Controls</h3>
+
+                <div class="info-box">
+                    <h4>Network Access Control (NAC):</h4>
                     <ul>
-                        <li>Incomplete fire alarm testing</li>
-                        <li>Missing emergency lighting</li>
-                        <li>Egress obstructions</li>
-                        <li>Documentation gaps</li>
-                        <li>Outstanding permits</li>
-                        <li>Contractor coordination</li>
+                        <li><strong>802.1X Port Authentication:</strong> Verify identity before granting LAN/WLAN access</li>
+                        <li><strong>RADIUS/TACACS+:</strong> Centralized AAA (Authentication, Authorization, Accounting)</li>
+                        <li><strong>MAC Address Filtering:</strong> Basic control; can be bypassed — use as additional layer only</li>
+                        <li><strong>Posture Assessment:</strong> Verify endpoint compliance before network admission</li>
+                    </ul>
+                </div>
+
+                <div class="danger-box">
+                    <h4>🚨 Common Network Attack Vectors:</h4>
+                    <ul>
+                        <li><strong>VLAN Hopping:</strong> Switch spoofing or double-tagging — mitigate with native VLAN best practices</li>
+                        <li><strong>ARP Spoofing:</strong> Redirect traffic via forged ARP replies — enable Dynamic ARP Inspection (DAI)</li>
+                        <li><strong>DHCP Starvation:</strong> Exhaust the DHCP pool — enable DHCP Snooping on access switches</li>
+                        <li><strong>Rogue APs:</strong> Unauthorized wireless access points — use WIDS/WIPS detection</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Slide 9: Ongoing Compliance -->
+            <!-- Slide 10: Network Management and Monitoring -->
             <div class="slide">
-                <h2>Ongoing Compliance Requirements</h2>
-                
-                <p>Code compliance doesn't end with the Certificate of Occupancy - it requires continuous attention throughout facility operation.</p>
+                <h2>Network Management and Monitoring</h2>
 
-                <h3>Annual Requirements</h3>
-                
-                <div class="info-box">
-                    <h4>Recurring Obligations:</h4>
-                    <ul>
-                        <li><strong>Fire Inspections:</strong> Annual fire marshal inspection</li>
-                        <li><strong>System Testing:</strong> Annual fire system testing</li>
-                        <li><strong>Permits:</strong> Operational permit renewals</li>
-                        <li><strong>Training:</strong> Staff fire safety training</li>
-                        <li><strong>Drills:</strong> Evacuation drill requirements</li>
-                        <li><strong>Documentation:</strong> Updated emergency plans</li>
-                    </ul>
-                </div>
+                <p>Effective network management ensures visibility, control, and rapid response to incidents. A combination of protocols and tools provides comprehensive operational insight.</p>
 
-                <h3>Change Management</h3>
-                
-                <div class="warning-box">
-                    <h4>When Permits are Required:</h4>
-                    <ul>
-                        <li>Modifications to fire alarm system</li>
-                        <li>Changes to sprinkler system</li>
-                        <li>Alterations affecting egress</li>
-                        <li>Occupancy changes</li>
-                        <li>Hazardous material storage</li>
-                        <li>Hot work operations</li>
-                    </ul>
-                </div>
+                <h3>Key Management Protocols</h3>
 
-                <h3>Compliance Tracking</h3>
-                
                 <table>
                     <tr>
+                        <th>Protocol</th>
+                        <th>Port</th>
+                        <th>Function</th>
+                        <th>Best Practice</th>
+                    </tr>
+                    <tr>
+                        <td><strong>SNMP v3</strong></td>
+                        <td>UDP 161/162</td>
+                        <td>Device polling and traps</td>
+                        <td>Use v3 with auth+priv</td>
+                    </tr>
+                    <tr>
+                        <td><strong>NetFlow / IPFIX</strong></td>
+                        <td>UDP 2055/4739</td>
+                        <td>Traffic flow analytics</td>
+                        <td>Collect at core/border</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Syslog</strong></td>
+                        <td>UDP/TCP 514</td>
+                        <td>Event and error logging</td>
+                        <td>Centralize to SIEM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SSH</strong></td>
+                        <td>TCP 22</td>
+                        <td>Secure CLI management</td>
+                        <td>Disable Telnet entirely</td>
+                    </tr>
+                    <tr>
+                        <td><strong>NTP</strong></td>
+                        <td>UDP 123</td>
+                        <td>Clock synchronization</td>
+                        <td>Stratum 2 internal NTP</td>
+                    </tr>
+                </table>
+
+                <h3>Monitoring and NOC Tooling</h3>
+
+                <div class="success-box">
+                    <h4>Essential Monitoring Capabilities:</h4>
+                    <ul>
+                        <li><strong>Availability Monitoring:</strong> ICMP/SNMP ping checks with alerting thresholds for uptime SLAs</li>
+                        <li><strong>Performance Dashboards:</strong> Interface utilization, error rates, CPU/memory on network devices</li>
+                        <li><strong>Bandwidth Analysis:</strong> NetFlow-based top-talker and application identification</li>
+                        <li><strong>Configuration Management:</strong> Automated backup and change tracking (e.g., RANCID, Oxidized)</li>
+                        <li><strong>Network Topology Maps:</strong> Auto-discovered maps using LLDP/CDP and SNMP MIB data</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>Documentation Requirements:</h4>
+                    <ul>
+                        <li>Maintain up-to-date network diagrams (Layer 1, Layer 2, Layer 3) in a change-controlled system</li>
+                        <li>Document IP address management (IPAM) — use dedicated tools for large environments</li>
+                        <li>Keep hardware inventory records including serial numbers, firmware versions, and support contracts</li>
+                        <li>Record all configuration changes with timestamps and change ticket references</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 11: Cabling and Physical Infrastructure -->
+            <div class="slide">
+                <h2>Cabling and Physical Infrastructure</h2>
+
+                <p>The physical layer is the foundation of every network. Structured cabling standards ensure a reliable, scalable, and maintainable cable plant.</p>
+
+                <h3>Copper Cabling Standards (TIA-568)</h3>
+
+                <table>
+                    <tr>
+                        <th>Category</th>
+                        <th>Max Speed</th>
+                        <th>Max Distance</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Cat 5e</strong></td>
+                        <td>1 Gbps</td>
+                        <td>100 m</td>
+                        <td>Legacy enterprise</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cat 6</strong></td>
+                        <td>1 Gbps / 10 Gbps*</td>
+                        <td>100 m / 55 m*</td>
+                        <td>Standard desktop access</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cat 6A</strong></td>
+                        <td>10 Gbps</td>
+                        <td>100 m</td>
+                        <td>Access layer, PoE+ APs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cat 8</strong></td>
+                        <td>25/40 Gbps</td>
+                        <td>30 m</td>
+                        <td>Top-of-rack DC links</td>
+                    </tr>
+                </table>
+
+                <h3>Fiber Optic Cabling</h3>
+
+                <div class="info-box">
+                    <h4>Fiber Types and Applications:</h4>
+                    <ul>
+                        <li><strong>OM3/OM4 Multimode:</strong> 10/40/100 Gbps within campus (up to 400 m); lower cost transceivers</li>
+                        <li><strong>OM5 Multimode:</strong> SWDM support for higher bandwidth over short distances</li>
+                        <li><strong>OS2 Single-mode:</strong> Long-distance links (metro, inter-building); supports DWDM up to 80 km+</li>
+                        <li><strong>Pre-terminated MPO/MTP:</strong> High-density fiber trunks for data center structured cabling</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>MDF / IDF Best Practices:</h4>
+                    <ul>
+                        <li>Maintain 1:3 ratio of patch panel ports to active ports for future growth</li>
+                        <li>Label every cable, port, and panel with a consistent naming convention</li>
+                        <li>Separate power and data cabling to avoid EMI interference</li>
+                        <li>Use horizontal cable managers and velcro straps — never zip ties on active cables</li>
+                        <li>Conduct cable certification testing and retain test reports for warranty compliance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 12: Compliance and Documentation -->
+            <div class="slide">
+                <h2>Compliance, Standards, and Documentation</h2>
+
+                <p>Network infrastructure must align with applicable compliance frameworks and industry standards. Proper documentation is the foundation of audit readiness and operational continuity.</p>
+
+                <h3>Relevant Compliance Frameworks</h3>
+
+                <div class="info-box">
+                    <h4>Common Frameworks Affecting Network Design:</h4>
+                    <ul>
+                        <li><strong>PCI DSS:</strong> Cardholder data environments require network segmentation, firewall rule reviews, and quarterly scans</li>
+                        <li><strong>HIPAA:</strong> PHI transmission requires encryption in transit; audit logging of access to healthcare systems</li>
+                        <li><strong>ISO 27001:</strong> Information security management; requires documented network controls and risk assessments</li>
+                        <li><strong>NIST CSF:</strong> Identify, Protect, Detect, Respond, Recover framework for cybersecurity risk management</li>
+                        <li><strong>SOC 2 Type II:</strong> Trust service criteria including availability and confidentiality of networked systems</li>
+                    </ul>
+                </div>
+
+                <h3>Change Management Process</h3>
+
+                <table>
+                    <tr>
+                        <th>Stage</th>
                         <th>Activity</th>
-                        <th>Frequency</th>
                         <th>Responsible Party</th>
                     </tr>
                     <tr>
-                        <td><strong>System Testing</strong></td>
-                        <td>Per NFPA schedule</td>
-                        <td>Qualified contractor</td>
+                        <td><strong>Request</strong></td>
+                        <td>Submit RFC with scope and justification</td>
+                        <td>Requestor</td>
                     </tr>
                     <tr>
-                        <td><strong>Staff Training</strong></td>
-                        <td>Annual + new hires</td>
-                        <td>Facility management</td>
+                        <td><strong>Review</strong></td>
+                        <td>CAB evaluates risk, impact, rollback plan</td>
+                        <td>Change Advisory Board</td>
                     </tr>
                     <tr>
-                        <td><strong>Plan Updates</strong></td>
-                        <td>As changes occur</td>
-                        <td>Fire safety director</td>
+                        <td><strong>Approve</strong></td>
+                        <td>Change authorized with maintenance window</td>
+                        <td>Change Manager</td>
                     </tr>
                     <tr>
-                        <td><strong>Inspections</strong></td>
-                        <td>Annual minimum</td>
-                        <td>Fire marshal</td>
+                        <td><strong>Implement</strong></td>
+                        <td>Execute change with real-time monitoring</td>
+                        <td>Network Engineer</td>
                     </tr>
                     <tr>
-                        <td><strong>Records</strong></td>
-                        <td>Continuous</td>
-                        <td>Document control</td>
+                        <td><strong>Review</strong></td>
+                        <td>Post-implementation review and documentation update</td>
+                        <td>Network Engineer / CAB</td>
                     </tr>
                 </table>
 
-                <h3>Best Practices</h3>
-                
-                <div class="success-box">
-                    <h4>Maintaining Compliance:</h4>
+                <div class="reference-box">
+                    <h4>📋 Key Standards References</h4>
                     <ul>
-                        <li>Establish compliance calendar with all deadlines</li>
-                        <li>Maintain relationships with AHJ representatives</li>
-                        <li>Use qualified contractors for all work</li>
-                        <li>Document all changes and modifications</li>
-                        <li>Regular internal audits and assessments</li>
-                        <li>Stay current with code updates and changes</li>
+                        <li>📌 <strong>TIA-568</strong> — Telecommunications Cabling Standard</li>
+                        <li>📌 <strong>TIA-942</strong> — Data Center Telecommunications Infrastructure</li>
+                        <li>📌 <strong>IEEE 802.1Q</strong> — Virtual LANs (VLAN Tagging)</li>
+                        <li>📌 <strong>IEEE 802.3</strong> — Ethernet Standards</li>
+                        <li>📌 <strong>IETF RFC 1918</strong> — Private Address Space</li>
+                        <li>📌 <strong>IETF RFC 4364</strong> — BGP/MPLS IP VPNs</li>
+                        <li>📌 <strong>NIST SP 800-53</strong> — Security and Privacy Controls</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Slide 10: Data Center Specific Compliance -->
+            <!-- Slide 13: Knowledge Check Quiz -->
             <div class="slide">
-                <h2>Data Center Specific Compliance</h2>
-                
-                <p>Data centers face unique compliance challenges due to their critical nature and specialized systems.</p>
-
-                <h3>Special Considerations</h3>
-                
-                <div class="info-box">
-                    <h4>Data Center Compliance Factors:</h4>
-                    <ul>
-                        <li><strong>24/7 Operations:</strong> Testing and maintenance windows</li>
-                        <li><strong>Security Requirements:</strong> Access for inspections</li>
-                        <li><strong>Clean Agent Systems:</strong> Environmental regulations</li>
-                        <li><strong>EPO Systems:</strong> Coordination with life safety</li>
-                        <li><strong>High Density:</strong> Cooling and fire load calculations</li>
-                        <li><strong>Uptime Requirements:</strong> Impairment procedures</li>
-                    </ul>
-                </div>
-
-                <h3>Regulatory Overlaps</h3>
-                
-                <table>
-                    <tr>
-                        <th>Requirement</th>
-                        <th>Fire Code</th>
-                        <th>Other Authority</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Halon Systems</strong></td>
-                        <td>NFPA 2001</td>
-                        <td>EPA regulations</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Battery Rooms</strong></td>
-                        <td>IFC hazmat</td>
-                        <td>IEEE standards</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Fuel Storage</strong></td>
-                        <td>NFPA 110</td>
-                        <td>Environmental permits</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Security</strong></td>
-                        <td>Egress requirements</td>
-                        <td>Federal standards</td>
-                    </tr>
-                </table>
-
-                <h3>Industry Certifications</h3>
-                
-                <div class="success-box">
-                    <h4>Beyond Code Compliance:</h4>
-                    <ul>
-                        <li><strong>Uptime Institute:</strong> Tier certification requirements</li>
-                        <li><strong>LEED:</strong> Sustainable design credits</li>
-                        <li><strong>DCCA:</strong> Data center standards</li>
-                        <li><strong>ISO 27001:</strong> Security management</li>
-                        <li><strong>SOC 2:</strong> Compliance auditing</li>
-                    </ul>
-                </div>
-
-                <h3>Compliance Strategy</h3>
-                
-                <div class="warning-box">
-                    <h4>Integrated Approach:</h4>
-                    <ul>
-                        <li>Early engagement with all authorities</li>
-                        <li>Comprehensive compliance matrix</li>
-                        <li>Regular compliance audits</li>
-                        <li>Continuous training program</li>
-                        <li>Proactive code update monitoring</li>
-                        <li>Strong documentation practices</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Slide 11: References -->
-            <div class="slide">
-                <h2>References and Resources</h2>
-                
-                <p>This training module was developed using authoritative sources on fire safety codes and regulations.</p>
-
-                <div class="reference-box">
-                    <h4>📚 Primary References:</h4>
-                    <ul>
-                        <li>• NFPA 1 - Fire Code (2021 Edition)</li>
-                        <li>• NFPA 13 - Installation of Sprinkler Systems (2022)</li>
-                        <li>• NFPA 72 - National Fire Alarm and Signaling Code (2022)</li>
-                        <li>• NFPA 75 - Fire Protection of Information Technology Equipment (2020)</li>
-                        <li>• NFPA 101 - Life Safety Code (2021)</li>
-                        <li>• International Building Code (2021)</li>
-                        <li>• International Fire Code (2021)</li>
-                    </ul>
-                </div>
-
-                <div class="reference-box">
-                    <h4>🏢 Code Organizations:</h4>
-                    <ul>
-                        <li>• NFPA - National Fire Protection Association</li>
-                        <li>• ICC - International Code Council</li>
-                        <li>• IAPMO - International Association of Plumbing and Mechanical Officials</li>
-                        <li>• NFSA - National Fire Sprinkler Association</li>
-                        <li>• AFAA - Automatic Fire Alarm Association</li>
-                        <li>• NICET - National Institute for Certification in Engineering Technologies</li>
-                    </ul>
-                </div>
-
-                <div class="reference-box">
-                    <h4>📖 Additional Resources:</h4>
-                    <ul>
-                        <li>• "Fire Protection Handbook" - NFPA, 20th Edition</li>
-                        <li>• "Code Compliance for Advanced Technology Facilities" - SFPE</li>
-                        <li>• "Data Center Design and Implementation Best Practices" - BICSI</li>
-                        <li>• State and local fire marshal websites</li>
-                        <li>• ICC code commentary volumes</li>
-                    </ul>
-                </div>
-
-                <div class="info-box">
-                    <h4>💡 Note on Content Development:</h4>
-                    <p>This training module is based on model codes and standards commonly adopted in the United States. Always verify the specific codes, editions, and local amendments adopted in your jurisdiction. Code requirements can vary significantly between locations and change with new editions.</p>
-                </div>
-            </div>
-
-            <!-- Quiz Slide -->
-            <div class="slide">
-                <h2>Knowledge Assessment Quiz</h2>
-                <p>Test your understanding of Code Compliance. Select the best answer for each question:</p>
+                <h2>Knowledge Check Quiz</h2>
+                <p>Test your understanding of Network Infrastructure 101. You need 80% or higher to pass.</p>
 
                 <form id="quizForm">
                     <div class="quiz-question">
-                        <h4>1. What does AHJ stand for?</h4>
+                        <h4>1. Which OSI layer is responsible for IP addressing and packet routing?</h4>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q1" value="a"> Authorized Hazard Jurisdiction</label>
+                            <label><input type="radio" name="q1" value="a"> Layer 2 — Data Link</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q1" value="b"> Authority Having Jurisdiction</label>
+                            <label><input type="radio" name="q1" value="b"> Layer 4 — Transport</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q1" value="c"> Administrative Housing Journal</label>
+                            <label><input type="radio" name="q1" value="c"> Layer 3 — Network</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q1" value="d"> Annual Hazard Justification</label>
-                        </div>
-                    </div>
-
-                    <div class="quiz-question">
-                        <h4>2. Which NFPA standard specifically addresses data center fire protection?</h4>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q2" value="a"> NFPA 13</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q2" value="b"> NFPA 72</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q2" value="c"> NFPA 75</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q2" value="d"> NFPA 101</label>
+                            <label><input type="radio" name="q1" value="d"> Layer 1 — Physical</label>
                         </div>
                     </div>
 
                     <div class="quiz-question">
-                        <h4>3. In the code hierarchy, which typically has the highest enforcement authority?</h4>
+                        <h4>2. What is the maximum cable run length for Cat 6A at 10 Gbps?</h4>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q3" value="a"> Industry standards</label>
+                            <label><input type="radio" name="q2" value="a"> 55 meters</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q3" value="b"> Federal regulations</label>
+                            <label><input type="radio" name="q2" value="b"> 30 meters</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q3" value="c"> Local amendments</label>
+                            <label><input type="radio" name="q2" value="c"> 100 meters</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q3" value="d"> State codes</label>
-                        </div>
-                    </div>
-
-                    <div class="quiz-question">
-                        <h4>4. What is the typical occupancy classification for a data center under IBC?</h4>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q4" value="a"> Group A - Assembly</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q4" value="b"> Group B - Business</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q4" value="c"> Group S - Storage</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q4" value="d"> Group U - Utility</label>
+                            <label><input type="radio" name="q2" value="d"> 150 meters</label>
                         </div>
                     </div>
 
                     <div class="quiz-question">
-                        <h4>5. How often must fire alarm systems typically undergo comprehensive testing?</h4>
+                        <h4>3. Which RFC defines private IP address space?</h4>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q5" value="a"> Monthly</label>
+                            <label><input type="radio" name="q3" value="a"> RFC 2544</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q5" value="b"> Quarterly</label>
+                            <label><input type="radio" name="q3" value="b"> RFC 1918</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q5" value="c"> Annually</label>
+                            <label><input type="radio" name="q3" value="c"> RFC 4364</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q5" value="d"> Every 5 years</label>
-                        </div>
-                    </div>
-
-                    <div class="quiz-question">
-                        <h4>6. What document provides final authorization to occupy a building?</h4>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q6" value="a"> Building permit</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q6" value="b"> Fire marshal approval</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q6" value="c"> Certificate of Occupancy</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q6" value="d"> Construction permit</label>
+                            <label><input type="radio" name="q3" value="d"> RFC 791</label>
                         </div>
                     </div>
 
                     <div class="quiz-question">
-                        <h4>7. When multiple codes apply, which requirement typically governs?</h4>
+                        <h4>4. What is the primary purpose of Spanning Tree Protocol (STP)?</h4>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q7" value="a"> The oldest code</label>
+                            <label><input type="radio" name="q4" value="a"> Encrypt inter-VLAN traffic</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q7" value="b"> The newest code</label>
+                            <label><input type="radio" name="q4" value="b"> Prevent Layer 2 switching loops</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q7" value="c"> The most restrictive requirement</label>
+                            <label><input type="radio" name="q4" value="c"> Assign IP addresses automatically</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q7" value="d"> The least restrictive requirement</label>
-                        </div>
-                    </div>
-
-                    <div class="quiz-question">
-                        <h4>8. What is required when making modifications to fire protection systems?</h4>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q8" value="a"> Notification only</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q8" value="b"> Permit and inspection</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q8" value="c"> Documentation update</label>
-                        </div>
-                        <div class="quiz-option">
-                            <label><input type="radio" name="q8" value="d"> No requirements</label>
+                            <label><input type="radio" name="q4" value="d"> Prioritize voice traffic on the network</label>
                         </div>
                     </div>
 
                     <div class="quiz-question">
-                        <h4>9. How long should fire protection system test records typically be retained?</h4>
+                        <h4>5. Which SNMP version provides both authentication and encryption?</h4>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q9" value="a"> 1 year</label>
+                            <label><input type="radio" name="q5" value="a"> SNMPv1</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q9" value="b"> 3-5 years minimum</label>
+                            <label><input type="radio" name="q5" value="b"> SNMPv2c</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q9" value="c"> 10 years</label>
+                            <label><input type="radio" name="q5" value="c"> SNMPv3</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q9" value="d"> Not required</label>
+                            <label><input type="radio" name="q5" value="d"> SNMPv2u</label>
                         </div>
                     </div>
 
                     <div class="quiz-question">
-                        <h4>10. What is a variance in code compliance?</h4>
+                        <h4>6. In a three-tier enterprise architecture, which layer performs inter-VLAN routing and policy enforcement?</h4>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q10" value="a"> A code violation</label>
+                            <label><input type="radio" name="q6" value="a"> Access Layer</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q10" value="b"> An approved alternative method</label>
+                            <label><input type="radio" name="q6" value="b"> Physical Layer</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q10" value="c"> A temporary permit</label>
+                            <label><input type="radio" name="q6" value="c"> Distribution Layer</label>
                         </div>
                         <div class="quiz-option">
-                            <label><input type="radio" name="q10" value="d"> An inspection report</label>
+                            <label><input type="radio" name="q6" value="d"> Core Layer</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>7. Which Wi-Fi generation introduced the 6 GHz band?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q7" value="a"> Wi-Fi 5 (802.11ac)</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q7" value="b"> Wi-Fi 4 (802.11n)</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q7" value="c"> Wi-Fi 6E (802.11ax)</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q7" value="d"> Wi-Fi 3 (802.11g)</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>8. Which switch security feature mitigates DHCP starvation attacks?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q8" value="a"> Dynamic ARP Inspection</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q8" value="b"> DHCP Snooping</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q8" value="c"> Port Security</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q8" value="d"> VLAN Access Lists</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>9. What does CIDR notation /26 indicate?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q9" value="a"> 26 available host addresses</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q9" value="b"> 26-bit subnet mask, providing 62 usable hosts</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q9" value="c"> A Class B network address</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q9" value="d"> 26 VLANs configured on the switch</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>10. Which compliance framework specifically requires network segmentation for cardholder data environments?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q10" value="a"> ISO 27001</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q10" value="b"> HIPAA</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q10" value="c"> PCI DSS</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q10" value="d"> SOC 2</label>
                         </div>
                     </div>
 
@@ -1336,6 +1386,8 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1352,38 +1404,85 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // Authority Having Jurisdiction
-            q2: 'c',  // NFPA 75
-            q3: 'b',  // Federal regulations (highest in hierarchy)
-            q4: 'b',  // Group B - Business
-            q5: 'c',  // Annually
-            q6: 'c',  // Certificate of Occupancy
-            q7: 'c',  // The most restrictive requirement
-            q8: 'b',  // Permit and inspection
-            q9: 'b',  // 3-5 years minimum
-            q10: 'b'  // An approved alternative method
+        // Quiz answers, correct option labels, and explanations
+        const quizData = {
+            q1: {
+                answer: 'c',
+                question: 'Which OSI layer is responsible for IP addressing and packet routing?',
+                correctLabel: 'Layer 3 — Network',
+                explanation: 'Layer 3 (Network) handles logical addressing via IP and is responsible for routing packets between different networks. Routers operate at this layer. Layer 2 uses MAC addresses for local delivery, while Layer 4 (Transport) manages end-to-end communication via TCP/UDP.'
+            },
+            q2: {
+                answer: 'c',
+                question: 'What is the maximum cable run length for Cat 6A at 10 Gbps?',
+                correctLabel: '100 meters',
+                explanation: 'Cat 6A (Augmented Category 6) supports 10 Gbps over the full TIA-568 standard horizontal distance of 100 meters. Regular Cat 6 can only reach 10 Gbps over a shorter 55-meter run. Cat 8 supports 25/40 Gbps but is limited to 30 meters, making it suitable only for short data center links.'
+            },
+            q3: {
+                answer: 'b',
+                question: 'Which RFC defines private IP address space?',
+                correctLabel: 'RFC 1918',
+                explanation: 'RFC 1918 defines the three reserved private address ranges (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16) that are non-routable on the public internet. These addresses are used internally within organizations and require NAT to communicate externally.'
+            },
+            q4: {
+                answer: 'b',
+                question: 'What is the primary purpose of Spanning Tree Protocol (STP)?',
+                correctLabel: 'Prevent Layer 2 switching loops',
+                explanation: 'STP (IEEE 802.1D) prevents broadcast storms and Layer 2 loops by logically blocking redundant switch paths and designating a single active forwarding path. Without STP, a loop in a switched network would cause frames to circulate indefinitely, consuming all available bandwidth.'
+            },
+            q5: {
+                answer: 'c',
+                question: 'Which SNMP version provides both authentication and encryption?',
+                correctLabel: 'SNMPv3',
+                explanation: 'SNMPv3 introduced user-based security with support for both authentication (MD5/SHA) and encryption (DES/AES). SNMPv1 and SNMPv2c transmit community strings in plain text, making them vulnerable to interception. Always use SNMPv3 with auth+priv in production environments.'
+            },
+            q6: {
+                answer: 'c',
+                question: 'In a three-tier enterprise architecture, which layer performs inter-VLAN routing and policy enforcement?',
+                correctLabel: 'Distribution Layer',
+                explanation: 'The Distribution Layer sits between the Access and Core layers and performs inter-VLAN routing, applies QoS policies, implements ACLs, and provides redundancy. The Core Layer focuses purely on high-speed packet forwarding, while the Access Layer connects end devices.'
+            },
+            q7: {
+                answer: 'c',
+                question: 'Which Wi-Fi generation introduced the 6 GHz band?',
+                correctLabel: 'Wi-Fi 6E (802.11ax)',
+                explanation: 'Wi-Fi 6E extends the 802.11ax standard into the 6 GHz spectrum, providing up to 1,200 MHz of additional clean spectrum free from legacy device interference. Wi-Fi 5 (802.11ac) operates only on 5 GHz, and Wi-Fi 4 (802.11n) uses both 2.4 and 5 GHz.'
+            },
+            q8: {
+                answer: 'b',
+                question: 'Which switch security feature mitigates DHCP starvation attacks?',
+                correctLabel: 'DHCP Snooping',
+                explanation: 'DHCP Snooping validates DHCP messages on untrusted ports and limits the rate of DHCP requests per port, preventing an attacker from exhausting the DHCP pool. Dynamic ARP Inspection (DAI) complements DHCP Snooping by preventing ARP spoofing, but does not address DHCP starvation directly.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'What does CIDR notation /26 indicate?',
+                correctLabel: '26-bit subnet mask, providing 62 usable hosts',
+                explanation: 'A /26 subnet mask means the first 26 bits are the network portion, leaving 6 bits for host addresses (2⁶ = 64 total addresses, minus network and broadcast = 62 usable hosts). CIDR notation describes the number of bits in the subnet mask, not the number of hosts or VLANs.'
+            },
+            q10: {
+                answer: 'c',
+                question: 'Which compliance framework specifically requires network segmentation for cardholder data environments?',
+                correctLabel: 'PCI DSS',
+                explanation: 'PCI DSS (Payment Card Industry Data Security Standard) explicitly requires that cardholder data environments (CDE) be isolated from other networks using firewalls and segmentation controls. This reduces the scope of compliance. While ISO 27001 and NIST CSF recommend segmentation as a best practice, only PCI DSS mandates it for CDE isolation.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
+
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1393,49 +1492,98 @@
             showSlide(currentSlide);
         }
 
-        // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Code Compliance.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Network Infrastructure fundamentals.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#1565c0; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #1565c0; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data = quizData[question];
+                const userAns = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                // Get the label text of the user's selected answer
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label') ? selectedInput.closest('label').textContent.trim() : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon = isCorrect ? '✅' : '❌';
+                const statusText = isCorrect ? 'Correct' : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745' : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            // Scroll to results
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
-        // Keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft' && currentSlide > 0) {
                 changeSlide(-1);
@@ -1444,7 +1592,6 @@
             }
         });
 
-        // Initialize
         showSlide(currentSlide);
     </script>
 </body>
