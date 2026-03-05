@@ -1331,6 +1331,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1347,38 +1348,84 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // 64-80°F (18-27°C)
-            q2: 'b',  // Computer Room Air Handler
-            q3: 'b',  // CRAC uses direct expansion, CRAH uses chilled water
-            q4: 'c',  // 40-60% RH
-            q5: 'c',  // 20-40%
-            q6: 'b',  // 0.02-0.05" H₂O
-            q7: 'b',  // Prevent hot air recirculation
-            q8: 'b',  // 2-5%
-            q9: 'b',  // Outside air
-            q10: 'c'  // 1.0" w.g.
+        // Quiz data: correct answers, correct label text, and explanations
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What is the ASHRAE recommended temperature range for data centers?',
+                correctLabel: '64-80°F (18-27°C)',
+                explanation: 'ASHRAE Thermal Guidelines for Data Processing Environments (TC 9.9) define an A1–A4 classification system for IT equipment. The widely adopted A1 class specifies an allowable inlet air temperature range of 64–80°F (18–27°C) with a recommended range of 64.4–80.6°F. Raising supply temperatures toward the upper end of this range reduces mechanical cooling energy significantly — every 1°F increase yields approximately 2–5% energy savings. Many modern hyperscale data centers operate at 80°F or higher using A2/A3 class equipment to maximise free-cooling hours.'
+            },
+            q2: {
+                answer: 'b',
+                question: 'What does CRAH stand for?',
+                correctLabel: 'Computer Room Air Handler',
+                explanation: 'CRAH stands for Computer Room Air Handler. Unlike a CRAC (Computer Room Air Conditioner) which contains its own self-contained refrigeration cycle, a CRAH is a fan coil unit that circulates room air across a chilled water coil supplied by a central chiller plant. CRAHs have no compressor — they rely entirely on the external chiller for cooling capacity. This makes them simpler, quieter, and more energy-efficient at scale, but dependent on chilled water availability. CRAHs are the standard choice for large enterprise and hyperscale data centers.'
+            },
+            q3: {
+                answer: 'b',
+                question: 'What is the primary difference between CRAC and CRAH units?',
+                correctLabel: 'CRAC uses direct expansion, CRAH uses chilled water',
+                explanation: 'The fundamental difference is the cooling medium. A CRAC (Computer Room Air Conditioner) contains an integral direct expansion (DX) refrigeration circuit with its own compressor, condenser, and expansion valve — it is a self-contained cooling system requiring only power and condenser heat rejection. A CRAH (Computer Room Air Handler) has no refrigeration components; it circulates room air over a chilled water coil connected to a central chiller. CRACs are common in smaller deployments and edge sites where a chiller plant is unavailable. CRAHs are preferred at larger scales for efficiency and reliability.'
+            },
+            q4: {
+                answer: 'c',
+                question: 'What is the recommended relative humidity range for data centers?',
+                correctLabel: '40-60% RH',
+                explanation: 'ASHRAE recommends maintaining relative humidity between 40–60% RH in data center environments. Too low humidity (below ~40% RH) creates a risk of electrostatic discharge (ESD), which can damage sensitive electronic components. Too high humidity (above ~60% RH) risks condensation forming on cold surfaces inside equipment, potentially causing short circuits and corrosion. Some modern data centers operate with a wider range (20–80% RH) per ASHRAE A1 allowable limits, but 40–60% remains the conservative recommended band for mixed legacy and modern equipment.'
+            },
+            q5: {
+                answer: 'c',
+                question: 'What efficiency improvement can hot aisle containment typically provide?',
+                correctLabel: '20-40%',
+                explanation: 'Hot aisle containment (HAC) — physically enclosing the hot exhaust aisle to direct server exhaust air directly back to CRAC/CRAH return without mixing with cold supply air — typically delivers 20–40% cooling energy savings compared to an open floor layout. The improvement comes from eliminating hot and cold air mixing, which raises return air temperature to cooling units (improving their efficiency) and eliminates the need to over-cool supply air to compensate for mixing losses. Cold aisle containment (CAC) delivers similar benefits but captures the cold supply air side instead.'
+            },
+            q6: {
+                answer: 'b',
+                question: 'What is the typical static pressure maintained in a raised floor plenum?',
+                correctLabel: '0.02-0.05" H₂O',
+                explanation: 'Raised floor plenums in data centers are maintained at a very slight positive static pressure of 0.02–0.05 inches of water gauge (w.g.). This low pressure is sufficient to push conditioned air up through perforated tiles and floor grilles to the cold aisles, while remaining low enough to be efficiently maintained by CRAC/CRAH fans. Higher pressures would waste fan energy and can cause excessive airflow through certain tiles, creating uneven distribution. Computational fluid dynamics (CFD) modelling is often used to optimise tile placement and perforation percentages for uniform distribution across the floor.'
+            },
+            q7: {
+                answer: 'b',
+                question: 'What is the purpose of blanking panels in server racks?',
+                correctLabel: 'Prevent hot air recirculation',
+                explanation: 'Blanking panels (also called filler panels) fill unused rack unit spaces in server cabinets to prevent hot exhaust air from the rear of the rack from recirculating back through the empty spaces to the front of the rack, where it would mix with cold supply air and raise server inlet temperatures. Without blanking panels, hot air short-circuits directly from the hot aisle back into the cold aisle through the empty rack openings, potentially causing servers to overheat or CRAC units to run harder to compensate. Blanking panels are one of the simplest, lowest-cost efficiency improvements available in any data center.'
+            },
+            q8: {
+                answer: 'b',
+                question: 'How much energy savings can result from raising set points by 1°F?',
+                correctLabel: '2-5%',
+                explanation: 'Raising the cooling setpoint (supply air temperature or chilled water supply temperature) by 1°F typically yields 2–5% cooling energy savings. The savings come from two compounding effects: the chiller operates at a higher evaporating temperature, reducing the compression ratio and improving efficiency; and more hours of free cooling become available per year as the economiser threshold is reached more often. This is why temperature setpoint optimisation — raising supply air temperatures toward ASHRAE A1 upper limits — is consistently recommended as a no-cost or low-cost energy optimisation measure.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'What does an air-side economizer use for free cooling?',
+                correctLabel: 'Outside air',
+                explanation: 'An air-side economiser (or economizer) uses cool outside ambient air directly — or via an air-to-air heat exchanger — to cool the data center without running mechanical refrigeration. When outside air temperature and humidity are within acceptable limits, outside air is introduced into the data center air stream, bypassing or supplementing the chiller and DX cooling systems entirely. This "free cooling" can dramatically reduce mechanical cooling energy — data centers in cool climates (e.g., the Nordics, Pacific Northwest) can achieve thousands of annual free-cooling hours. A water-side economiser uses cooling tower water; an air-side uses outside air directly.'
+            },
+            q10: {
+                answer: 'c',
+                question: 'What is the recommended filter replacement pressure drop?',
+                correctLabel: '1.0" w.g.',
+                explanation: 'Air filters in CRAC/CRAH units and AHUs should be replaced when the pressure drop across them reaches approximately 1.0 inch of water gauge (w.g.). At this point, the accumulated particulate loading has increased resistance enough to measurably reduce airflow and increase fan energy consumption. Waiting significantly beyond this threshold wastes fan energy, reduces cooling capacity, and risks filter media failure. BAS differential pressure sensors monitor filter pressure drop continuously and generate alarms when the threshold is approached. The exact replacement threshold varies by filter type and manufacturer recommendation, but 1.0" w.g. is the widely accepted standard for data center applications.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1391,43 +1438,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of HVAC Systems.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of HVAC Systems.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#1976d2; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #1976d2; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
