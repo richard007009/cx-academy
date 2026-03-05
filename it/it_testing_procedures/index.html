@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Compliance Training Module - IT Testing Procedures</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1565c0 0%, #42a5f5 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content-wrapper {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            min-height: 500px;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide h2 {
+            color: #1565c0;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #1565c0;
+            padding-bottom: 10px;
+        }
+
+        .slide h3 {
+            color: #42a5f5;
+            font-size: 1.5em;
+            margin: 20px 0 15px;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .slide ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .nav-button {
+            background: #1565c0;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #42a5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #1565c0, #42a5f5);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .slide-counter {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .quiz-question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question h4 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .quiz-option {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .quiz-option label {
+            cursor: pointer;
+            padding: 10px;
+            display: block;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .quiz-option label:hover {
+            background: #e9ecef;
+        }
+
+        .submit-quiz {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-quiz:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .score-display h3 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .score-display .score {
+            font-size: 3em;
+            font-weight: bold;
+            color: #28a745;
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 5px solid #1565c0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .danger-box {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th {
+            background: #1565c0;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .reference-box {
+            background: #f0f7ff;
+            border: 2px solid #0066cc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .reference-box h4 {
+            color: #0066cc;
+            margin-bottom: 15px;
+        }
+
+        .reference-box ul {
+            list-style-type: none;
+            margin-left: 0;
+        }
+
+        .reference-box li {
+            padding: 5px 0;
+            color: #444;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .content-wrapper {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .slide h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>IT Testing Procedures Training Module</h1>
+            <p>Comprehensive Guide to Software Testing Methodologies and Best Practices</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="content-wrapper">
+            <!-- Slide 1: Welcome -->
+            <div class="slide active">
+                <h2>Welcome to IT Testing Procedures Training</h2>
+                <p>Welcome to this comprehensive training module on IT Testing Procedures. This course will provide you with essential knowledge about software testing methodologies, test planning, execution strategies, and quality assurance best practices.</p>
+                
+                <div class="info-box">
+                    <h3>Learning Objectives</h3>
+                    <ul>
+                        <li>Understand fundamental testing concepts and methodologies</li>
+                        <li>Learn test planning and documentation strategies</li>
+                        <li>Master different types of testing approaches</li>
+                        <li>Explore test case design and execution techniques</li>
+                        <li>Understand defect management processes</li>
+                        <li>Learn basics of test automation</li>
+                        <li>Understand performance and security testing</li>
+                        <li>Apply industry best practices</li>
+                    </ul>
+                </div>
+
+                <p><strong>Duration:</strong> Approximately 45-60 minutes</p>
+                <p><strong>Prerequisites:</strong> Basic understanding of software development lifecycle</p>
+            </div>
+
+            <!-- Slide 2: Testing Fundamentals -->
+            <div class="slide">
+                <h2>Software Testing Fundamentals</h2>
+                
+                <p>Software testing is a systematic process of evaluating and verifying that a software application meets specified requirements and functions correctly.</p>
+
+                <h3>Testing Principles</h3>
+                
+                <div class="diagram">
+                    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">Seven Principles of Software Testing</text>
+                        
+                        <!-- Principle 1 -->
+                        <rect x="50" y="60" width="140" height="80" fill="#1976D2" stroke="#0D47A1" stroke-width="2" rx="5"/>
+                        <text x="120" y="85" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Testing Shows</text>
+                        <text x="120" y="100" text-anchor="middle" fill="white" font-size="12">Presence of</text>
+                        <text x="120" y="115" text-anchor="middle" fill="white" font-size="12">Defects</text>
+                        
+                        <!-- Principle 2 -->
+                        <rect x="210" y="60" width="140" height="80" fill="#1E88E5" stroke="#1565C0" stroke-width="2" rx="5"/>
+                        <text x="280" y="85" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Exhaustive</text>
+                        <text x="280" y="100" text-anchor="middle" fill="white" font-size="12">Testing is</text>
+                        <text x="280" y="115" text-anchor="middle" fill="white" font-size="12">Impossible</text>
+                        
+                        <!-- Principle 3 -->
+                        <rect x="370" y="60" width="140" height="80" fill="#2196F3" stroke="#1976D2" stroke-width="2" rx="5"/>
+                        <text x="440" y="85" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Early Testing</text>
+                        <text x="440" y="100" text-anchor="middle" fill="white" font-size="12">Saves Time</text>
+                        <text x="440" y="115" text-anchor="middle" fill="white" font-size="12">and Money</text>
+                        
+                        <!-- Principle 4 -->
+                        <rect x="530" y="60" width="140" height="80" fill="#42A5F5" stroke="#2196F3" stroke-width="2" rx="5"/>
+                        <text x="600" y="85" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Defect</text>
+                        <text x="600" y="100" text-anchor="middle" fill="white" font-size="12">Clustering</text>
+                        <text x="600" y="115" text-anchor="middle" fill="white" font-size="12">Occurs</text>
+                        
+                        <!-- Principle 5 -->
+                        <rect x="130" y="180" width="140" height="80" fill="#64B5F6" stroke="#42A5F5" stroke-width="2" rx="5"/>
+                        <text x="200" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Pesticide</text>
+                        <text x="200" y="220" text-anchor="middle" fill="white" font-size="12">Paradox</text>
+                        <text x="200" y="235" text-anchor="middle" fill="white" font-size="12">Effect</text>
+                        
+                        <!-- Principle 6 -->
+                        <rect x="290" y="180" width="140" height="80" fill="#90CAF9" stroke="#64B5F6" stroke-width="2" rx="5"/>
+                        <text x="360" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Testing is</text>
+                        <text x="360" y="220" text-anchor="middle" fill="white" font-size="12">Context</text>
+                        <text x="360" y="235" text-anchor="middle" fill="white" font-size="12">Dependent</text>
+                        
+                        <!-- Principle 7 -->
+                        <rect x="450" y="180" width="140" height="80" fill="#BBDEFB" stroke="#90CAF9" stroke-width="2" rx="5"/>
+                        <text x="520" y="205" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">Absence of</text>
+                        <text x="520" y="220" text-anchor="middle" fill="#333" font-size="12">Errors Fallacy</text>
+                        
+                        <!-- Central Quality Circle -->
+                        <circle cx="400" cy="320" r="50" fill="#1565c0" stroke="#0D47A1" stroke-width="3"/>
+                        <text x="400" y="315" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Quality</text>
+                        <text x="400" y="330" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Assurance</text>
+                    </svg>
+                </div>
+
+                <h3>Testing Objectives</h3>
+                
+                <div class="info-box">
+                    <h4>Primary Goals:</h4>
+                    <ul>
+                        <li><strong>Find Defects:</strong> Identify bugs and issues before release</li>
+                        <li><strong>Verify Requirements:</strong> Ensure software meets specifications</li>
+                        <li><strong>Validate Functionality:</strong> Confirm system works as intended</li>
+                        <li><strong>Assess Quality:</strong> Evaluate overall software quality</li>
+                        <li><strong>Risk Mitigation:</strong> Reduce risk of failures in production</li>
+                        <li><strong>Compliance:</strong> Meet regulatory and industry standards</li>
+                    </ul>
+                </div>
+
+                <h3>Testing vs. Quality Assurance</h3>
+                
+                <div class="warning-box">
+                    <h4>Key Distinctions:</h4>
+                    <ul>
+                        <li><strong>Testing:</strong> Process-oriented, focuses on finding defects</li>
+                        <li><strong>QA:</strong> Product-oriented, focuses on preventing defects</li>
+                        <li><strong>Testing:</strong> Reactive approach to quality</li>
+                        <li><strong>QA:</strong> Proactive approach to quality</li>
+                        <li><strong>Testing:</strong> Subset of quality control activities</li>
+                        <li><strong>QA:</strong> Encompasses entire software development process</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 3: Testing Methodologies -->
+            <div class="slide">
+                <h2>Testing Methodologies and Approaches</h2>
+                
+                <p>Different testing methodologies provide structured approaches to organizing and executing testing activities.</p>
+
+                <h3>Testing Approaches</h3>
+                
+                <table>
+                    <tr>
+                        <th>Approach</th>
+                        <th>Description</th>
+                        <th>When to Use</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Black Box Testing</strong></td>
+                        <td>Testing without knowledge of internal code structure</td>
+                        <td>Functional testing, user acceptance testing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>White Box Testing</strong></td>
+                        <td>Testing with full knowledge of internal code structure</td>
+                        <td>Unit testing, code coverage analysis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gray Box Testing</strong></td>
+                        <td>Combination of black box and white box approaches</td>
+                        <td>Integration testing, penetration testing</td>
+                    </tr>
+                </table>
+
+                <h3>Testing Methodologies</h3>
+                
+                <div class="info-box">
+                    <h4>Waterfall Testing:</h4>
+                    <ul>
+                        <li>Sequential testing phases</li>
+                        <li>Testing begins after development completion</li>
+                        <li>Extensive documentation</li>
+                        <li>Best for stable requirements</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <h4>Agile Testing:</h4>
+                    <ul>
+                        <li>Continuous testing throughout development</li>
+                        <li>Test-driven development (TDD)</li>
+                        <li>Behavior-driven development (BDD)</li>
+                        <li>Sprint-based testing cycles</li>
+                        <li>Collaboration between developers and testers</li>
+                    </ul>
+                </div>
+
+                <h3>V-Model Testing</h3>
+                
+                <div class="warning-box">
+                    <h4>V-Model Characteristics:</h4>
+                    <ul>
+                        <li>Each development phase has corresponding test phase</li>
+                        <li>Testing activities planned in parallel with development</li>
+                        <li>Early test planning and design</li>
+                        <li>Verification and validation at each level</li>
+                        <li>Higher defect detection rates</li>
+                    </ul>
+                </div>
+
+                <h3>Risk-Based Testing</h3>
+                
+                <div class="danger-box">
+                    <h4>Risk Assessment Factors:</h4>
+                    <ul>
+                        <li>Business impact of potential failures</li>
+                        <li>Probability of defect occurrence</li>
+                        <li>Complexity of system components</li>
+                        <li>Historical defect data</li>
+                        <li>Customer usage patterns</li>
+                        <li>Time and resource constraints</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 4: Test Planning and Documentation -->
+            <div class="slide">
+                <h2>Test Planning and Documentation</h2>
+                
+                <p>Effective test planning is crucial for successful testing projects. It involves defining test strategy, scope, resources, and timelines.</p>
+
+                <h3>Test Planning Process</h3>
+                
+                <div class="diagram">
+                    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">Test Planning Process Flow</text>
+                        
+                        <!-- Process Steps -->
+                        <rect x="50" y="60" width="120" height="50" fill="#1976D2" stroke="#0D47A1" stroke-width="2" rx="5"/>
+                        <text x="110" y="85" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Requirements</text>
+                        <text x="110" y="98" text-anchor="middle" fill="white" font-size="11">Analysis</text>
+                        
+                        <rect x="190" y="60" width="120" height="50" fill="#1E88E5" stroke="#1565C0" stroke-width="2" rx="5"/>
+                        <text x="250" y="85" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Test</text>
+                        <text x="250" y="98" text-anchor="middle" fill="white" font-size="11">Strategy</text>
+                        
+                        <rect x="330" y="60" width="120" height="50" fill="#2196F3" stroke="#1976D2" stroke-width="2" rx="5"/>
+                        <text x="390" y="85" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Test</text>
+                        <text x="390" y="98" text-anchor="middle" fill="white" font-size="11">Planning</text>
+                        
+                        <rect x="470" y="60" width="120" height="50" fill="#42A5F5" stroke="#2196F3" stroke-width="2" rx="5"/>
+                        <text x="530" y="85" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Resource</text>
+                        <text x="530" y="98" text-anchor="middle" fill="white" font-size="11">Allocation</text>
+                        
+                        <rect x="610" y="60" width="120" height="50" fill="#64B5F6" stroke="#42A5F5" stroke-width="2" rx="5"/>
+                        <text x="670" y="85" text-anchor="middle" fill="white" font-size="11" font-weight="bold">Schedule</text>
+                        <text x="670" y="98" text-anchor="middle" fill="white" font-size="11">Creation</text>
+                        
+                        <!-- Arrows -->
+                        <path d="M 170 85 L 190 85" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <path d="M 310 85 L 330 85" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <path d="M 450 85 L 470 85" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <path d="M 590 85 L 610 85" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        
+                        <!-- Test Plan Components -->
+                        <rect x="100" y="180" width="200" height="180" fill="#E3F2FD" stroke="#1976D2" stroke-width="2" rx="5"/>
+                        <text x="200" y="205" text-anchor="middle" font-size="14" font-weight="bold" fill="#1565c0">Test Plan Components</text>
+                        <text x="120" y="230" font-size="12" fill="#333">• Test Objectives</text>
+                        <text x="120" y="248" font-size="12" fill="#333">• Scope and Approach</text>
+                        <text x="120" y="266" font-size="12" fill="#333">• Test Environment</text>
+                        <text x="120" y="284" font-size="12" fill="#333">• Entry/Exit Criteria</text>
+                        <text x="120" y="302" font-size="12" fill="#333">• Resource Requirements</text>
+                        <text x="120" y="320" font-size="12" fill="#333">• Risk Assessment</text>
+                        <text x="120" y="338" font-size="12" fill="#333">• Schedule and Milestones</text>
+                        
+                        <!-- Test Strategy Elements -->
+                        <rect x="420" y="180" width="200" height="180" fill="#E8F5E8" stroke="#28a745" stroke-width="2" rx="5"/>
+                        <text x="520" y="205" text-anchor="middle" font-size="14" font-weight="bold" fill="#28a745">Test Strategy Elements</text>
+                        <text x="440" y="230" font-size="12" fill="#333">• Testing Levels</text>
+                        <text x="440" y="248" font-size="12" fill="#333">• Testing Types</text>
+                        <text x="440" y="266" font-size="12" fill="#333">• Test Techniques</text>
+                        <text x="440" y="284" font-size="12" fill="#333">• Automation Strategy</text>
+                        <text x="440" y="302" font-size="12" fill="#333">• Tool Selection</text>
+                        <text x="440" y="320" font-size="12" fill="#333">• Defect Management</text>
+                        <text x="440" y="338" font-size="12" fill="#333">• Reporting Strategy</text>
+                        
+                        <!-- Arrowhead marker -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+                                <polygon points="0 0, 10 5, 0 10" fill="#333"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <h3>Test Documentation</h3>
+                
+                <table>
+                    <tr>
+                        <th>Document Type</th>
+                        <th>Purpose</th>
+                        <th>Key Contents</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Plan</strong></td>
+                        <td>Overall testing approach</td>
+                        <td>Scope, strategy, resources, schedule</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Cases</strong></td>
+                        <td>Detailed test procedures</td>
+                        <td>Steps, data, expected results</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Scripts</strong></td>
+                        <td>Automated test procedures</td>
+                        <td>Code, parameters, assertions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Data</strong></td>
+                        <td>Input values for testing</td>
+                        <td>Valid/invalid data sets</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Reports</strong></td>
+                        <td>Results and metrics</td>
+                        <td>Pass/fail rates, defects found</td>
+                    </tr>
+                </table>
+
+                <h3>Test Estimation</h3>
+                
+                <div class="info-box">
+                    <h4>Estimation Techniques:</h4>
+                    <ul>
+                        <li><strong>Function Point Analysis:</strong> Based on functional requirements</li>
+                        <li><strong>Work Breakdown Structure:</strong> Task-based estimation</li>
+                        <li><strong>Three-Point Estimation:</strong> Optimistic, pessimistic, realistic</li>
+                        <li><strong>Historical Data:</strong> Previous project metrics</li>
+                        <li><strong>Expert Judgment:</strong> Experience-based estimates</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 5: Types of Testing -->
+            <div class="slide">
+                <h2>Types of Testing</h2>
+                
+                <p>Software testing encompasses various types and levels, each serving specific purposes in ensuring software quality.</p>
+
+                <h3>Testing Levels</h3>
+                
+                <div class="diagram">
+                    <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">Testing Pyramid</text>
+                        
+                        <!-- Unit Tests (Base) -->
+                        <polygon points="200,280 600,280 500,220 300,220" fill="#28a745" stroke="#218838" stroke-width="2"/>
+                        <text x="400" y="255" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Unit Tests</text>
+                        <text x="400" y="275" text-anchor="middle" fill="white" font-size="12">Fast • Isolated • Developer-focused</text>
+                        
+                        <!-- Integration Tests (Middle) -->
+                        <polygon points="250,220 550,220 475,160 325,160" fill="#ffc107" stroke="#e0a800" stroke-width="2"/>
+                        <text x="400" y="195" text-anchor="middle" fill="white" font-size="16" font-weight="bold">Integration Tests</text>
+                        <text x="400" y="210" text-anchor="middle" fill="white" font-size="12">Component interaction</text>
+                        
+                        <!-- System Tests (Top) -->
+                        <polygon points="300,160 500,160 450,100 350,100" fill="#dc3545" stroke="#c82333" stroke-width="2"/>
+                        <text x="400" y="135" text-anchor="middle" fill="white" font-size="16" font-weight="bold">System Tests</text>
+                        <text x="400" y="150" text-anchor="middle" fill="white" font-size="12">End-to-end</text>
+                        
+                        <!-- UI Tests (Peak) -->
+                        <polygon points="350,100 450,100 425,60 375,60" fill="#6f42c1" stroke="#5a32a3" stroke-width="2"/>
+                        <text x="400" y="85" text-anchor="middle" fill="white" font-size="14" font-weight="bold">UI Tests</text>
+                        
+                        <!-- Labels -->
+                        <text x="100" y="250" font-size="12" fill="#333">More tests</text>
+                        <text x="100" y="265" font-size="12" fill="#333">Faster execution</text>
+                        <text x="100" y="280" font-size="12" fill="#333">Lower cost</text>
+                        
+                        <text x="650" y="100" font-size="12" fill="#333">Fewer tests</text>
+                        <text x="650" y="115" font-size="12" fill="#333">Slower execution</text>
+                        <text x="650" y="130" font-size="12" fill="#333">Higher cost</text>
+                    </svg>
+                </div>
+
+                <h3>Functional Testing Types</h3>
+                
+                <div class="info-box">
+                    <h4>Key Functional Tests:</h4>
+                    <ul>
+                        <li><strong>Unit Testing:</strong> Individual components or modules</li>
+                        <li><strong>Integration Testing:</strong> Component interactions</li>
+                        <li><strong>System Testing:</strong> Complete integrated system</li>
+                        <li><strong>User Acceptance Testing:</strong> Business requirements validation</li>
+                        <li><strong>Regression Testing:</strong> Ensuring existing functionality works</li>
+                        <li><strong>Smoke Testing:</strong> Basic functionality verification</li>
+                    </ul>
+                </div>
+
+                <h3>Non-Functional Testing Types</h3>
+                
+                <table>
+                    <tr>
+                        <th>Testing Type</th>
+                        <th>Purpose</th>
+                        <th>Key Metrics</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Performance Testing</strong></td>
+                        <td>Speed, stability, scalability</td>
+                        <td>Response time, throughput, resource usage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security Testing</strong></td>
+                        <td>Vulnerability identification</td>
+                        <td>Breach attempts, data protection</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Usability Testing</strong></td>
+                        <td>User experience evaluation</td>
+                        <td>Task completion time, error rates</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Compatibility Testing</strong></td>
+                        <td>Cross-platform functionality</td>
+                        <td>Browser/OS support</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reliability Testing</strong></td>
+                        <td>System stability over time</td>
+                        <td>Mean time between failures</td>
+                    </tr>
+                </table>
+
+                <h3>Specialized Testing Approaches</h3>
+                
+                <div class="success-box">
+                    <h4>Advanced Testing Types:</h4>
+                    <ul>
+                        <li><strong>API Testing:</strong> Application programming interface validation</li>
+                        <li><strong>Database Testing:</strong> Data integrity and performance</li>
+                        <li><strong>Mobile Testing:</strong> Device-specific functionality</li>
+                        <li><strong>Accessibility Testing:</strong> Compliance with accessibility standards</li>
+                        <li><strong>Localization Testing:</strong> Multi-language and cultural adaptation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 6: Test Case Design -->
+            <div class="slide">
+                <h2>Test Case Design and Execution</h2>
+                
+                <p>Effective test case design is essential for comprehensive test coverage and efficient defect detection.</p>
+
+                <h3>Test Case Components</h3>
+                
+                <div class="info-box">
+                    <h4>Essential Elements:</h4>
+                    <ul>
+                        <li><strong>Test Case ID:</strong> Unique identifier</li>
+                        <li><strong>Test Description:</strong> Clear, concise summary</li>
+                        <li><strong>Preconditions:</strong> Setup requirements</li>
+                        <li><strong>Test Steps:</strong> Detailed execution procedure</li>
+                        <li><strong>Test Data:</strong> Input values and parameters</li>
+                        <li><strong>Expected Result:</strong> Anticipated outcome</li>
+                        <li><strong>Actual Result:</strong> Observed outcome</li>
+                        <li><strong>Status:</strong> Pass/Fail/Blocked</li>
+                    </ul>
+                </div>
+
+                <h3>Test Design Techniques</h3>
+                
+                <table>
+                    <tr>
+                        <th>Technique</th>
+                        <th>Description</th>
+                        <th>Best Use Case</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Equivalence Partitioning</strong></td>
+                        <td>Divide input data into equivalent classes</td>
+                        <td>Reducing test cases while maintaining coverage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Boundary Value Analysis</strong></td>
+                        <td>Test values at boundaries of input domains</td>
+                        <td>Finding errors at data boundaries</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Decision Table Testing</strong></td>
+                        <td>Test different combinations of conditions</td>
+                        <td>Complex business logic validation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>State Transition Testing</strong></td>
+                        <td>Test system behavior state changes</td>
+                        <td>Applications with distinct operational states</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pairwise Testing</strong></td>
+                        <td>Test all possible pairs of parameters</td>
+                        <td>Configuration testing with multiple variables</td>
+                    </tr>
+                </table>
+
+                <h3>Test Execution Process</h3>
+                
+                <div class="warning-box">
+                    <h4>Execution Best Practices:</h4>
+                    <ul>
+                        <li>Execute tests in defined order</li>
+                        <li>Document all results thoroughly</li>
+                        <li>Report defects immediately</li>
+                        <li>Maintain traceability to requirements</li>
+                        <li>Update test status regularly</li>
+                        <li>Coordinate with development team</li>
+                    </ul>
+                </div>
+
+                <h3>Test Coverage Metrics</h3>
+                
+                <div class="success-box">
+                    <h4>Coverage Types:</h4>
+                    <ul>
+                        <li><strong>Requirements Coverage:</strong> Percentage of requirements tested</li>
+                        <li><strong>Code Coverage:</strong> Percentage of code executed</li>
+                        <li><strong>Branch Coverage:</strong> Percentage of decision branches tested</li>
+                        <li><strong>Condition Coverage:</strong> Percentage of boolean conditions tested</li>
+                        <li><strong>Path Coverage:</strong> Percentage of execution paths tested</li>
+                    </ul>
+                </div>
+
+                <h3>Test Data Management</h3>
+                
+                <div class="danger-box">
+                    <h4>Data Considerations:</h4>
+                    <ul>
+                        <li>Use realistic test data sets</li>
+                        <li>Protect sensitive information</li>
+                        <li>Maintain data consistency</li>
+                        <li>Plan for data cleanup</li>
+                        <li>Version control test data</li>
+                        <li>Document data dependencies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 7: Defect Management -->
+            <div class="slide">
+                <h2>Defect Management Process</h2>
+                
+                <p>Effective defect management ensures that identified issues are properly tracked, prioritized, and resolved throughout the software development lifecycle.</p>
+
+                <h3>Defect Lifecycle</h3>
+                
+                <div class="diagram">
+                    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">Defect Lifecycle States</text>
+                        
+                        <!-- New -->
+                        <rect x="50" y="60" width="100" height="50" fill="#1976D2" stroke="#0D47A1" stroke-width="2" rx="5"/>
+                        <text x="100" y="90" text-anchor="middle" fill="white" font-size="12" font-weight="bold">NEW</text>
+                        
+                        <!-- Assigned -->
+                        <rect x="200" y="60" width="100" height="50" fill="#1E88E5" stroke="#1565C0" stroke-width="2" rx="5"/>
+                        <text x="250" y="90" text-anchor="middle" fill="white" font-size="12" font-weight="bold">ASSIGNED</text>
+                        
+                        <!-- Open -->
+                        <rect x="350" y="60" width="100" height="50" fill="#2196F3" stroke="#1976D2" stroke-width="2" rx="5"/>
+                        <text x="400" y="90" text-anchor="middle" fill="white" font-size="12" font-weight="bold">OPEN</text>
+                        
+                        <!-- Fixed -->
+                        <rect x="500" y="60" width="100" height="50" fill="#42A5F5" stroke="#2196F3" stroke-width="2" rx="5"/>
+                        <text x="550" y="90" text-anchor="middle" fill="white" font-size="12" font-weight="bold">FIXED</text>
+                        
+                        <!-- Retest -->
+                        <rect x="350" y="150" width="100" height="50" fill="#64B5F6" stroke="#42A5F5" stroke-width="2" rx="5"/>
+                        <text x="400" y="180" text-anchor="middle" fill="white" font-size="12" font-weight="bold">RETEST</text>
+                        
+                        <!-- Verified -->
+                        <rect x="200" y="240" width="100" height="50" fill="#90CAF9" stroke="#64B5F6" stroke-width="2" rx="5"/>
+                        <text x="250" y="270" text-anchor="middle" fill="white" font-size="12" font-weight="bold">VERIFIED</text>
+                        
+                        <!-- Closed -->
+                        <rect x="350" y="240" width="100" height="50" fill="#BBDEFB" stroke="#90CAF9" stroke-width="2" rx="5"/>
+                        <text x="400" y="270" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">CLOSED</text>
+                        
+                        <!-- Rejected -->
+                        <rect x="650" y="150" width="100" height="50" fill="#dc3545" stroke="#c82333" stroke-width="2" rx="5"/>
+                        <text x="700" y="180" text-anchor="middle" fill="white" font-size="12" font-weight="bold">REJECTED</text>
+                        
+                        <!-- Reopened -->
+                        <rect x="500" y="150" width="100" height="50" fill="#ffc107" stroke="#e0a800" stroke-width="2" rx="5"/>
+                        <text x="550" y="180" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">REOPENED</text>
+                        
+                        <!-- Arrows -->
+                        <path d="M 150 85 L 200 85" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 300 85 L 350 85" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 450 85 L 500 85" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 550 110 L 400 150" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 400 200 L 250 240" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 300 265 L 350 265" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 450 175 L 500 175" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 600 175 L 650 175" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 550 150 L 550 110" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <!-- Arrow marker -->
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+                                <polygon points="0 0, 10 5, 0 10" fill="#333"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <h3>Defect Classification</h3>
+                
+                <table>
+                    <tr>
+                        <th>Severity</th>
+                        <th>Priority</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Critical</strong></td>
+                        <td>High</td>
+                        <td>System crash, data loss</td>
+                        <td>Application cannot start</td>
+                    </tr>
+                    <tr>
+                        <td><strong>High</strong></td>
+                        <td>High</td>
+                        <td>Major functionality broken</td>
+                        <td>Login system failure</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Medium</strong></td>
+                        <td>Medium</td>
+                        <td>Feature works with issues</td>
+                        <td>Incorrect calculations</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Low</strong></td>
+                        <td>Low</td>
+                        <td>Minor issues, cosmetic problems</td>
+                        <td>Typos, alignment issues</td>
+                    </tr>
+                </table>
+
+                <h3>Defect Reporting</h3>
+                
+                <div class="info-box">
+                    <h4>Essential Defect Information:</h4>
+                    <ul>
+                        <li><strong>Summary:</strong> Clear, concise description</li>
+                        <li><strong>Steps to Reproduce:</strong> Detailed reproduction steps</li>
+                        <li><strong>Expected vs Actual Result:</strong> What should happen vs what happens</li>
+                        <li><strong>Environment:</strong> OS, browser, version information</li>
+                        <li><strong>Severity/Priority:</strong> Business impact assessment</li>
+                        <li><strong>Attachments:</strong> Screenshots, logs, test data</li>
+                    </ul>
+                </div>
+
+                <h3>Root Cause Analysis</h3>
+                
+                <div class="warning-box">
+                    <h4>Common Defect Categories:</h4>
+                    <ul>
+                        <li><strong>Requirements Issues:</strong> Unclear or missing requirements</li>
+                        <li><strong>Design Flaws:</strong> Architectural or design problems</li>
+                        <li><strong>Coding Errors:</strong> Implementation mistakes</li>
+                        <li><strong>Integration Issues:</strong> Component interaction problems</li>
+                        <li><strong>Environment Problems:</strong> Configuration or setup issues</li>
+                        <li><strong>Data Issues:</strong> Incorrect or missing test data</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 8: Test Automation -->
+            <div class="slide">
+                <h2>Test Automation Fundamentals</h2>
+                
+                <p>Test automation involves using software tools and scripts to execute tests automatically, improving efficiency and test coverage.</p>
+
+                <h3>Automation Benefits and Challenges</h3>
+                
+                <div class="success-box">
+                    <h4>Benefits of Test Automation:</h4>
+                    <ul>
+                        <li>Faster test execution</li>
+                        <li>Improved test coverage</li>
+                        <li>Consistent and repeatable tests</li>
+                        <li>Early defect detection</li>
+                        <li>Reduced manual effort</li>
+                        <li>Better ROI for regression testing</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>Automation Challenges:</h4>
+                    <ul>
+                        <li>High initial setup costs</li>
+                        <li>Maintenance overhead</li>
+                        <li>Tool learning curve</li>
+                        <li>Not suitable for all test types</li>
+                        <li>False positive/negative results</li>
+                        <li>Dependency on stable applications</li>
+                    </ul>
+                </div>
+
+                <h3>Automation Strategy</h3>
+                
+                <table>
+                    <tr>
+                        <th>Test Type</th>
+                        <th>Automation Suitability</th>
+                        <th>Reasoning</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Regression Tests</strong></td>
+                        <td>High</td>
+                        <td>Repetitive, stable functionality</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Smoke Tests</strong></td>
+                        <td>High</td>
+                        <td>Basic functionality validation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Load/Performance</strong></td>
+                        <td>High</td>
+                        <td>Requires multiple virtual users</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data-Driven Tests</strong></td>
+                        <td>Medium-High</td>
+                        <td>Multiple datasets, same logic</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Usability Tests</strong></td>
+                        <td>Low</td>
+                        <td>Requires human judgment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Exploratory Tests</strong></td>
+                        <td>Low</td>
+                        <td>Ad-hoc, investigative nature</td>
+                    </tr>
+                </table>
+
+                <h3>Automation Tools and Frameworks</h3>
+                
+                <div class="info-box">
+                    <h4>Popular Automation Tools:</h4>
+                    <ul>
+                        <li><strong>Selenium:</strong> Web application testing</li>
+                        <li><strong>Cypress:</strong> Modern web testing framework</li>
+                        <li><strong>Appium:</strong> Mobile application testing</li>
+                        <li><strong>JUnit/TestNG:</strong> Unit testing frameworks</li>
+                        <li><strong>REST Assured:</strong> API testing</li>
+                        <li><strong>Playwright:</strong> Cross-browser automation</li>
+                    </ul>
+                </div>
+
+                <h3>Automation Best Practices</h3>
+                
+                <div class="danger-box">
+                    <h4>Key Guidelines:</h4>
+                    <ul>
+                        <li>Start with stable, high-value test cases</li>
+                        <li>Maintain clear test automation architecture</li>
+                        <li>Use page object model for web testing</li>
+                        <li>Implement proper error handling and reporting</li>
+                        <li>Regular maintenance and updates</li>
+                        <li>Parallel execution for faster feedback</li>
+                        <li>Continuous integration pipeline integration</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 9: Performance Testing -->
+            <div class="slide">
+                <h2>Performance Testing</h2>
+                
+                <p>Performance testing evaluates how well software performs under various conditions, ensuring it meets performance requirements and can handle expected loads.</p>
+
+                <h3>Types of Performance Testing</h3>
+                
+                <div class="diagram">
+                    <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">Performance Testing Types</text>
+                        
+                        <!-- Load Testing -->
+                        <rect x="50" y="80" width="140" height="60" fill="#1976D2" stroke="#0D47A1" stroke-width="2" rx="5"/>
+                        <text x="120" y="105" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Load Testing</text>
+                        <text x="120" y="120" text-anchor="middle" fill="white" font-size="10">Normal expected load</text>
+                        
+                        <!-- Stress Testing -->
+                        <rect x="220" y="80" width="140" height="60" fill="#1E88E5" stroke="#1565C0" stroke-width="2" rx="5"/>
+                        <text x="290" y="105" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Stress Testing</text>
+                        <text x="290" y="120" text-anchor="middle" fill="white" font-size="10">Beyond normal capacity</text>
+                        
+                        <!-- Volume Testing -->
+                        <rect x="390" y="80" width="140" height="60" fill="#2196F3" stroke="#1976D2" stroke-width="2" rx="5"/>
+                        <text x="460" y="105" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Volume Testing</text>
+                        <text x="460" y="120" text-anchor="middle" fill="white" font-size="10">Large amounts of data</text>
+                        
+                        <!-- Spike Testing -->
+                        <rect x="560" y="80" width="140" height="60" fill="#42A5F5" stroke="#2196F3" stroke-width="2" rx="5"/>
+                        <text x="630" y="105" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Spike Testing</text>
+                        <text x="630" y="120" text-anchor="middle" fill="white" font-size="10">Sudden load increases</text>
+                        
+                        <!-- Endurance Testing -->
+                        <rect x="135" y="180" width="140" height="60" fill="#64B5F6" stroke="#42A5F5" stroke-width="2" rx="5"/>
+                        <text x="205" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Endurance Testing</text>
+                        <text x="205" y="220" text-anchor="middle" fill="white" font-size="10">Extended periods</text>
+                        
+                        <!-- Scalability Testing -->
+                        <rect x="305" y="180" width="140" height="60" fill="#90CAF9" stroke="#64B5F6" stroke-width="2" rx="5"/>
+                        <text x="375" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Scalability Testing</text>
+                        <text x="375" y="220" text-anchor="middle" fill="white" font-size="10">Resource scaling</text>
+                        
+                        <!-- Baseline Testing -->
+                        <rect x="475" y="180" width="140" height="60" fill="#BBDEFB" stroke="#90CAF9" stroke-width="2" rx="5"/>
+                        <text x="545" y="205" text-anchor="middle" fill="#333" font-size="12" font-weight="bold">Baseline Testing</text>
+                        <text x="545" y="220" text-anchor="middle" fill="#333" font-size="10">Performance benchmarks</text>
+                        
+                        <!-- Performance Graph -->
+                        <rect x="200" y="270" width="400" height="60" fill="#f8f9fa" stroke="#1976D2" stroke-width="2" rx="5"/>
+                        <text x="400" y="295" text-anchor="middle" font-size="14" font-weight="bold" fill="#1565c0">Key Metrics</text>
+                        <text x="400" y="315" text-anchor="middle" font-size="11" fill="#333">Response Time • Throughput • Resource Utilization • Error Rate</text>
+                    </svg>
+                </div>
+
+                <h3>Performance Metrics</h3>
+                
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Description</th>
+                        <th>Target Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Response Time</strong></td>
+                        <td>Time to complete a request</td>
+                        <td>< 2 seconds for web pages</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Throughput</strong></td>
+                        <td>Requests processed per unit time</td>
+                        <td>1000 requests per second</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Concurrent Users</strong></td>
+                        <td>Number of simultaneous users</td>
+                        <td>500 concurrent users</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Resource Utilization</strong></td>
+                        <td>CPU, memory, disk, network usage</td>
+                        <td>CPU < 80%, Memory < 85%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Error Rate</strong></td>
+                        <td>Percentage of failed requests</td>
+                        <td>< 1% error rate</td>
+                    </tr>
+                </table>
+
+                <h3>Performance Testing Tools</h3>
+                
+                <div class="info-box">
+                    <h4>Popular Tools:</h4>
+                    <ul>
+                        <li><strong>JMeter:</strong> Open-source load testing tool</li>
+                        <li><strong>LoadRunner:</strong> Enterprise performance testing suite</li>
+                        <li><strong>Gatling:</strong> High-performance load testing framework</li>
+                        <li><strong>K6:</strong> Developer-friendly load testing tool</li>
+                        <li><strong>BlazeMeter:</strong> Cloud-based performance testing</li>
+                        <li><strong>WebLoad:</strong> Web application load testing</li>
+                    </ul>
+                </div>
+
+                <h3>Performance Testing Process</h3>
+                
+                <div class="success-box">
+                    <h4>Testing Steps:</h4>
+                    <ul>
+                        <li>Define performance requirements and acceptance criteria</li>
+                        <li>Design realistic test scenarios and user journeys</li>
+                        <li>Prepare test environment and monitoring tools</li>
+                        <li>Execute baseline tests to establish benchmarks</li>
+                        <li>Run load tests with increasing user loads</li>
+                        <li>Identify performance bottlenecks and issues</li>
+                        <li>Optimize and retest until criteria are met</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 10: Security Testing -->
+            <div class="slide">
+                <h2>Security Testing Considerations</h2>
+                
+                <p>Security testing identifies vulnerabilities, threats, and risks in software applications to ensure data protection and system security.</p>
+
+                <h3>Security Testing Types</h3>
+                
+                <div class="info-box">
+                    <h4>Key Security Tests:</h4>
+                    <ul>
+                        <li><strong>Authentication Testing:</strong> User identity verification</li>
+                        <li><strong>Authorization Testing:</strong> Access control validation</li>
+                        <li><strong>Data Protection Testing:</strong> Encryption and data integrity</li>
+                        <li><strong>Input Validation Testing:</strong> Malicious input handling</li>
+                        <li><strong>Session Management Testing:</strong> Session security controls</li>
+                        <li><strong>Error Handling Testing:</strong> Information disclosure prevention</li>
+                    </ul>
+                </div>
+
+                <h3>Common Security Vulnerabilities</h3>
+                
+                <table>
+                    <tr>
+                        <th>Vulnerability Type</th>
+                        <th>Description</th>
+                        <th>Testing Approach</th>
+                    </tr>
+                    <tr>
+                        <td><strong>SQL Injection</strong></td>
+                        <td>Malicious SQL code injection</td>
+                        <td>Input validation, parameterized queries</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cross-Site Scripting (XSS)</strong></td>
+                        <td>Malicious script execution</td>
+                        <td>Input sanitization, output encoding</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cross-Site Request Forgery</strong></td>
+                        <td>Unauthorized request execution</td>
+                        <td>Token validation, same-site cookies</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Buffer Overflow</strong></td>
+                        <td>Memory boundary violations</td>
+                        <td>Boundary testing, input length validation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Broken Authentication</strong></td>
+                        <td>Authentication bypass or weakness</td>
+                        <td>Login security, session management</td>
+                    </tr>
+                </table>
+
+                <h3>Security Testing Tools</h3>
+                
+                <div class="warning-box">
+                    <h4>Security Testing Tools:</h4>
+                    <ul>
+                        <li><strong>OWASP ZAP:</strong> Web application security scanner</li>
+                        <li><strong>Burp Suite:</strong> Web vulnerability scanner</li>
+                        <li><strong>Nessus:</strong> Network vulnerability scanner</li>
+                        <li><strong>SonarQube:</strong> Static code analysis</li>
+                        <li><strong>Fortify:</strong> Application security testing</li>
+                        <li><strong>Checkmarx:</strong> Static application security testing</li>
+                    </ul>
+                </div>
+
+                <h3>Security Testing Process</h3>
+                
+                <div class="danger-box">
+                    <h4>Testing Activities:</h4>
+                    <ul>
+                        <li>Threat modeling and risk assessment</li>
+                        <li>Static code analysis for security flaws</li>
+                        <li>Dynamic security testing during runtime</li>
+                        <li>Penetration testing and vulnerability assessment</li>
+                        <li>Security configuration review</li>
+                        <li>Compliance testing (GDPR, HIPAA, SOX)</li>
+                    </ul>
+                </div>
+
+                <h3>Security Best Practices</h3>
+                
+                <div class="success-box">
+                    <h4>Security Guidelines:</h4>
+                    <ul>
+                        <li>Implement security testing early in SDLC</li>
+                        <li>Regular security assessments and updates</li>
+                        <li>Secure coding practices and training</li>
+                        <li>Proper error handling and logging</li>
+                        <li>Regular security patches and updates</li>
+                        <li>Incident response and recovery planning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 11: Best Practices -->
+            <div class="slide">
+                <h2>Testing Best Practices and Industry Standards</h2>
+                
+                <p>Following established best practices ensures effective testing processes and high-quality software delivery.</p>
+
+                <h3>Test Process Best Practices</h3>
+                
+                <div class="success-box">
+                    <h4>Process Excellence:</h4>
+                    <ul>
+                        <li><strong>Shift-Left Testing:</strong> Start testing early in development cycle</li>
+                        <li><strong>Risk-Based Testing:</strong> Focus on high-risk areas first</li>
+                        <li><strong>Continuous Testing:</strong> Integrate testing into CI/CD pipelines</li>
+                        <li><strong>Test-Driven Development:</strong> Write tests before code</li>
+                        <li><strong>Behavior-Driven Development:</strong> Collaborate on test scenarios</li>
+                        <li><strong>Exploratory Testing:</strong> Combine learning and testing</li>
+                    </ul>
+                </div>
+
+                <h3>Team and Communication</h3>
+                
+                <div class="info-box">
+                    <h4>Team Practices:</h4>
+                    <ul>
+                        <li>Cross-functional collaboration</li>
+                        <li>Regular communication and standups</li>
+                        <li>Knowledge sharing and training</li>
+                        <li>Clear roles and responsibilities</li>
+                        <li>Continuous learning and improvement</li>
+                        <li>Quality mindset across all team members</li>
+                    </ul>
+                </div>
+
+                <h3>Quality Metrics and KPIs</h3>
+                
+                <table>
+                    <tr>
+                        <th>Metric Category</th>
+                        <th>Key Metrics</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Effectiveness</strong></td>
+                        <td>Defect detection rate, test coverage</td>
+                        <td>Measure testing quality</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Test Efficiency</strong></td>
+                        <td>Test execution time, automation ratio</td>
+                        <td>Optimize testing process</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Defect Quality</strong></td>
+                        <td>Defect density, escape rate</td>
+                        <td>Track product quality</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Process Quality</strong></td>
+                        <td>Requirement coverage, test case quality</td>
+                        <td>Improve test processes</td>
+                    </tr>
+                </table>
+
+                <h3>Industry Standards and Frameworks</h3>
+                
+                <div class="warning-box">
+                    <h4>Testing Standards:</h4>
+                    <ul>
+                        <li><strong>ISO 29119:</strong> Software testing standards</li>
+                        <li><strong>IEEE 829:</strong> Test documentation standard</li>
+                        <li><strong>ISTQB:</strong> Testing certification body</li>
+                        <li><strong>TMMI:</strong> Test Maturity Model Integration</li>
+                        <li><strong>Agile Testing:</strong> Agile testing principles</li>
+                        <li><strong>DevOps Testing:</strong> Continuous testing practices</li>
+                    </ul>
+                </div>
+
+                <h3>Continuous Improvement</h3>
+                
+                <div class="danger-box">
+                    <h4>Improvement Areas:</h4>
+                    <ul>
+                        <li>Regular retrospectives and lessons learned</li>
+                        <li>Process optimization and automation</li>
+                        <li>Tool evaluation and adoption</li>
+                        <li>Team skill development and training</li>
+                        <li>Metrics analysis and action planning</li>
+                        <li>Industry trend monitoring and adaptation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 12: References -->
+            <div class="slide">
+                <h2>References and Resources</h2>
+                
+                <p>This training module was developed using authoritative sources on software testing methodologies and industry best practices.</p>
+
+                <div class="reference-box">
+                    <h4>Primary References:</h4>
+                    <ul>
+                        <li>• ISTQB Foundation Level Syllabus (2018 Version 3.1)</li>
+                        <li>• IEEE 829 - Standard for Software and System Test Documentation</li>
+                        <li>• ISO/IEC 29119 - Software Testing Standards</li>
+                        <li>• "Agile Testing: A Practical Guide" - Crispin & Gregory</li>
+                        <li>• "The Art of Software Testing" - Myers, Sandler & Badgett</li>
+                        <li>• "Lessons Learned in Software Testing" - Kaner, Bach & Pettichord</li>
+                        <li>• OWASP Testing Guide v4.2</li>
+                    </ul>
+                </div>
+
+                <div class="reference-box">
+                    <h4>Professional Organizations:</h4>
+                    <ul>
+                        <li>• ISTQB - International Software Testing Qualifications Board</li>
+                        <li>• AST - Association for Software Testing</li>
+                        <li>• IIST - International Institute for Software Testing</li>
+                        <li>• IEEE Computer Society</li>
+                        <li>• OWASP - Open Web Application Security Project</li>
+                        <li>• Agile Alliance</li>
+                    </ul>
+                </div>
+
+                <div class="reference-box">
+                    <h4>Tools and Frameworks:</h4>
+                    <ul>
+                        <li>• Selenium WebDriver Documentation</li>
+                        <li>• JUnit 5 User Guide</li>
+                        <li>• TestNG Documentation</li>
+                        <li>• Cypress Documentation</li>
+                        <li>• Apache JMeter User Manual</li>
+                        <li>• Postman Learning Center</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h4>Note on Content Development:</h4>
+                    <p>This training module represents current industry best practices for software testing. Testing methodologies and tools continue to evolve rapidly. Always verify the latest versions of tools and frameworks, and adapt practices to your specific organizational context and project requirements.</p>
+                </div>
+            </div>
+
+            <!-- Quiz Slide -->
+            <div class="slide">
+                <h2>Knowledge Assessment Quiz</h2>
+                <p>Test your understanding of IT Testing Procedures. Select the best answer for each question:</p>
+
+                <form id="quizForm">
+                    <div class="quiz-question">
+                        <h4>1. Which testing principle states that finding and fixing defects early saves time and money?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q1" value="a"> Exhaustive testing is impossible</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q1" value="b"> Early testing saves time and money</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q1" value="c"> Testing shows presence of defects</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q1" value="d"> Defect clustering occurs</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>2. What type of testing is performed without knowledge of the internal code structure?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q2" value="a"> White box testing</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q2" value="b"> Gray box testing</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q2" value="c"> Black box testing</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q2" value="d"> Unit testing</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>3. In the testing pyramid, which type of tests should be most numerous?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q3" value="a"> UI tests</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q3" value="b"> Integration tests</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q3" value="c"> Unit tests</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q3" value="d"> System tests</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>4. Which test design technique divides input data into equivalent classes?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q4" value="a"> Boundary value analysis</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q4" value="b"> Equivalence partitioning</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q4" value="c"> Decision table testing</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q4" value="d"> State transition testing</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>5. What is the first state in the typical defect lifecycle?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q5" value="a"> Assigned</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q5" value="b"> Open</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q5" value="c"> New</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q5" value="d"> Fixed</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>6. Which type of testing is best suited for automation?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q6" value="a"> Usability testing</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q6" value="b"> Exploratory testing</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q6" value="c"> Regression testing</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q6" value="d"> Ad-hoc testing</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>7. What performance metric measures the number of requests processed per unit time?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q7" value="a"> Response time</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q7" value="b"> Throughput</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q7" value="c"> Concurrent users</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q7" value="d"> Error rate</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>8. Which security vulnerability involves malicious SQL code injection?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q8" value="a"> Cross-Site Scripting (XSS)</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q8" value="b"> SQL Injection</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q8" value="c"> Buffer Overflow</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q8" value="d"> Cross-Site Request Forgery</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>9. What does "shift-left testing" mean?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q9" value="a"> Moving testing to the end of development</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q9" value="b"> Starting testing early in the development cycle</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q9" value="c"> Testing only on the left side of the application</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q9" value="d"> Using left-handed testers only</label>
+                        </div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <h4>10. Which standard provides guidelines for software testing documentation?</h4>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q10" value="a"> ISO 9001</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q10" value="b"> IEEE 829</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q10" value="c"> ISO 27001</label>
+                        </div>
+                        <div class="quiz-option">
+                            <label><input type="radio" name="q10" value="d"> CMMI Level 3</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-quiz">Submit Quiz</button>
+                </form>
+
+                <div id="quizResults" style="display: none;">
+                    <div class="score-display">
+                        <h3>Your Quiz Results</h3>
+                        <div class="score" id="scoreDisplay">0%</div>
+                        <p id="resultMessage"></p>
+                        <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">Previous</button>
+            <span class="slide-counter" id="slideCounter">1 / 13</span>
+            <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">Next</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.getElementsByClassName('slide');
+        const totalSlides = slides.length;
+
+        // Quiz answers
+        const correctAnswers = {
+            q1: 'b',  // Early testing saves time and money
+            q2: 'c',  // Black box testing
+            q3: 'c',  // Unit tests (most numerous in pyramid)
+            q4: 'b',  // Equivalence partitioning
+            q5: 'c',  // New (first defect state)
+            q6: 'c',  // Regression testing (best for automation)
+            q7: 'b',  // Throughput
+            q8: 'b',  // SQL Injection
+            q9: 'b',  // Starting testing early in development cycle
+            q10: 'b'  // IEEE 829
+        };
+
+        function showSlide(n) {
+            if (n >= totalSlides) { currentSlide = totalSlides - 1; }
+            if (n < 0) { currentSlide = 0; }
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+            
+            slides[currentSlide].classList.add('active');
+            
+            // Update navigation
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+            
+            // Update slide counter
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            
+            // Update progress bar
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        // Quiz functionality
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let score = 0;
+            const totalQuestions = Object.keys(correctAnswers).length;
+            
+            for (let question in correctAnswers) {
+                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                    score++;
+                }
+            }
+            
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            // Hide form and show results
+            document.getElementById('quizForm').style.display = 'none';
+            document.getElementById('quizResults').style.display = 'block';
+            
+            // Display score
+            document.getElementById('scoreDisplay').textContent = percentage + '%';
+            
+            // Display message based on score
+            let message = '';
+            if (percentage >= 80) {
+                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of IT Testing Procedures.`;
+                document.getElementById('scoreDisplay').style.color = '#28a745';
+            } else {
+                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('scoreDisplay').style.color = '#dc3545';
+            }
+            document.getElementById('resultMessage').textContent = message;
+        });
+
+        function retakeQuiz() {
+            // Reset form
+            document.getElementById('quizForm').reset();
+            document.getElementById('quizForm').style.display = 'block';
+            document.getElementById('quizResults').style.display = 'none';
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                changeSlide(1);
+            }
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
