@@ -1328,6 +1328,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1344,38 +1345,84 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // 42-45°F
-            q2: 'c',  // Water-cooled centrifugal with magnetic bearings
-            q3: 'b',  // Integrated Part Load Value
-            q4: 'b',  // To provide hydraulic separation between loops
-            q5: 'b',  // 1.5%
-            q6: 'c',  // <50 ppm
-            q7: 'b',  // 4 chillers (3+1)
-            q8: 'b',  // Unstable operation at low load/high lift conditions
-            q9: 'b',  // 0.55-0.65 kW/ton
-            q10: 'c'  // Tube cleaning
+        // Quiz data: correct answers, correct label text, and explanations
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What is the typical chilled water supply temperature for data center applications?',
+                correctLabel: '42-45°F',
+                explanation: 'Data center chilled water systems are typically designed to supply water at 42–45°F (5.6–7.2°C). This range is cold enough to support efficient cooling of IT equipment via CRAHs and in-row coolers while staying above the dew point to prevent condensation on equipment. Temperatures below 42°F risk condensation problems, while temperatures above 45°F may not provide sufficient cooling capacity for high-density loads.'
+            },
+            q2: {
+                answer: 'c',
+                question: 'Which type of chiller typically has the best efficiency?',
+                correctLabel: 'Water-cooled centrifugal with magnetic bearings',
+                explanation: 'Water-cooled centrifugal chillers with magnetic bearing compressors achieve the highest efficiency of any chiller type — typically 0.35–0.50 kW/ton at full load and even lower at part load. Magnetic bearings eliminate mechanical friction losses and oil management systems, and the centrifugal compressor is inherently efficient at the large capacities used in data centers. Air-cooled scroll chillers are the least efficient due to the higher heat rejection temperatures of air-cooled condensers.'
+            },
+            q3: {
+                answer: 'b',
+                question: 'What does IPLV stand for?',
+                correctLabel: 'Integrated Part Load Value',
+                explanation: 'IPLV (Integrated Part Load Value) is a weighted efficiency metric defined by AHRI Standard 550/590 that reflects the average efficiency of a chiller across a range of part-load operating conditions (100%, 75%, 50%, and 25% load). Because chillers in data centers rarely operate at full load, IPLV is often more representative of real-world energy consumption than full-load kW/ton ratings. A chiller with a superior IPLV may deliver significantly lower annual operating costs than one with a better full-load rating.'
+            },
+            q4: {
+                answer: 'b',
+                question: 'In a primary-secondary chilled water system, what is the purpose of the decoupler?',
+                correctLabel: 'To provide hydraulic separation between loops',
+                explanation: 'The decoupler (also called a bypass pipe or common pipe) hydraulically separates the primary chiller loop from the secondary distribution loop, allowing each loop to operate at its own flow rate independently. The primary loop maintains a constant, minimum flow through each chiller to protect the evaporator, while the secondary loop varies its flow in response to building load. Without hydraulic separation, flow imbalances between the two loops could cause chiller surge, low-flow trips, or poor temperature control.'
+            },
+            q5: {
+                answer: 'b',
+                question: 'How much efficiency improvement typically results from a 1°F reduction in condenser water temperature?',
+                correctLabel: '1.5%',
+                explanation: 'Every 1°F reduction in condenser water supply temperature (CWST) to the chiller condenser results in approximately 1.5% improvement in chiller efficiency (kW/ton). This is because lower condenser water temperature reduces the compression ratio the compressor must work against, directly lowering power consumption. This is why cooling tower reset strategies — lowering CWST during cooler ambient conditions — are one of the most impactful energy optimisation measures in a chiller plant.'
+            },
+            q6: {
+                answer: 'c',
+                question: 'What is the recommended moisture content limit for chiller oil?',
+                correctLabel: '<50 ppm',
+                explanation: 'Chiller lubricating oil should be maintained at less than 50 ppm moisture content. Moisture contamination in chiller oil causes acid formation when it reacts with refrigerants and heat, leading to bearing damage, copper plating on internal surfaces, and premature compressor failure. Oil analysis is a key preventive maintenance activity — if moisture exceeds the 50 ppm limit, the oil must be replaced and the system inspected for the moisture ingress source, such as a refrigerant leak or a failed shaft seal.'
+            },
+            q7: {
+                answer: 'b',
+                question: 'In an N+1 chiller plant with 1500 tons design load and 500-ton chillers, how many chillers are required?',
+                correctLabel: '4 chillers',
+                explanation: 'To meet a 1500-ton design load, 3 × 500-ton chillers are required (3 × 500 = 1500 tons). The N+1 redundancy requirement adds one additional chiller as a standby — so that if any single chiller fails, the remaining 3 can continue to serve the full design load. Total = 3 (N) + 1 = 4 chillers. This is the minimum configuration to achieve N+1 at 100% design load. For partial load redundancy at lower cost, some operators deploy 4 smaller chillers with each sized to carry 50% load.'
+            },
+            q8: {
+                answer: 'b',
+                question: 'What is surge in a centrifugal chiller?',
+                correctLabel: 'Unstable operation at low load/high lift conditions',
+                explanation: 'Surge in a centrifugal chiller is a destructive instability that occurs when the compressor is asked to work against too high a pressure differential (high lift) relative to the mass flow it is moving — typically at low part-load conditions or when condenser water temperature is very high. The refrigerant flow reverses cyclically through the impeller, creating a characteristic banging sound and severe vibration that can rapidly damage the compressor. Modern chillers use inlet guide vanes (IGVs) and hot gas bypass to avoid the surge region. Minimum load limits are specified by the manufacturer to keep the chiller out of surge.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'What is the typical efficiency range for a modern water-cooled centrifugal chiller at full load?',
+                correctLabel: '0.55-0.65 kW/ton',
+                explanation: 'Modern water-cooled centrifugal chillers achieve full-load efficiencies of 0.55–0.65 kW/ton under ARI standard rating conditions (44°F CHWS / 85°F CWS). High-efficiency magnetic bearing chillers can reach 0.35–0.50 kW/ton. For reference, 1 ton of cooling = 12,000 BTU/hr = 3.517 kW of heat removal. Air-cooled chillers are significantly less efficient (0.9–1.2 kW/ton) due to the higher condensing temperatures associated with air-cooled heat rejection.'
+            },
+            q10: {
+                answer: 'c',
+                question: 'Which maintenance task should be performed annually on chillers?',
+                correctLabel: 'Tube cleaning',
+                explanation: 'Condenser and evaporator tube cleaning is an annual maintenance task. Fouling of heat transfer tubes — from mineral scale, biofilm, or sediment — significantly degrades chiller efficiency. Even a thin 0.002" scale deposit can reduce efficiency by 10–15%. Annual mechanical brushing or chemical cleaning of tubes restores heat transfer performance. By contrast, oil analysis and vibration analysis are typically performed quarterly, and operating parameter checks (temperatures, pressures, amp draws) are performed daily or weekly as part of routine operations.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1388,43 +1435,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Chiller Systems.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Chiller Systems.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#00796b; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #00796b; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data = quizData[question];
+                const userAns = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
