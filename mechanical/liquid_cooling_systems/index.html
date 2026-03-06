@@ -1364,6 +1364,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1380,38 +1381,84 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'c',  // 3,000-4,000 times
-            q2: 'c',  // 70-80%
-            q3: 'b',  // Coolant Distribution Unit
-            q4: 'b',  // Two-phase immersion
-            q5: 'b',  // 15-45°C
-            q6: 'c',  // Quick disconnect
-            q7: 'c',  // Non-conductive properties
-            q8: 'c',  // 1.1-1.2
-            q9: 'b',  // 0.5-2.0 GPM
-            q10: 'd' // Rear door heat exchanger
+        // Quiz data: correct answers, correct label text, and explanations
+        const quizData = {
+            q1: {
+                answer: 'c',
+                question: 'How much more efficient is water at removing heat compared to air?',
+                correctLabel: '3,000-4,000 times',
+                explanation: 'Water has a volumetric heat capacity approximately 3,000–4,000 times greater than air. This means a given volume of water can absorb and carry away vastly more heat energy than the same volume of air. This fundamental thermodynamic advantage is why liquid cooling can handle chip-level heat fluxes exceeding 1,000 W that are completely beyond the capability of air cooling. It also means liquid cooling systems can move the same amount of heat using far smaller flow volumes and quieter, lower-energy pumps compared to the large fans required in air-cooled systems.'
+            },
+            q2: {
+                answer: 'c',
+                question: 'What percentage of server heat can direct-to-chip cooling typically remove?',
+                correctLabel: '70-80%',
+                explanation: 'Direct-to-chip (cold plate) liquid cooling targets the highest-power components — primarily CPUs, GPUs, and memory — and typically captures 70–80% of total server heat at those components. The remaining 20–30% of heat from lower-power components such as storage drives, NICs, voltage regulators, and motherboard components still requires residual airflow (typically provided by server fans at reduced speed). This is why direct-to-chip is described as a hybrid approach. Full immersion cooling, by contrast, can capture close to 100% of server heat.'
+            },
+            q3: {
+                answer: 'b',
+                question: 'What does CDU stand for in liquid cooling systems?',
+                correctLabel: 'Coolant Distribution Unit',
+                explanation: 'CDU stands for Coolant Distribution Unit. It is the central infrastructure component that manages the liquid cooling loop between the facility\'s facility water supply (or dry cooler) and the IT equipment. A CDU typically contains pumps, a heat exchanger (to thermally separate the facility loop from the IT cooling loop), sensors, flow controls, and a control interface. It maintains the correct coolant supply temperature, pressure, and flow rate to the server cold plates or rack manifolds. The thermal separation also protects IT equipment from facility water quality issues.'
+            },
+            q4: {
+                answer: 'b',
+                question: 'Which type of immersion cooling uses phase change for heat removal?',
+                correctLabel: 'Two-phase immersion',
+                explanation: 'Two-phase immersion cooling submerges IT equipment in a dielectric fluid engineered to boil at a low temperature (typically 49–60°C) at atmospheric pressure. When the fluid contacts hot components, it absorbs heat through vaporisation (latent heat of evaporation), which is an extremely efficient heat transfer mechanism. The vapour rises, condenses on a water-cooled condenser coil at the top of the tank, and drips back down as liquid — creating a passive, self-circulating cycle with no pumps required for the primary loop. Single-phase immersion, by contrast, keeps the fluid in liquid state throughout and requires pumps to circulate it.'
+            },
+            q5: {
+                answer: 'b',
+                question: 'What is the typical supply temperature range for direct-to-chip cooling?',
+                correctLabel: '15-45°C',
+                explanation: 'Direct-to-chip cooling systems typically supply coolant to server cold plates at 15–45°C. This wide range reflects the flexibility of liquid cooling — coolant warm enough to enable water-side economisation and heat reuse while still cold enough to keep processor junction temperatures within safe operating limits. Many deployments operate at 40–45°C supply temperature, which is above ambient air temperature and allows the heat to be rejected directly to cooling towers or dry coolers without mechanical refrigeration, delivering significant energy savings. Chip manufacturers specify maximum cold plate inlet temperatures in their thermal design power (TDP) documentation.'
+            },
+            q6: {
+                answer: 'c',
+                question: 'Which component provides dripless connection for server maintenance?',
+                correctLabel: 'Quick disconnect',
+                explanation: 'Quick disconnects (QDs) — also called dry-break or dripless couplings — are specialised fittings that allow liquid-cooled servers to be connected and disconnected from the rack manifold without spilling coolant. When disconnected, spring-loaded valves on both the server and manifold sides close simultaneously, trapping liquid in both sections and preventing leaks. This is critical for serviceability in direct-to-chip deployments, where servers must be hot-swapped or maintained without draining the entire cooling loop. QDs are rated for a defined number of mate/demate cycles and must be inspected and replaced according to manufacturer schedules.'
+            },
+            q7: {
+                answer: 'c',
+                question: 'What is the main advantage of dielectric fluids in IT cooling loops?',
+                correctLabel: 'Non-conductive properties',
+                explanation: 'The defining and essential property of dielectric fluids used in immersion cooling is their non-conductivity — they do not conduct electricity. This means IT equipment can be fully submerged in direct contact with the fluid without risk of short circuits, even when powered on. Dielectric fluids must maintain their non-conductive properties even after prolonged exposure to heat and electronic components. Common dielectric fluids include engineered fluorocarbons (3M Novec, Solvay Galden), mineral oil, and synthetic esters. While some dielectric fluids also have good heat transfer properties, it is their electrical safety that makes them uniquely suitable for direct contact with live electronics.'
+            },
+            q8: {
+                answer: 'c',
+                question: 'What PUE can typically be achieved with liquid cooling systems?',
+                correctLabel: '1.1-1.2',
+                explanation: 'Well-designed liquid cooling systems can achieve a Power Usage Effectiveness (PUE) of 1.1–1.2, compared to 1.4–1.6 for typical air-cooled data centers and 2.0+ for older inefficient facilities. PUE = Total Facility Power ÷ IT Equipment Power, so a PUE of 1.1 means only 10% of total facility power is used for cooling and other overhead — 90% reaches the IT equipment. Liquid cooling achieves this through elimination of large air-handling fans, ability to reject heat at higher temperatures (enabling free cooling), and superior heat transfer efficiency. A PUE below 1.0 is physically impossible as some overhead power is always required.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'What is the typical flow rate per server for direct-to-chip cooling?',
+                correctLabel: '0.5-2.0 GPM',
+                explanation: 'Direct-to-chip cooling systems typically supply 0.5–2.0 gallons per minute (GPM) of coolant per server, depending on the server\'s thermal design power (TDP). Higher-power servers with multiple GPUs or high-TDP CPUs require flow rates toward the upper end of this range to maintain acceptable cold plate outlet temperatures. Flow rate is set by the CDU and rack manifold pressure regulators, and must be balanced across all servers in the rack. Too low a flow rate causes excessive coolant temperature rise across the cold plate; too high wastes pump energy without proportional benefit to heat transfer.'
+            },
+            q10: {
+                answer: 'd',
+                question: 'Which liquid cooling method is best for retrofit applications?',
+                correctLabel: 'Rear door heat exchanger',
+                explanation: 'Rear door heat exchangers (RDHx) are the least disruptive liquid cooling solution for retrofit into existing air-cooled data centers. An RDHx replaces the standard rear door of an existing server rack with a door containing a chilled water coil. Hot exhaust air from the servers passes through the coil as it exits the rear of the rack, cooling it before it reaches the hot aisle. No modifications to the servers, cabling, or raised floor are required — only a chilled water supply connection to each rack door. This makes RDHx ideal for upgrading legacy data centers to handle higher rack densities without a full facility redesign. Direct-to-chip and immersion solutions require more significant server and infrastructure changes.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1424,43 +1471,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Liquid Cooling Systems.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Liquid Cooling Systems.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#00796b; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #00796b; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
