@@ -581,8 +581,8 @@
                         <text x="200" y="145" text-anchor="middle" fill="white" font-size="10">Meter</text>
                         
                         <!-- Temperature Sensors -->
-                        <rect x="100" y="200" width="80" height="40" fill="#e74c3c" stroke="#c0392b" stroke-width="2" rx="5"/>
-                        <text x="140" y="225" text-anchor="middle" fill="white" font-size="12">T1 (EWT)</text>
+                        <rect x="80" y="200" width="80" height="40" fill="#e74c3c" stroke="#c0392b" stroke-width="2" rx="5"/>
+                        <text x="120" y="225" text-anchor="middle" fill="white" font-size="12">T1 (EWT)</text>
                         
                         <rect x="520" y="200" width="80" height="40" fill="#e74c3c" stroke="#c0392b" stroke-width="2" rx="5"/>
                         <text x="560" y="225" text-anchor="middle" fill="white" font-size="12">T2 (LWT)</text>
@@ -593,9 +593,9 @@
                         <text x="400" y="295" text-anchor="middle" fill="white" font-size="10">Meter (kW)</text>
                         
                         <!-- Connections -->
-                        <path d="M 140 200 L 140 130 L 160 130" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <path d="M 120 200 L 120 130 L 160 130" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
                         <path d="M 240 130 L 300 130" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
-                        <path d="M 500 130 L 560 130 L 560 200" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <path d="M 500 130 L 560 130 L 560 200" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
                         <path d="M 400 180 L 400 250" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
                         
                         <!-- Labels -->
@@ -1210,6 +1210,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1226,38 +1227,84 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // 1.5 times operating pressure
-            q2: 'b',  // <0.3 in/sec
-            q3: 'c',  // ±5%
-            q4: 'c',  // Motor rotation verification
-            q5: 'b',  // 15-30 minutes
-            q6: 'c',  // Pitot tube
-            q7: 'b',  // Testing, Adjusting, and Balancing
-            q8: 'b',  // kW/ton
-            q9: 'b',  // Critical test requiring owner presence
-            q10: 'c' // Lockout/tagout procedures
+        // Quiz data: correct answers, correct label text, and explanations
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What is the typical hydrostatic test pressure for piping systems?',
+                correctLabel: '1.5 times operating pressure',
+                explanation: 'Hydrostatic testing is performed at 1.5 times the maximum allowable operating pressure (MAOP), as required by ASME B31.1 (Power Piping) and B31.9 (Building Services Piping). This 50% margin above operating pressure stresses the piping system enough to reveal any weaknesses, joint failures, or weld defects that would not be apparent at normal operating pressures, while remaining safely below the yield strength of the pipe material. The test is held for a minimum duration (typically 10–30 minutes) with no observed pressure drop before the system is accepted. Testing at exactly operating pressure would not provide the safety margin needed to detect marginal defects.'
+            },
+            q2: {
+                answer: 'b',
+                question: 'What is the acceptable vibration level for pumps according to industry standards?',
+                correctLabel: '<0.3 in/sec',
+                explanation: 'Industry standards, including the Hydraulic Institute (HI) Standard 9.6.4 and ISO 10816, specify that acceptable peak vibration velocity for HVAC and data center pumps should not exceed 0.3 inches per second (in/sec) measured at the bearing housings. Vibration above this threshold indicates mechanical issues such as imbalance, misalignment, bearing wear, cavitation, or resonance that require investigation and correction. Vibration is measured with a calibrated vibration analyser during commissioning and periodically during operation as part of a predictive maintenance programme. Trending vibration values over time is as important as the absolute reading.'
+            },
+            q3: {
+                answer: 'c',
+                question: 'During air balancing, what is the ASHRAE tolerance for supply air in critical spaces?',
+                correctLabel: '±5%',
+                explanation: 'ASHRAE Standard 111 (Measurement, Testing, Adjusting, and Balancing of Building HVAC Systems) specifies a tolerance of ±5% of design airflow for supply air terminals in critical spaces such as data centers, operating theatres, and clean rooms. This tighter tolerance compared to the ±10% allowed in general commercial spaces reflects the importance of precise airflow control for maintaining temperature uniformity, pressure relationships, and air quality. Achieving ±5% requires careful balancing of dampers, correction of duct leakage, and verification with calibrated airflow measurement equipment such as capture hoods or Pitot tube traverses.'
+            },
+            q4: {
+                answer: 'c',
+                question: 'Which test should be performed first on a new pump installation?',
+                correctLabel: 'Motor rotation verification',
+                explanation: 'Motor rotation verification must always be the very first test performed on a new pump installation, before any other tests or full-speed operation. Three-phase motors can be connected with incorrect phase rotation, causing the motor — and therefore the pump impeller — to spin in reverse. Running a centrifugal pump backwards causes zero or severely reduced flow, potential impeller loosening on the shaft, and possible mechanical seal damage. Rotation is verified by briefly "bumping" the motor (a momentary start) and observing the direction of shaft rotation against the rotation arrow marked on the pump casing. This simple check prevents costly damage before it occurs.'
+            },
+            q5: {
+                answer: 'b',
+                question: 'What is the stabilization time typically required between load steps during performance testing?',
+                correctLabel: '15-30 minutes',
+                explanation: 'A stabilization period of 15–30 minutes between load steps is required during mechanical performance testing to allow system temperatures, pressures, and flow rates to reach steady-state conditions before measurements are recorded. Mechanical systems — particularly chiller plants, cooling towers, and hydronic loops — have significant thermal mass and response lag. Recording data before the system has stabilised produces readings that do not represent true steady-state performance and can lead to incorrect efficiency calculations and invalid test results. The exact stabilisation time required depends on system size, thermal mass, and the magnitude of the load step applied.'
+            },
+            q6: {
+                answer: 'c',
+                question: 'Which instrument is used for air flow measurement in ducts?',
+                correctLabel: 'Pitot tube',
+                explanation: 'A Pitot tube (used in conjunction with a manometer or differential pressure meter) is the standard instrument for measuring air velocity and volumetric flow rate inside ductwork. It measures the difference between total (stagnation) pressure and static pressure — the velocity pressure — from which air velocity is calculated using Bernoulli\'s equation. A full Pitot tube traverse involves taking measurements at multiple points across the duct cross-section according to a defined grid pattern (log-Chebyshev or equal-area) to determine the average velocity, then multiplying by duct area to calculate total flow (CFM). A manometer measures static pressure only; a megger tests insulation resistance; a tachometer measures rotational speed.'
+            },
+            q7: {
+                answer: 'b',
+                question: 'What does TAB stand for in mechanical testing?',
+                correctLabel: 'Testing, Adjusting, and Balancing',
+                explanation: 'TAB stands for Testing, Adjusting, and Balancing — a formal commissioning process performed by certified TAB contractors (typically NEBB or AABC certified) to verify and adjust HVAC air and hydronic systems to deliver design airflow and water flow rates throughout a building. Testing involves measuring actual flow rates at each terminal device. Adjusting involves setting dampers, balancing valves, and variable speed drives to achieve the correct proportional distribution. Balancing confirms the final measurements meet design tolerances. A TAB report documents all measurements, adjustments, and final verified values and is a required deliverable for data center commissioning and LEED certification.'
+            },
+            q8: {
+                answer: 'b',
+                question: 'During chiller performance testing, efficiency is typically measured in:',
+                correctLabel: 'kW/ton',
+                explanation: 'Chiller efficiency is expressed in kW/ton — kilowatts of electrical input power per ton of refrigeration output (1 ton = 12,000 BTU/hr = 3.517 kW of heat removal). A lower kW/ton value indicates a more efficient chiller. Modern water-cooled centrifugal chillers achieve 0.35–0.65 kW/ton at full load, while older or air-cooled equipment may be 0.9–1.2 kW/ton. During performance testing, electrical power input is measured with a power analyser, cooling capacity is calculated from chilled water flow rate and temperature differential (using Q = m·Cp·ΔT), and the two values are divided to obtain the measured efficiency for comparison against the manufacturer\'s performance curve.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'What is a "witness point" in mechanical testing?',
+                correctLabel: 'Critical test requiring owner presence',
+                explanation: 'A witness point is a designated critical test or inspection milestone in a commissioning or acceptance testing programme that requires the formal presence of the owner, owner\'s representative, or a designated third-party witness before the work can be considered accepted. The contractor must notify the witness in advance, and testing cannot proceed without their attendance and sign-off. Witness points are defined in the contract documents for the most consequential tests — such as chiller performance tests, pressure tests on critical piping, and integrated systems tests. They differ from "hold points" (where work must stop and cannot proceed without approval) in that a witness point can sometimes be waived in writing if the witness cannot attend.'
+            },
+            q10: {
+                answer: 'c',
+                question: 'Which safety procedure must always be followed before testing rotating equipment?',
+                correctLabel: 'Lockout/tagout procedures',
+                explanation: 'Lockout/Tagout (LOTO) is a mandatory safety procedure governed by OSHA Standard 29 CFR 1910.147 (Control of Hazardous Energy) that must be performed before any maintenance, inspection, or testing activity on rotating or electrically energised equipment. LOTO ensures all energy sources (electrical, mechanical, hydraulic, pneumatic) are isolated and physically locked in the de-energised position so the equipment cannot be accidentally started while personnel are working on it. Each technician applies their own personal lock to the energy isolation point. Failure to follow LOTO is one of the leading causes of serious injury and fatality in industrial and mechanical maintenance environments. Checking oil levels, verifying calibration, and taking baseline readings are all valid tasks but must only be performed after LOTO has been completed.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1270,43 +1317,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Mechanical Testing Procedures.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Mechanical Testing Procedures.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#00796b; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #00796b; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
