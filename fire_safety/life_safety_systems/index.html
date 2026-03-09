@@ -1383,6 +1383,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1399,38 +1400,83 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // 1.0 foot-candle average
-            q2: 'c',  // 90 minutes
-            q3: 'b',  // Exit access, exit, exit discharge
-            q4: 'b',  // 0.05-0.35 inches water column
-            q5: 'b',  // 6 inches
-            q6: 'b',  // 30 pounds
-            q7: 'c',  // ≥ 0.70
-            q8: 'd',  // Annually
-            q9: 'b',  // 0.3 inches per occupant
-            q10: 'b'  // 32 inches
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What is the minimum illumination level required for emergency lighting?',
+                correctLabel: '1.0 foot-candle average',
+                explanation: 'NFPA 101 (Life Safety Code) and IBC Section 1008 require that emergency lighting provide a minimum average illumination level of 1.0 foot-candle (10.8 lux) measured along the path of egress at floor level. This level must be maintained for the full required duration of emergency lighting operation. The standard also imposes a maximum-to-minimum uniformity ratio of 40:1 — meaning the brightest point in the egress path cannot be more than 40 times brighter than the darkest point — to prevent the eye adaptation problems that occur when occupants move between very bright and very dark areas during evacuation. At the end of the required operating period (90 minutes), illumination levels are permitted to decline to a minimum of 0.6 foot-candles. Emergency lighting must activate automatically within 10 seconds of normal power failure and must cover all exit access corridors, exit stairways, elevator lobbies, and exit discharge paths.'
+            },
+            q2: {
+                answer: 'c',
+                question: 'How long must emergency lighting operate on battery power?',
+                correctLabel: '90 minutes',
+                explanation: 'NFPA 101 and IBC both require emergency lighting systems to operate for a minimum of 90 minutes following loss of normal power. This 90-minute duration is based on the estimated time required for complete building evacuation under emergency conditions, including time for occupants to recognise the emergency, locate exits, and safely egress in reduced lighting. The 90-minute requirement applies whether the emergency lighting is served by integral battery units (self-contained unit equipment), a central battery system, or a generator with an automatic transfer switch — all must sustain the required illumination for the full 90 minutes. Annual testing must verify that the system can actually sustain adequate illumination for the full 90-minute period under load; a 30-second functional test is required monthly to confirm that the unit transfers and illuminates correctly, but only the annual test verifies full duration capacity.'
+            },
+            q3: {
+                answer: 'b',
+                question: 'What are the three parts of means of egress?',
+                correctLabel: 'Exit access, exit, exit discharge',
+                explanation: 'The IBC and NFPA 101 define the means of egress as a continuous and unobstructed path of travel from any point in a building to a public way, composed of three distinct and sequential components. The Exit Access is the portion of the means of egress that leads from any occupied point in the building to an exit — this includes corridors, aisles, and open floor areas within the occupied space and is not required to be separated from the rest of the building. The Exit is the protected portion of the egress path that is separated from other building areas by fire-rated construction — typically enclosed exit stairways, exit passageways, exterior doors at grade, or horizontal exits through fire walls. The Exit Discharge is the portion of the egress path between the exit and the public way — typically the path across an exterior plaza, parking area, or yard to the street or other public space. All three components must meet specific width, height, lighting, signage, and protection requirements under the applicable code.'
+            },
+            q4: {
+                answer: 'b',
+                question: 'What is the typical pressure differential for stairwell pressurization?',
+                correctLabel: '0.05-0.35 inches water column',
+                explanation: 'Stairwell pressurisation systems maintain the exit stairway enclosure at a positive pressure relative to the adjacent floor areas by supplying mechanical ventilation to the stairwell, creating a pressure differential that prevents smoke from entering the protected egress path during a fire. NFPA 92 (Standard for Smoke Control Systems) and IBC Section 909 specify that the pressure differential across closed stairwell doors must be maintained between 0.05 and 0.35 inches water column (12.5 to 87 Pa). The minimum of 0.05 inches water column ensures that smoke cannot migrate through door gaps and frame leakage paths into the stairwell. The maximum of 0.35 inches water column limits the force required to push open the pressurised stairwell door — exceeding this upper limit would make doors too difficult to open, particularly for elderly, disabled, or panicking occupants, potentially trapping people on the floor side of the door. Variable-flow pressurisation systems modulate fan output to maintain pressure within this range as floors above and below are evacuated and stairwell doors open and close.'
+            },
+            q5: {
+                answer: 'b',
+                question: 'What is the minimum height for EXIT sign letters?',
+                correctLabel: '6 inches',
+                explanation: 'NFPA 101 and IBC Section 1013 require that EXIT signs have letters with a minimum height of 6 inches (152 mm), with the principal strokes of letters having a minimum width of 3/4 inch (19 mm). These dimensional requirements are based on legibility research — the 6-inch letter height provides sufficient size to be read from the required viewing distances along the egress path, even in smoke-reduced visibility conditions. EXIT signs must be illuminated at all times that the building is occupied, either by an internal light source (internally illuminated signs) or by external lighting providing a minimum of 5 foot-candles on the face of the sign. Self-luminous signs (tritium-based or photoluminescent) are also acceptable alternatives where they provide the required luminance levels. EXIT signs must also be served by the emergency power system to remain illuminated during power failure, and must be visible from any direction of approach along the egress path.'
+            },
+            q6: {
+                answer: 'b',
+                question: 'What is the maximum door opening force allowed for egress?',
+                correctLabel: '30 pounds',
+                explanation: 'IBC Section 1010 and NFPA 101 limit the force required to open egress doors to a maximum of 30 pounds (133 N) applied to the latch side of the door to release the latch, and a maximum of 30 pounds to set the door in motion from the fully closed position. This force limit exists to ensure that all building occupants — including the elderly, children, people with disabilities, and those in a state of panic — can open egress doors without requiring exceptional physical strength. Doors that are too heavy or have high-resistance hardware create a life-safety hazard by delaying evacuation. This force limit applies to the door hardware resistance only; separately, door closers must be adjusted to meet accessibility requirements under ADA/IBC. Where security hardware such as electromagnetic locks or electrified panic hardware is used on egress doors, the hardware must release upon activation of the fire alarm system to ensure doors meet the 30-pound opening force requirement during an emergency.'
+            },
+            q7: {
+                answer: 'c',
+                question: 'What is the required Common Intelligibility Scale (CIS) for voice systems?',
+                correctLabel: '≥ 0.70',
+                explanation: 'NFPA 72 requires that voice/tone emergency communication systems achieve a minimum Common Intelligibility Scale (CIS) score of 0.70 in all occupied areas of the building. The CIS is a standardised metric derived from the Speech Transmission Index (STI) that measures the clarity and intelligibility of spoken announcements through the public address system in the actual acoustic conditions of the space — accounting for background noise levels, reverberation, system frequency response, and signal-to-noise ratio. A CIS score of 0.70 corresponds to "good" intelligibility, meaning that a significant majority of words in emergency announcements will be correctly understood by listeners. This threshold is critical in data centers where high levels of mechanical and cooling equipment noise can significantly degrade intelligibility. Achieving 0.70 CIS in noisy mechanical spaces often requires careful speaker selection, placement, aim, and signal processing — and must be verified by measurement after system installation, not merely by design calculation.'
+            },
+            q8: {
+                answer: 'd',
+                question: 'How often must emergency lighting undergo a 90-minute test?',
+                correctLabel: 'Annually',
+                explanation: 'NFPA 101 and NFPA 110 require that emergency lighting systems undergo a full 90-minute discharge test on an annual basis. During this test, normal power to the emergency lighting equipment is interrupted and the system must sustain the required minimum illumination levels (1.0 foot-candle average, declining to 0.6 foot-candle by end of test) for the full 90-minute period — demonstrating that battery capacity remains sufficient after a full year of standby service. In addition to the annual 90-minute test, a monthly 30-second functional test is required to verify that each unit transfers to battery power and illuminates correctly. Monthly tests are intentionally brief to avoid unnecessarily depleting batteries, while the annual test verifies actual capacity. Test results must be documented and records retained. Facilities that use self-diagnostic emergency lighting units (which automatically perform and log test functions electronically) may be permitted to substitute electronic records for manual test logs, subject to AHJ acceptance.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'What is the typical egress width factor for stairs?',
+                correctLabel: '0.3 inches per occupant',
+                explanation: 'IBC Table 1005.1 specifies that the minimum required width of exit stairways must be calculated using an egress width factor of 0.3 inches per occupant of the total occupant load served by that stairway. This width factor is applied to the total number of occupants that the stairway must accommodate — typically the sum of occupants on all floors above (for downward egress) or below (for upward egress) that discharge through the stairway. For example, a stairway serving 200 occupants requires a minimum clear width of 60 inches (200 × 0.3). However, IBC also imposes an absolute minimum stair width of 44 inches regardless of occupant load calculation, and 36 inches for occupant loads of 49 or fewer. Corridors and other level egress components use a different, lower width factor of 0.2 inches per occupant, reflecting that movement along corridors is faster than movement down stairs where occupants must navigate treads and risers.'
+            },
+            q10: {
+                answer: 'b',
+                question: 'What is the minimum clear width for an egress door?',
+                correctLabel: '32 inches',
+                explanation: 'IBC Section 1010 and NFPA 101 require that egress doors provide a minimum clear opening width of 32 inches (813 mm), measured between the face of the door and the door stop when the door is opened to 90 degrees. This 32-inch minimum clear width is distinct from the nominal door width — a standard 36-inch nominal door typically provides approximately 33.5 to 34 inches of clear width when hardware is accounted for, which satisfies the requirement. The 32-inch minimum ensures that occupants, including those using wheelchairs, can pass through the doorway without obstruction. For doors serving large occupant loads, the minimum required clear width may be greater than 32 inches when calculated using the 0.2 inches per occupant width factor, and in those cases the calculated width governs. The absolute maximum clear width that can be credited for egress purposes without additional hardware considerations is 48 inches per door leaf. Double-leaf doors may credit both leaves if both are operable without a key or special knowledge or effort.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1443,43 +1489,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Life Safety Systems.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Life Safety Systems.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#d32f2f; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #d32f2f; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
