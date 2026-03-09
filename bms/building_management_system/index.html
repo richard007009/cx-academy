@@ -1455,6 +1455,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1471,38 +1472,83 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // Building Automation and Control Networks
-            q2: 'b',  // Modbus
-            q3: 'c',  // Proportional-Integral-Derivative
-            q4: 'b',  // Green
-            q5: 'b',  // Power Usage Effectiveness
-            q6: 'd',  // Critical
-            q7: 'b',  // Weekly
-            q8: 'c',  // Interoperability
-            q9: 'b',  // Direct protocol
-            q10: 'b'  // Digital Twins
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What does BACnet stand for?',
+                correctLabel: 'Building Automation and Control Networks',
+                explanation: 'BACnet stands for Building Automation and Control Networks. It is an open data communication protocol developed by ASHRAE (American Society of Heating, Refrigerating and Air-Conditioning Engineers) and published as ANSI/ASHRAE Standard 135. BACnet was created specifically to address the need for interoperability between different building automation systems and equipment from different manufacturers — replacing the proprietary, vendor-locked protocols that previously prevented systems from communicating. BACnet defines a standardised set of object types (such as Analog Input, Binary Output, Schedule, and Trend Log), services (read/write property, subscribe COV, alarm notification), and network layer options (BACnet/IP over Ethernet, MS/TP over RS-485, BACnet/SC for secure connections) that allow any BACnet-compliant device to exchange data with any other. In data centers, BACnet is widely used for integrating HVAC controllers, cooling systems, power monitoring, and lighting into the BMS, enabling unified monitoring and cross-system automation strategies such as coordinated economiser control and thermal capacity management.'
+            },
+            q2: {
+                answer: 'b',
+                question: 'Which protocol is best for simple power meter integration?',
+                correctLabel: 'Modbus',
+                explanation: 'Modbus is the preferred protocol for integrating simple power meters and electrical monitoring devices into a BMS, and has been the dominant protocol in the power monitoring and industrial automation space since its introduction by Modicon in 1979. Modbus is a request-response master-slave protocol with an extremely simple and lightweight data model: it reads and writes values in a flat register map (holding registers, input registers, coils, and discrete inputs), making it straightforward to implement on low-cost microcontrollers embedded in energy meters, PDUs, UPS systems, and switchgear. The protocol requires minimal configuration — just the device address and register map from the manufacturer — and operates reliably over RS-485 serial links (Modbus RTU) or TCP/IP networks (Modbus TCP). Unlike BACnet, which has a rich but complex object model, Modbus has no built-in alarm management, scheduling, or device discovery — but for the specific task of reading power measurements (kW, kWh, voltage, current, power factor) from meters, its simplicity is a significant advantage that reduces integration effort and cost.'
+            },
+            q3: {
+                answer: 'c',
+                question: 'What does PID stand for in control loops?',
+                correctLabel: 'Proportional-Integral-Derivative',
+                explanation: 'PID stands for Proportional-Integral-Derivative — the three mathematical terms that define how a PID controller calculates its output to minimise the error between a measured process variable and the desired setpoint. The Proportional term produces an output proportional to the current error: a large deviation from setpoint produces a large corrective output, but Proportional control alone will always leave a residual steady-state error. The Integral term accumulates the error over time and increases the output until steady-state error is eliminated — it ensures the process reaches setpoint exactly, but can cause overshoot if tuned too aggressively. The Derivative term responds to the rate of change of error — it provides damping by reducing output when the error is closing rapidly, preventing overshoot and oscillation. In data center BMS applications, PID controllers govern chilled water valve positions to maintain supply air temperature, variable frequency drives to maintain differential pressure in chilled water loops, and cooling tower fan speeds to maintain condenser water temperature. Correct PID tuning is essential — poorly tuned loops cause hunting, temperature oscillation, and excessive equipment wear.'
+            },
+            q4: {
+                answer: 'b',
+                question: 'What color typically indicates a running status in BMS graphics?',
+                correctLabel: 'Green',
+                explanation: 'Green is the universally accepted colour convention for indicating that equipment is running, operating normally, or in a healthy status in BMS and SCADA graphical user interfaces. This convention is deeply rooted in the broader human-machine interface (HMI) colour standard codified in ISA-101 (Human Machine Interfaces for Process Automation Systems) and echoed across industrial control and building automation industries: green = normal/running/healthy; red = fault/alarm/stopped/failed; yellow or amber = warning/standby/transitional state; grey or white = off/de-energised/unknown status. In a data center BMS, a green pump icon indicates the pump is running and confirmed by status feedback from its motor starter or VFD; a green cooling unit indicates it is operating within normal parameters; a green AHU indicates supply fan is running and no alarms are active. Operators performing rounds or monitoring from the control room rely on these colour conventions to quickly identify the operational state of hundreds of pieces of equipment without reading individual values — deviations from expected green status immediately draw attention.'
+            },
+            q5: {
+                answer: 'b',
+                question: 'What is PUE in data center energy management?',
+                correctLabel: 'Power Usage Effectiveness',
+                explanation: 'PUE stands for Power Usage Effectiveness — the industry-standard metric for measuring the energy efficiency of a data center, defined and published by The Green Grid. PUE is calculated as the ratio of total facility energy consumption (all energy entering the data center boundary, including cooling, power distribution, lighting, and support systems) divided by IT equipment energy consumption (the energy delivered to the IT load — servers, storage, and networking). A PUE of 1.0 represents perfect efficiency where all facility energy goes directly to IT equipment with zero overhead losses. A PUE of 2.0 means the facility consumes twice as much energy as its IT load — half of all energy is consumed by support infrastructure. The global average data center PUE has improved significantly over the past decade, from approximately 2.5 in 2006 to around 1.5 today for enterprise data centers, with hyperscale facilities achieving 1.1 to 1.2. The BMS contributes directly to PUE improvement by optimising cooling system efficiency through strategies such as economiser control, chilled water temperature optimisation, airflow management, and demand-based cooling.'
+            },
+            q6: {
+                answer: 'd',
+                question: 'Which alarm priority requires immediate action?',
+                correctLabel: 'Critical',
+                explanation: 'Critical is the highest alarm priority level in BMS alarm management hierarchies and designates conditions that require immediate intervention to prevent equipment failure, data center downtime, safety incidents, or cascading system failures. A typical four-tier alarm priority structure assigns: Low priority to informational conditions that require no immediate action and can be addressed during routine maintenance; Medium priority to degraded conditions or threshold exceedances that require attention within a defined response window; High priority to conditions that indicate significant equipment anomalies or approaching failure that require prompt response; and Critical priority to conditions that indicate imminent failure, safety risks, or loss of redundancy where immediate action is required to prevent impact to the critical load. Examples of Critical alarms in a data center BMS include UPS on battery power, chilled water supply temperature above high limit, computer room cooling unit fan failure, generator running on fuel below reserve threshold, or primary-secondary power path failure. BMS alarm management best practices require that Critical alarms trigger immediate notification to on-call staff via multiple channels (BMS console, SMS, phone call) and be acknowledged and acted upon within minutes.'
+            },
+            q7: {
+                answer: 'b',
+                question: 'How often should a BMS database be backed up?',
+                correctLabel: 'Weekly',
+                explanation: 'BMS databases should be backed up on at minimum a weekly basis as standard practice, with many critical data center operators implementing daily automated backups. The BMS database contains all configured points, graphics, control logic programs, PID tuning parameters, setpoints, schedules, alarm definitions, trend configurations, and historical data — representing months or years of commissioning, fine-tuning, and operational learning that would be extremely difficult and time-consuming to reconstruct from scratch following a server failure, cyberattack, or accidental misconfiguration. Weekly backups represent the minimum acceptable recovery point objective (RPO) for most facilities — meaning that in the worst case, only one week of configuration changes and trend data would be lost following a catastrophic failure. Backups should be stored off the BMS server (ideally off-site or in cloud storage) to protect against server hardware failure or localised incidents. The backup and restore procedure should be tested annually to verify that backed-up data can actually be successfully restored to a working BMS configuration.'
+            },
+            q8: {
+                answer: 'c',
+                question: 'What is the primary benefit of using open protocols?',
+                correctLabel: 'Interoperability',
+                explanation: 'The primary benefit of open protocols such as BACnet, Modbus, LonWorks, and OPC-UA is interoperability — the ability for equipment, controllers, and software from different manufacturers to communicate and work together within the same BMS ecosystem without requiring proprietary gateways, custom drivers, or vendor-specific integration agreements. Open protocols achieve interoperability by defining standardised data models, communication methods, and conformance requirements that all certified devices must implement, enabling a BMS from one manufacturer to natively read and control a chiller from a second manufacturer, a UPS from a third, and power meters from a fourth — all over the same network using the same integration approach. The commercial benefits of interoperability are significant: facility owners can select best-in-class equipment from any manufacturer rather than being locked into a single vendor\'s ecosystem, can obtain competitive pricing for both equipment and integration services, can continue to expand and upgrade systems over time without being constrained to a single vendor\'s product roadmap, and can change BMS or controls contractors without losing the ability to support existing equipment. Vendor lock-in through proprietary protocols has historically been a major source of unnecessary cost and operational constraint in building automation.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'Which integration method is best for real-time control?',
+                correctLabel: 'Direct protocol',
+                explanation: 'Direct protocol integration — where the BMS communicates in real time with field devices and controllers using a native or standard building automation protocol such as BACnet, Modbus, or OPC-UA — is the best integration method for real-time control because it provides the lowest latency, highest reliability, and tightest control loop performance of any available integration approach. In direct protocol integration, the BMS polls or subscribes to device data at rates of seconds or sub-seconds, enabling control logic to respond to changing conditions with minimal delay. This is essential for closed-loop control functions such as PID temperature control, demand-based cooling, load-shedding sequences, and emergency responses to equipment alarms. Database integration (reading/writing values through a shared database) introduces significant latency from database query overhead and polling intervals, making it unsuitable for real-time control and appropriate only for data exchange and reporting. File transfer integration (exchanging CSV or XML files on a schedule) is appropriate only for bulk data export and reporting, with latency measured in minutes to hours. Manual entry provides no automation capability at all.'
+            },
+            q10: {
+                answer: 'b',
+                question: 'What technology enables virtual facility modeling?',
+                correctLabel: 'Digital Twins',
+                explanation: 'Digital Twins are the technology that enables virtual facility modelling — creating a live, continuously updated digital replica of a physical data center that mirrors the real facility\'s equipment state, environmental conditions, power flows, and operational performance in real time. A data center digital twin integrates data from the BMS, DCIM (Data Center Infrastructure Management) platform, CMDB (Configuration Management Database), and IoT sensors to build and maintain a virtual model that can be used for operational analysis, "what-if" scenario planning, capacity forecasting, and thermal modelling without requiring physical changes or tests. Digital twins allow operators to simulate the impact of adding new IT load, decommissioning cooling equipment, or changing airflow management strategies in the virtual model before implementing changes in the physical facility — dramatically reducing the risk of unintended consequences. Advanced digital twins incorporate computational fluid dynamics (CFD) models to predict airflow and thermal conditions throughout the server room. SCADA (Supervisory Control and Data Acquisition) provides real-time monitoring and control; PLCs (Programmable Logic Controllers) execute local control logic; and HMIs (Human-Machine Interfaces) provide operator displays — but none of these specifically enables the virtual facility modelling that defines a digital twin.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1515,43 +1561,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Building Management Systems.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Building Management Systems.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#1565c0; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #1565c0; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
