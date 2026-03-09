@@ -1336,6 +1336,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1352,38 +1353,84 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // Authority Having Jurisdiction
-            q2: 'c',  // NFPA 75
-            q3: 'b',  // Federal regulations (highest in hierarchy)
-            q4: 'b',  // Group B - Business
-            q5: 'c',  // Annually
-            q6: 'c',  // Certificate of Occupancy
-            q7: 'c',  // The most restrictive requirement
-            q8: 'b',  // Permit and inspection
-            q9: 'b',  // 3-5 years minimum
-            q10: 'b'  // An approved alternative method
+        // Quiz data: correct answers, correct label text, and explanations
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What does AHJ stand for?',
+                correctLabel: 'Authority Having Jurisdiction',
+                explanation: 'AHJ stands for Authority Having Jurisdiction — the organisation, office, or individual responsible for enforcing the requirements of a code or standard, or their designated representative. In data center construction and operations, the AHJ is typically the local building department, fire marshal, or a combination of agencies depending on the system involved. The AHJ has the final word on code interpretation and enforcement within their jurisdiction; they can approve alternative methods, grant variances, require additional measures beyond the base code, and issue stop-work orders. Building a productive working relationship with the AHJ early in a project is essential — they are consulted during design review, called for inspections at defined hold points during construction, and involved in final approval before a Certificate of Occupancy is issued.'
+            },
+            q2: {
+                answer: 'c',
+                question: 'Which NFPA standard specifically addresses data center fire protection?',
+                correctLabel: 'NFPA 75',
+                explanation: 'NFPA 75, Standard for the Fire Protection of Information Technology Equipment, is the primary NFPA standard specifically dedicated to protecting data centers, computer rooms, and IT equipment spaces from fire. It provides requirements for the construction, protection, and occupancy of areas containing IT equipment — including fire detection, suppression, separation, raised floor fire protection, and cable management. It works in conjunction with other NFPA standards: NFPA 13 covers the design and installation of sprinkler systems; NFPA 72 covers fire alarm and signalling systems; and NFPA 2001 covers clean agent fire suppression systems used in data centers. NFPA 76 is a related companion standard specifically addressing telecommunications facilities. NFPA 101, the Life Safety Code, addresses means of egress and occupant safety rather than equipment protection.'
+            },
+            q3: {
+                answer: 'b',
+                question: 'In the code hierarchy, which typically has the highest enforcement authority?',
+                correctLabel: 'Federal regulations',
+                explanation: 'In the United States, the code hierarchy places federal regulations at the top — they preempt all lower levels under the Supremacy Clause of the Constitution. Federal regulations (such as OSHA standards, EPA requirements, or federal energy efficiency mandates) apply nationally and cannot be superseded by state or local codes. Below federal regulations sit state codes, which adopt and sometimes amend model codes (such as the IBC, IFC, and NEC) for their jurisdiction. Local amendments sit below state codes and can make state requirements more stringent but cannot relax them below the state minimum. Industry standards (such as NFPA publications, ASHRAE guidelines, and Uptime Institute tier standards) are voluntary unless adopted by reference into law, at which point they carry the enforcement authority of the adopting jurisdiction.'
+            },
+            q4: {
+                answer: 'b',
+                question: 'What is the typical occupancy classification for a data center under IBC?',
+                correctLabel: 'Group B - Business',
+                explanation: 'Under the International Building Code (IBC), data centers are most commonly classified as Group B — Business occupancy. The IBC defines Group B occupancies as buildings used for office, professional, or service transactions, including the storage of records and accounts — a category that fits the primary function of data center operations. This classification governs fire resistance ratings for structural elements and floor assemblies, travel distances to exits, occupant load calculations, means of egress requirements, and allowable building heights and areas. Some data centers may carry additional or mixed occupancy classifications: spaces with large fuel storage may trigger Group S (Storage) or Group H (Hazardous) requirements, and areas with large battery banks (lead-acid or lithium-ion) may trigger specific hazardous material occupancy thresholds under the International Fire Code.'
+            },
+            q5: {
+                answer: 'c',
+                question: 'How often must fire alarm systems typically undergo comprehensive testing?',
+                correctLabel: 'Annually',
+                explanation: 'NFPA 72, National Fire Alarm and Signalling Code, requires a comprehensive inspection and test of fire alarm systems on an annual basis. Annual testing must be performed by qualified service personnel and covers all system components: control panels and power supplies, all initiating devices (smoke detectors, heat detectors, manual pull stations), all notification appliances (horns, strobes, voice evacuation), all supervisory devices, and all interfaces to suppression systems and building systems. Some components require more frequent testing — for example, NFPA 72 requires monthly testing of battery backup power and quarterly inspection of visual notification appliances in certain applications. Records of all inspections and tests must be retained on-site and made available to the AHJ. Non-compliance with NFPA 72 testing requirements can void insurance coverage and result in enforcement action.'
+            },
+            q6: {
+                answer: 'c',
+                question: 'What document provides final authorization to occupy a building?',
+                correctLabel: 'Certificate of Occupancy',
+                explanation: 'A Certificate of Occupancy (CO) is the official document issued by the local building department (AHJ) that legally authorises a building or space to be occupied and used for its intended purpose. A CO is issued only after all required inspections have been completed and passed — including structural, electrical, mechanical, plumbing, fire protection, and life safety inspections — confirming that the construction conforms to the approved plans, applicable codes, and all required permits have been closed. Without a CO, a building cannot legally be occupied, and data center operators cannot place live IT equipment in the space. A building permit authorises the start of construction but does not authorise occupancy. A Temporary Certificate of Occupancy (TCO) may be issued for partial occupancy of a phased project while remaining work continues.'
+            },
+            q7: {
+                answer: 'c',
+                question: 'When multiple codes apply, which requirement typically governs?',
+                correctLabel: 'The most restrictive requirement',
+                explanation: 'When multiple codes, standards, or regulations apply to the same aspect of a data center design or operation, the most restrictive (most demanding) requirement governs. This is a fundamental principle of code compliance: the design must satisfy all applicable requirements simultaneously, and where they conflict or overlap, the one that imposes the greatest obligation on the designer or operator takes precedence. For example, if a state energy code requires a minimum cooling efficiency of PUE 1.5 but a federal energy regulation requires PUE 1.4, the PUE 1.4 requirement governs. Similarly, if NFPA 75 requires a specific fire detection spacing and a local amendment requires tighter spacing, the local amendment applies. This principle ensures that compliance with the highest applicable standard always provides compliance with the lesser ones.'
+            },
+            q8: {
+                answer: 'b',
+                question: 'What is required when making modifications to fire protection systems?',
+                correctLabel: 'Permit and inspection',
+                explanation: 'Any modification to a fire protection system — including alterations to sprinkler layouts, addition or relocation of suppression nozzles, changes to fire alarm device locations, or modifications to suppression system piping — requires a permit from the AHJ and a subsequent inspection before the work is accepted. This requirement exists under the International Fire Code (IFC), NFPA 13, NFPA 72, and NFPA 2001, among others. The permit process ensures that proposed modifications are reviewed for code compliance before work begins, and the inspection confirms that completed work matches approved plans and was executed correctly. Performing fire protection modifications without a permit is a code violation that can result in the work being required to be removed and redone, invalidation of the fire protection system acceptance, and potential insurance and liability consequences.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'How long should fire protection system test records typically be retained?',
+                correctLabel: '3-5 years minimum',
+                explanation: 'NFPA 72 and NFPA 25 (Inspection, Testing, and Maintenance of Water-Based Fire Protection Systems) both require that records of all fire protection system inspections, tests, and maintenance be retained for a minimum of 3 years (NFPA 72) to 5 years (NFPA 25), with the most recent records kept on the premises and available for review by the AHJ. In practice, many data center operators and their insurers require longer retention periods — often the life of the system — because historical test records are essential for demonstrating a pattern of compliance, identifying deteriorating performance trends, and defending against liability claims. Records must capture the date of inspection or test, the name of the organisation performing the work, the results of each test or inspection item, and any deficiencies identified and corrective actions taken.'
+            },
+            q10: {
+                answer: 'b',
+                question: 'What is a variance in code compliance?',
+                correctLabel: 'An approved alternative method',
+                explanation: 'A variance (also called an alternative means and methods approval or equivalency) is a formal approval from the AHJ that allows a specific deviation from the literal requirements of a code, provided the applicant can demonstrate that the proposed alternative achieves equivalent or better performance than the prescriptive requirement. Variances are not code violations — they are a legitimate and formal pathway built into most building and fire codes to accommodate innovative technologies, unusual building configurations, or situations where strict literal compliance is impractical or impossible. To obtain a variance, the applicant typically submits a formal request supported by engineering analysis, testing data, or other evidence demonstrating equivalency. The AHJ reviews the request, may consult with technical experts, and issues a written approval or denial. Approved variances must be documented and maintained with the building records.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1396,43 +1443,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Code Compliance.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Code Compliance.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#1565c0; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #1565c0; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
