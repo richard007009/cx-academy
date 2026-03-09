@@ -919,6 +919,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -935,38 +936,84 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',
-            q2: 'c',
-            q3: 'c',
-            q4: 'c',
-            q5: 'b',
-            q6: 'c',
-            q7: 'b',
-            q8: 'c',
-            q9: 'c',
-            q10: 'b'
+        // Quiz data: correct answers, correct label text, and explanations
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What does UPS stand for?',
+                correctLabel: 'Uninterruptible Power Supply',
+                explanation: 'UPS stands for Uninterruptible Power Supply — a device that provides continuous, conditioned power to connected loads without any interruption, even when the utility supply fails or falls outside acceptable voltage and frequency limits. The "uninterruptible" aspect is the defining characteristic: unlike a generator which takes 10–15 seconds to start and stabilise, a UPS supplies power instantaneously with no break in continuity. In a data center, the UPS sits between the utility/generator supply and the IT equipment, constantly conditioning the power and standing ready to switch to battery in the event of any supply disturbance. The UPS also protects against power quality events such as voltage sags, swells, spikes, and harmonic distortion that do not constitute full outages but can still damage or upset sensitive electronic equipment.'
+            },
+            q2: {
+                answer: 'c',
+                question: 'Which type of UPS is recommended for critical data center applications?',
+                correctLabel: 'Double-Conversion (Online) UPS',
+                explanation: 'The Double-Conversion (Online) UPS is the industry-standard topology for critical data center applications. In double-conversion operation, the load is always powered via the inverter — utility AC is continuously converted to DC by the rectifier, and then immediately converted back to clean AC by the inverter to feed the load. This means the output power is completely regenerated and isolated from the input supply at all times, providing total immunity from all input power quality issues including voltage fluctuations, frequency variations, harmonics, and transients. The battery is always connected to the DC bus, so any loss of input power results in zero transfer time — the inverter simply continues running from battery with no switching event whatsoever. Standby and line-interactive UPS types involve a transfer switch that must operate when utility fails, introducing a brief interruption.'
+            },
+            q3: {
+                answer: 'c',
+                question: 'What is the transfer time for a double-conversion UPS?',
+                correctLabel: 'Zero (no transfer needed)',
+                explanation: 'The transfer time for a double-conversion (online) UPS is zero — there is no transfer at all. Because the load is continuously powered by the inverter in normal operation, and the battery is permanently connected to the same DC bus that feeds the inverter, there is no switching event when utility power fails. The inverter simply continues operating from battery energy instead of rectifier-supplied energy, with no interruption, no transient, and no change detectable by the connected load. This is the fundamental advantage of the double-conversion topology over standby and line-interactive types, which both involve a mechanical or static transfer switch that must operate within 2–20 milliseconds when utility power fails. For sensitive IT equipment, even a 4ms interruption can be disruptive — zero transfer time eliminates this risk entirely.'
+            },
+            q4: {
+                answer: 'c',
+                question: 'What configuration provides complete redundancy with two separate UPS systems?',
+                correctLabel: '2N configuration',
+                explanation: '2N (two-N) configuration provides complete redundancy by deploying two entirely separate and independent UPS systems — an A-side and a B-side — each sized and capable of carrying 100% of the critical load on its own. Every piece of IT equipment is connected to both UPS systems via dual power supply units, with each power supply drawing from a different UPS. If either UPS system fails completely, is taken offline for maintenance, or loses its utility input, the other UPS continues to power all connected equipment without any interruption or capacity shortfall. This is the highest common UPS redundancy configuration and is required for Uptime Institute Tier IV data centers. N+1 adds only one extra UPS module to a parallel system — it cannot tolerate the failure of an entire UPS system the way 2N can.'
+            },
+            q5: {
+                answer: 'b',
+                question: 'What is the optimal temperature for UPS battery rooms?',
+                correctLabel: '25°C (77°F)',
+                explanation: 'The optimal operating temperature for VRLA (Valve Regulated Lead Acid) batteries — the most common UPS battery type — is 25°C (77°F), which is the reference temperature at which manufacturers rate battery capacity and state design life. All published battery specifications, including capacity (Ah), float voltage, and expected service life, are based on this reference temperature. Operating batteries consistently at 25°C maximises both available capacity and longevity. Every 8–10°C rise above this reference temperature approximately halves battery service life, due to accelerated electrochemical degradation described by the Arrhenius equation. Conversely, temperatures significantly below 25°C reduce available capacity — a battery room at 10°C may only deliver 70–80% of rated capacity. Battery room HVAC must therefore be maintained with high reliability, and temperature trending monitored as a key health indicator.'
+            },
+            q6: {
+                answer: 'c',
+                question: 'Which component converts AC power to DC power in a UPS?',
+                correctLabel: 'Rectifier',
+                explanation: 'The rectifier is the component in a UPS that converts incoming AC power to DC power. In a double-conversion UPS, the rectifier performs two simultaneous functions: it supplies DC power to the inverter (which regenerates clean AC for the load), and it float-charges the battery string. Modern UPS rectifiers use IGBT (Insulated Gate Bipolar Transistor) switching technology with active power factor correction (PFC), achieving input power factors of 0.99 or better and producing very low harmonic current distortion — addressing one of the major power quality concerns of older thyristor-based rectifiers. The inverter performs the reverse function (DC to AC). The battery stores and delivers DC energy. The static bypass switch provides a direct AC path from input to output, bypassing both rectifier and inverter, used during maintenance or in overload/fault conditions.'
+            },
+            q7: {
+                answer: 'b',
+                question: 'What is the typical runtime for data center UPS systems at full load?',
+                correctLabel: '5-30 minutes',
+                explanation: 'Data center UPS systems are typically designed to provide 5–30 minutes of runtime at full load. This runtime specification reflects the primary purpose of the UPS: to bridge the gap between utility power failure and generator start-up and stabilisation, which takes 10–30 seconds, plus additional margin for multiple start attempts and load transfer sequencing. Extended runtime beyond 30 minutes would require very large and expensive battery installations, and is generally unnecessary given that diesel generators provide sustained backup power once running. Most large data center UPS systems are specified for 10–15 minutes at full load — sufficient to handle generator start-up, any reasonable delay in automatic transfer, and a short period of troubleshooting. Longer runtimes (1–8 hours) are more common in smaller UPS systems protecting individual racks or edge computing sites where generator backup is not available.'
+            },
+            q8: {
+                answer: 'c',
+                question: 'How often should battery impedance testing be performed?',
+                correctLabel: 'Quarterly',
+                explanation: 'IEEE Standard 1188 (Recommended Practice for Maintenance, Testing, and Replacement of Valve-Regulated Lead-Acid Batteries for Stationary Applications) recommends that battery impedance (or conductance) testing be performed quarterly for VRLA batteries in critical UPS applications. Quarterly testing establishes a comprehensive trending baseline that allows degrading cells to be identified and replaced before they cause a string failure. Impedance testing is non-invasive — it injects a small AC signal into each cell or module and measures internal resistance without discharging the battery or taking the UPS offline. By comparing current readings to baseline values and to neighbouring cells in the string, technicians can identify cells with elevated impedance (indicating sulphation, plate degradation, or electrolyte dry-out) well before they fail. Annual capacity testing (full discharge under controlled conditions) complements quarterly impedance testing as the definitive performance verification.'
+            },
+            q9: {
+                answer: 'c',
+                question: 'What is the average cost of data centre downtime?',
+                correctLabel: '£4,300 per minute',
+                explanation: 'Industry research — including the widely cited Ponemon Institute studies on data centre outage costs — consistently places the average cost of unplanned data centre downtime in the range of $5,000–$9,000 per minute (approximately £4,000–£7,000 per minute), with £4,300 per minute being a commonly referenced average figure. This cost encompasses direct financial losses (lost transactions, revenue, and productivity), IT recovery labour costs, infrastructure repair or replacement, contractual penalties and SLA breach costs, and reputational damage that is harder to quantify but can represent significant long-term business impact. For certain sectors — financial trading, e-commerce, or healthcare — per-minute costs can exceed £100,000. These figures make the business case for investment in UPS redundancy, battery maintenance, and regular testing programmes straightforwardly compelling compared to the cost of even a single outage event.'
+            },
+            q10: {
+                answer: 'b',
+                question: 'What does EPO stand for in UPS systems?',
+                correctLabel: 'Emergency Power Off',
+                explanation: 'EPO stands for Emergency Power Off — a safety system that allows authorised personnel to immediately de-energise the entire UPS output and disconnect power from all connected IT equipment in a single action, typically via a clearly marked red mushroom-head pushbutton located at room exits. EPO is activated in life-safety emergencies such as fire, flood, structural failure, or electrical fault where continuing to supply power would present an immediate danger to personnel. Activation of EPO simultaneously opens the UPS output breakers, disconnects the battery, and in many implementations also signals the building management system to shut down HVAC and close fire dampers. EPO systems must be carefully integrated with the fire suppression system — in some configurations EPO activation triggers suppression agent release. EPO buttons must be clearly labelled, accessible, and tested periodically, but also protected against accidental activation which would cause an unplanned total outage.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -979,43 +1026,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of UPS systems.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of UPS systems.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#1e3c72; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #1e3c72; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
