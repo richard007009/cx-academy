@@ -1433,6 +1433,7 @@ Solution: Change BMS display units to Fahrenheit
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1449,38 +1450,83 @@ Solution: Change BMS display units to Fahrenheit
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // To verify systems work together correctly
-            q2: 'b',  // Top-down
-            q3: 'c',  // Shut down to prevent smoke spread
-            q4: 'd',  // <0.1%
-            q5: 'c',  // Traceability matrix
-            q6: 'b',  // <10 seconds
-            q7: 'c',  // Scalability testing
-            q8: 'c',  // Define the problem
-            q9: 'b',  // Scaling factors
-            q10: 'c'  // During design phase
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What is the primary purpose of integration testing?',
+                correctLabel: 'To verify systems work together correctly',
+                explanation: 'The primary purpose of integration testing is to verify that individual systems and subsystems work together correctly as a unified whole — confirming that interfaces, data exchanges, control sequences, and automated responses between different systems function as designed when they interact. In a data center context, this means testing not just that each individual system works in isolation (which is the domain of component testing and pre-functional checks), but that the connections and interdependencies between systems produce the correct combined behaviour. For example: when a fire alarm panel detects smoke, does the BMS correctly receive that signal and shut down HVAC systems within the required timeframe? When utility power fails, does the ATS correctly transfer load to the generator, does the UPS correctly support the load during transition, and does the BMS correctly reflect the changed power state? Integration testing discovers interface defects — incorrect point mappings, wrong engineering unit scaling, missing control sequences, timing issues, and protocol configuration errors — that cannot be found by testing systems individually. It is typically performed after individual component and subsystem testing is complete, following the commissioning progression from individual equipment checks through to full-facility operational verification.'
+            },
+            q2: {
+                answer: 'b',
+                question: 'Which integration approach tests high-level systems first?',
+                correctLabel: 'Top-down',
+                explanation: 'The top-down integration approach begins testing at the highest level of the system hierarchy first — starting with the supervisory BMS or SCADA layer and working progressively downward through mid-level controllers to field devices and sensors. In a data center integration context, this means first verifying that the BMS operator interface correctly communicates with major subsystem controllers (chiller plant controller, UPS management system, generator controller), then progressively verifying each controller\'s connection to its subordinate field devices. The top-down approach has the significant advantage of validating the most critical high-level control sequences and alarm responses early in the testing programme, when scheduling flexibility is greatest — identifying major architectural integration problems before investing time in detailed field device verification. It requires the use of stubs (simulated lower-level components) where real lower-level systems are not yet available or tested. By contrast, the bottom-up approach tests field devices first and builds upward — ensuring reliable field data before testing higher-level logic, but deferring validation of high-level system interactions until late in the programme. The big bang approach integrates and tests all components simultaneously — fast but makes fault isolation extremely difficult. Risk-based testing prioritises test sequence by consequence severity regardless of hierarchy level.'
+            },
+            q3: {
+                answer: 'c',
+                question: 'What should happen to HVAC systems when a fire alarm activates?',
+                correctLabel: 'Shut down to prevent smoke spread',
+                explanation: 'When a fire alarm activates in a data center, HVAC systems must shut down to prevent smoke spread — this is a critical life safety requirement mandated by NFPA 90A (Standard for the Installation of Air-Conditioning and Ventilating Systems), NFPA 72 (National Fire Alarm and Signaling Code), and local building codes. Running HVAC systems during a fire actively transports smoke and combustion products throughout the building via ductwork and airflow paths, dramatically increasing the speed at which smoke spreads to occupied areas, reducing visibility and egress safety, and potentially carrying smoke into areas remote from the fire origin. The correct response sequence is: fire alarm activates → HVAC fans shut down → dampers close to isolate zones → smoke control systems (where installed) activate in pressurisation mode to protect egress routes. This fire/HVAC integration is one of the most critical cross-system integration tests performed during data center commissioning — it must be verified using an actual (or simulated) fire alarm signal to confirm the BMS receives the interlock correctly, the HVAC equipment responds within the required timeframe, and damper positions are confirmed. Increasing ventilation would accelerate smoke spread; continuing normal operation would actively distribute smoke; switching to emergency power addresses an unrelated concern and would not prevent smoke spread.'
+            },
+            q4: {
+                answer: 'd',
+                question: 'What is an acceptable packet loss rate for control networks?',
+                correctLabel: '<0.1%',
+                explanation: 'Less than 0.1% packet loss is the accepted performance standard for building automation and industrial control networks used in data center BMS and SCADA systems. Control networks have fundamentally different performance requirements from general IT networks: while a 1–5% packet loss rate on an office network is often imperceptible (TCP/IP protocols retransmit lost packets transparently), on a control network every lost packet represents a missed command, a missing sensor reading, or a failed alarm delivery — any of which can compromise control loop stability, operator situational awareness, or safety system response. At packet loss rates above 0.1%, BMS polling cycles begin to produce gaps in trend data, control commands may be missed causing equipment to operate incorrectly, and alarm delivery reliability degrades. Control network design standards (including BACnet network design guidelines and Modbus best practices) target packet loss well below 0.1% through careful network segmentation, appropriate bandwidth provisioning, prioritisation of control traffic, and physical network quality. During integration testing, network performance is verified using tools such as continuous ping tests, protocol analysers, and BMS communication statistics — with packet loss, latency, and retransmission rates all measured and recorded against defined acceptance criteria.'
+            },
+            q5: {
+                answer: 'c',
+                question: 'Which document links tests to specific requirements?',
+                correctLabel: 'Traceability matrix',
+                explanation: 'A Requirements Traceability Matrix (RTM) is the document that creates explicit, verifiable links between each specific project requirement and the test(s) designed to verify that requirement has been met. In data center integration testing, the traceability matrix maps every functional requirement from the design specifications, owner\'s project requirements (OPR), and basis of design (BOD) documents to one or more specific test procedures — ensuring that no requirement is left unverified and that every test has a clear design intent. The matrix typically records: requirement ID and description, the source document and clause, the test procedure ID that verifies it, the test result (pass/fail), and the date tested. This bidirectional traceability serves multiple critical purposes: it provides objective evidence to the owner that all contracted requirements have been tested; it identifies gaps in test coverage where requirements exist without corresponding tests; it supports regulatory compliance demonstrations; and it provides a defensible record for dispute resolution if requirements are later challenged. A test plan defines the overall testing strategy, scope, and schedule. A test procedure provides step-by-step instructions for executing a specific test. A defect report documents a specific failure found during testing. Only the traceability matrix explicitly connects requirements to tests.'
+            },
+            q6: {
+                answer: 'b',
+                question: 'What is the typical maximum response time for BMS commands to equipment?',
+                correctLabel: '<10 seconds',
+                explanation: 'A maximum response time of less than 10 seconds from BMS command issuance to confirmed equipment response is the widely accepted performance benchmark for building automation control networks in data center applications. This criterion reflects the operational reality of data center management: operators issuing commands through the HMI — starting a pump, changing a valve position, enabling a cooling unit — need timely visual confirmation that their command has been received and acted upon. A response time exceeding 10 seconds creates operational uncertainty (did the command register?), risks operators issuing duplicate commands, and indicates underlying network or controller performance problems that could compromise time-critical automated control sequences and alarm responses. The 10-second benchmark applies to the full command-response cycle: operator clicks command button → HMI sends command to BMS server → BMS server sends command to field controller via BACnet/Modbus → controller executes command → field device responds → status feedback travels back through the chain → HMI updates to show new status. For critical safety interlock sequences (such as emergency shutdown commands), much faster response times are required — typically sub-second at the controller level. Response time testing is a standard component of BMS integration acceptance testing, typically performed by timestamping commands at the HMI and recording confirmation timestamps from field device status feedback.'
+            },
+            q7: {
+                answer: 'c',
+                question: 'Which test verifies systems can handle future growth?',
+                correctLabel: 'Scalability testing',
+                explanation: 'Scalability testing verifies that a system — whether a BMS, network infrastructure, monitoring platform, or control system — can accommodate future growth in points, devices, users, data volume, or operational complexity without degrading in performance or requiring architectural redesign. In data center integration testing, scalability testing is particularly important for systems that will expand over the facility lifecycle: a BMS designed for 5,000 points on day one may need to support 15,000 points within five years as the facility is built out; a network sized for 200 devices must be able to accommodate 600; a DCIM platform must handle increasing data volumes as monitoring density grows. Scalability tests typically involve loading the system to a multiple of its current operational size (often 150–200% of planned day-one capacity) and verifying that polling rates, response times, alarm delivery, and trend data collection all remain within acceptance criteria. This is distinct from load testing (which verifies performance at the expected normal operational load), stress testing (which deliberately exceeds capacity limits to find failure modes and recovery behaviour), and failover testing (which verifies system behaviour when primary components fail and standby systems take over).'
+            },
+            q8: {
+                answer: 'c',
+                question: 'What is the first step in systematic troubleshooting?',
+                correctLabel: 'Define the problem',
+                explanation: 'Defining the problem precisely and completely is always the first and most critical step in systematic troubleshooting — a principle consistent across all engineering troubleshooting methodologies including the CompTIA troubleshooting model, ISA instrumentation troubleshooting frameworks, and general scientific problem-solving approaches. A precise problem definition answers: What exactly is the observed symptom? When did it first occur? Is it consistent or intermittent? What changed before it started? Which systems, points, or interfaces are affected and which are not? What is the expected correct behaviour versus what is actually occurring? Investing time in thorough problem definition before jumping to solutions prevents the most common troubleshooting failures: solving the wrong problem, masking symptoms without addressing root causes, and wasting effort on irrelevant investigations. In data center integration testing, poor problem definition leads to integration engineers spending hours investigating the wrong interface or the wrong protocol layer. A well-defined problem statement — for example, "BMS chilled water supply temperature reading shows 0°C when equipment is running; all other chiller points display correctly; issue started after Modbus register map was updated yesterday" — immediately constrains the solution space and directs attention to the relevant change. Only after the problem is clearly defined should the troubleshooter develop theories, test those theories, implement solutions, and document results.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'Which protocol issue commonly causes data mismatches?',
+                correctLabel: 'Scaling factors',
+                explanation: 'Incorrect scaling factors are one of the most common causes of data mismatches in building automation and industrial protocol integrations, particularly with Modbus — where raw integer register values must be divided or multiplied by a scaling factor to produce meaningful engineering unit values. Many field devices store measurements as integers to conserve register space: a power meter may store kilowatt readings as integer values with an implied decimal point (e.g., the value 1234 represents 12.34 kW with a scaling factor of 0.01), or a temperature sensor may transmit values in tenths of a degree (e.g., 215 = 21.5°C). If the BMS integration applies the wrong scaling factor — or no scaling factor — the displayed value will be completely wrong: a chilled water temperature that should read 7.5°C might display as 75°C or 750°C. Scaling factor errors are particularly insidious because the communication itself appears healthy (the register is being read successfully, no communication errors), so network-layer diagnostics show no problems — only a comparison of the raw register value against the expected engineering value reveals the mismatch. All scaling factor settings must be verified against the device manufacturer\'s register map documentation during integration testing. Network speed, cable length, and device count are physical layer concerns that affect communication reliability but do not produce systematic value mismatches of this type.'
+            },
+            q10: {
+                answer: 'c',
+                question: 'When should integration planning begin?',
+                correctLabel: 'During design phase',
+                explanation: 'Integration planning must begin during the design phase — when systems are being selected, interfaces are being defined, and specifications are being written — not during construction, commissioning, or after installation. Starting integration planning in the design phase is essential for several interconnected reasons. First, protocol and interface requirements must be specified in equipment procurement documents so that purchased equipment actually supports the required integration protocols — a chiller ordered without a BACnet option cannot have BACnet added later. Second, network infrastructure (cabling, switches, gateways) must be designed and sized to support the integration architecture — adding integration network infrastructure during construction is costly and disruptive. Third, the integration scope, test procedures, and acceptance criteria must be defined in contracts with all relevant subcontractors to establish clear accountability. Fourth, the commissioning programme — including integration testing — must be resourced, scheduled, and budgeted from the outset. Fifth, potential interface conflicts between systems from different manufacturers can be identified and resolved during design (when changes are cheap) rather than during commissioning (when changes are expensive and schedule-critical). The Lawrence Berkeley National Laboratory\'s data center commissioning guide and ASHRAE commissioning standards consistently identify early integration planning as a key factor differentiating successful commissioning programmes from those that experience costly delays and rework.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1493,43 +1539,94 @@ Solution: Change BMS display units to Fahrenheit
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Integration Testing.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Integration Testing.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#673ab7; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #673ab7; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
