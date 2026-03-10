@@ -1583,6 +1583,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1599,38 +1600,83 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // Human Machine Interface
-            q2: 'c',  // Critical
-            q3: 'c',  // Green
-            q4: 'c',  // <10
-            q5: 'c',  // Supervisor
-            q6: 'b',  // 15-30 minutes
-            q7: 'b',  // Acknowledge receipt
-            q8: 'c',  // Trend line
-            q9: 'b',  // Track user actions
-            q10: 'b'  // Role-Based Access Control
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What does HMI stand for?',
+                correctLabel: 'Human Machine Interface',
+                explanation: 'HMI stands for Human Machine Interface — the graphical interface through which operators monitor, interact with, and control building automation, process control, and critical infrastructure systems. In a data center context, the HMI is the primary operational tool used by facility engineers and operators to visualise the real-time state of all mechanical and electrical systems — cooling, power distribution, UPS, generators, fire protection, and environmental monitoring — presented through interactive graphical screens showing system diagrams, live values, alarms, trends, and control buttons. Modern HMI platforms (such as Wonderware InTouch, GE iFIX, Siemens WinCC, Inductive Automation Ignition, and Schneider Electric ClearSCADA) run on standard PC hardware and communicate with field controllers and devices over building automation protocols such as BACnet, Modbus, and OPC-UA. The HMI is distinct from the underlying control system (PLCs and DDC controllers) that executes control logic — the HMI provides the supervisory visibility and manual override capability that allows human operators to manage and respond to system conditions.'
+            },
+            q2: {
+                answer: 'c',
+                question: 'Which alarm priority requires immediate action?',
+                correctLabel: 'Critical',
+                explanation: 'Critical is the highest alarm priority level in HMI and SCADA alarm management systems and designates conditions that require immediate operator action to prevent equipment failure, safety incidents, or loss of service to the critical IT load. ISA-18.2 (Management of Alarm Systems for the Process Industries) — the foundational standard for alarm management adopted across building automation and data center operations — defines alarm priority tiers based on the consequence severity and required response time: Information alarms are advisory and require no immediate action; Warning alarms indicate developing conditions that require attention within a defined response window; Critical alarms indicate conditions that require immediate response to prevent significant impact. In data center HMIs, Critical alarms typically include conditions such as UPS transfer to battery, chilled water temperature above high-high limit, primary cooling failure, generator start failure, fire alarm activation, or loss of redundancy in a critical system path. The HMI must present Critical alarms prominently and persistently — typically with audible alerting, flashing red indicators, and escalating notifications — to ensure they are not missed by operators monitoring many systems simultaneously.'
+            },
+            q3: {
+                answer: 'c',
+                question: 'What color typically indicates normal/running status?',
+                correctLabel: 'Green',
+                explanation: 'Green universally indicates normal/running status in HMI and SCADA graphical displays — a convention standardised in ISA-101 (Human Machine Interfaces for Process Automation Systems) and consistently applied across building automation and industrial control industries. The complete ISA-101 colour convention establishes clear meaning for each colour: green indicates the equipment is running, operating normally, or in a healthy state with no active alarms; red indicates a fault, alarm condition, stopped/failed state, or safety interlock active; yellow or amber indicates a warning, standby, or transitional state requiring attention but not yet critical; grey or white indicates equipment that is off, de-energised, in manual mode, or in an unknown/offline state. In data center HMI graphics, operators conducting a visual scan of a system overview screen rely entirely on these colour conventions to rapidly assess whether all equipment is in its expected state — a single red or yellow icon among a field of green immediately directs attention to the problem without requiring the operator to read individual values. Consistent application of colour conventions across all HMI screens in a facility is therefore a critical HMI design requirement that directly affects operator response speed and accuracy.'
+            },
+            q4: {
+                answer: 'c',
+                question: 'What is the recommended target for alarms per operator per hour?',
+                correctLabel: '<10',
+                explanation: 'The EEMUA Publication 191 (Alarm Systems — A Guide to Design, Management and Procurement) and ISA-18.2 both identify fewer than 10 alarms per operator per hour as the target alarm rate for manageable, effective alarm management. This benchmark reflects careful human factors research into operator cognitive load: at rates above approximately 10 alarms per hour, operators begin to experience difficulty managing, acknowledging, and responding to alarms effectively; at rates above 30 alarms per hour, operator performance degrades significantly; and at rates above 50 alarms per hour (a "flood" condition), operators are effectively unable to respond meaningfully and alarms become noise rather than actionable information. EEMUA 191 defines alarm rate benchmarks as: very likely acceptable at less than 1 alarm per 10 minutes (6/hour); manageable at 1 per 5 minutes (12/hour); very likely unacceptable at more than 1 per 2 minutes (30/hour). In practice, many data center HMI systems suffer from alarm overload due to poorly rationalised alarm setpoints, nuisance alarms on non-critical equipment, and chattering alarms — making alarm rationalisation and shelving programmes essential for maintaining operator effectiveness.'
+            },
+            q5: {
+                answer: 'c',
+                question: 'Which user level typically has setpoint change authority?',
+                correctLabel: 'Supervisor',
+                explanation: 'In a properly structured HMI Role-Based Access Control (RBAC) hierarchy, Supervisor-level users typically hold the authority to change setpoints — the control parameters that define how the BMS controls equipment, such as chilled water supply temperature target, supply air temperature setpoint, pressure differential targets, and alarm thresholds. The rationale for restricting setpoint changes to Supervisor level reflects the potential operational impact: an incorrect setpoint change can cause cooling system instability, increase energy consumption significantly, trigger nuisance alarms, or create conditions that compromise equipment reliability. The typical four-tier RBAC structure assigns: View Only access to read all values and trends but make no changes (suitable for visitors, auditors, remote monitoring personnel); Operator access to acknowledge alarms, issue basic equipment commands (start/stop), and adjust limited operational parameters within pre-defined safe ranges; Supervisor access to change setpoints, modify control sequences, configure alarm limits, and override interlocks with documented justification; and Administrator access to modify the HMI configuration itself, add or remove points, create graphics, and manage user accounts. All setpoint changes at Supervisor level and above should be automatically captured in the HMI audit trail with timestamp, username, previous value, and new value.'
+            },
+            q6: {
+                answer: 'b',
+                question: 'What is the typical session timeout period for HMI security?',
+                correctLabel: '15-30 minutes',
+                explanation: 'A session timeout of 15–30 minutes of inactivity is the widely accepted industry standard for HMI and SCADA workstation security, balancing two competing operational requirements. The timeout must be short enough to reduce the risk of an unattended authenticated session being used by an unauthorised person — a critical concern in data centers where multiple operators may share workstations and where the consequences of unauthorised control actions could be severe. However, the timeout must not be so short that it disrupts legitimate operational workflows — operators monitoring systems during quiet periods, reading trends, or analysing historical data should not have their sessions interrupted every few minutes, which would both reduce efficiency and encourage operators to defeat the timeout mechanism. 15–30 minutes represents the consensus balance validated by NERC CIP security standards (for utility control systems), ICS-CERT guidance, and building automation cybersecurity frameworks. Where HMI workstations are in secured control rooms with restricted physical access, longer timeouts may be acceptable; where workstations are in shared or less-controlled areas, shorter timeouts or additional authentication measures such as proximity card readers for re-authentication are recommended.'
+            },
+            q7: {
+                answer: 'b',
+                question: 'What should be done first when responding to an alarm?',
+                correctLabel: 'Acknowledge receipt',
+                explanation: 'The first action when responding to any HMI alarm is to acknowledge receipt — confirming to the system that the alarm has been seen and accepted for investigation by an operator. Acknowledgement serves several critical functions in alarm management: it stops the audible alerting (preventing alarm noise from masking subsequent new alarms), transitions the alarm visual state from "unacknowledged" to "acknowledged active" (visually distinguishing alarms under investigation from new unacknowledged conditions), timestamps the operator response, and records the acknowledging operator\'s identity in the audit trail. Critically, acknowledgement does not mean the condition has been resolved — the alarm remains active in the alarm list until the underlying condition clears, reminding operators that the issue requires ongoing attention and response. Clearing an alarm without investigating the condition first would be incorrect and potentially dangerous — it removes the alarm from the active list without addressing the underlying problem. The correct response sequence is: Acknowledge → Investigate → Take corrective action → Confirm resolution → Close alarm. This sequence ensures accountability (who saw the alarm and when), traceability (what actions were taken), and operational safety (the condition is actually resolved before the alarm is cleared).'
+            },
+            q8: {
+                answer: 'c',
+                question: 'Which visualization type is best for showing temperature over time?',
+                correctLabel: 'Trend line',
+                explanation: 'A trend line (also called a time-series chart or historical trend) is the correct and only appropriate visualisation for showing how a variable such as temperature changes over time. A trend line plots value on the Y-axis against time on the X-axis, allowing operators to instantly see the direction of change (rising, falling, stable), the rate of change (steep vs. gradual slope), cyclical patterns (time-of-day effects, seasonal variation), anomalies (sudden spikes, steps, or reversals), and the relationship between the current value and its recent history. In data center HMI operations, trend lines are essential for diagnosing thermal issues — a supply air temperature that is slowly rising over hours suggests a progressive cooling problem; a temperature that spikes sharply correlates with a specific event; a sawtooth pattern indicates a control system hunting around setpoint. Bar charts compare discrete categories or fixed time periods but cannot show continuous time evolution. Pie charts show proportional composition of a whole at a single point in time. Gauges show instantaneous current values effectively but provide no historical context. For any variable where trend over time is operationally relevant — temperature, pressure, humidity, power consumption, flow rate — the trend line is always the correct visualisation choice.'
+            },
+            q9: {
+                answer: 'b',
+                question: 'What is the primary purpose of an audit trail?',
+                correctLabel: 'Track user actions',
+                explanation: 'The primary purpose of an HMI audit trail is to create a tamper-evident, chronological record of all user actions performed through the HMI — including operator logons and logoffs, alarm acknowledgements, setpoint changes, manual equipment commands, control mode changes, and any configuration modifications. The audit trail answers the critical accountability questions: who did what, to which point, at what time, and what was the value before and after the change. This record serves multiple essential functions: it enables incident investigation — when a system behaves unexpectedly, the audit trail reveals whether a human action preceded the anomaly; it supports compliance with regulatory and insurance requirements that mandate documented control over critical systems; it deters unauthorised or careless operator actions by ensuring all activities are permanently recorded and attributable; and it enables performance reviews that identify operators who may need additional training. The audit trail must be stored securely with access controls that prevent modification or deletion, and should be retained for a minimum period defined by facility policy (typically 1–3 years for operational records). It is distinct from process data historians (which record equipment values) and alarm logs (which record alarm state changes) — the audit trail specifically captures human interactions with the system.'
+            },
+            q10: {
+                answer: 'b',
+                question: 'What does RBAC stand for in HMI security?',
+                correctLabel: 'Role-Based Access Control',
+                explanation: 'RBAC stands for Role-Based Access Control — the security model used in HMI and SCADA systems to manage what actions each user is permitted to perform based on their assigned organisational role rather than individual user-specific permissions. In an RBAC model, permissions are assigned to roles (such as View Only, Operator, Supervisor, and Administrator), and individual users are then assigned to one or more roles — receiving all permissions associated with those roles. This approach has significant practical advantages over user-specific permission management: when a new operator joins, they are assigned the Operator role and immediately receive the correct set of permissions without requiring individual configuration; when a role\'s permissions need to change (for example, adding a new command type to the Operator role), the change is made once to the role and automatically applies to all users in that role; and when someone leaves, removing them from their role immediately revokes all their access. In data center HMI systems, RBAC ensures that only appropriately trained and authorised personnel can modify setpoints, issue commands, or override safety interlocks — with the principle of least privilege applied so that each role has only the minimum permissions required for its legitimate operational function, reducing the risk of accidental or intentional misoperation.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1643,43 +1689,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of HMI Operations.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of HMI Operations.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#2e7d32; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #2e7d32; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
