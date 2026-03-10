@@ -1403,6 +1403,7 @@
                         <p id="resultMessage"></p>
                         <button onclick="retakeQuiz()" class="nav-button" style="margin-top: 20px;">Retake Quiz</button>
                     </div>
+                    <div id="answerReview" style="margin-top: 30px;"></div>
                 </div>
             </div>
         </div>
@@ -1419,38 +1420,83 @@
         const slides = document.getElementsByClassName('slide');
         const totalSlides = slides.length;
 
-        // Quiz answers
-        const correctAnswers = {
-            q1: 'b',  // Physical Security Information Management
-            q2: 'c',  // ONVIF
-            q3: 'b',  // Visual verification of access events
-            q4: 'b',  // They automatically unlock for evacuation
-            q5: 'b',  // 10-30 seconds
-            q6: 'd',  // Level 4 - Intelligent
-            q7: 'a',  // Reduce false alarms through correlation
-            q8: 'b',  // BACnet
-            q9: 'c',  // Unified threat response across physical and cyber
-            q10: 'c'  // Adaptive
+        const quizData = {
+            q1: {
+                answer: 'b',
+                question: 'What does PSIM stand for?',
+                correctLabel: 'Physical Security Information Management',
+                explanation: 'PSIM stands for Physical Security Information Management — a software platform that integrates and unifies data from multiple independent physical security subsystems (access control, video surveillance, intrusion detection, fire alarm, environmental monitoring, and more) into a single operator interface with centralised situational awareness, correlation, and response management. A PSIM platform acts as an aggregation and intelligence layer above existing security systems: it does not replace individual subsystems but connects to them via open APIs, SDKs, and standard protocols, ingesting their events and data into a unified view. When correlated events from multiple systems indicate a security incident — for example, a failed access attempt followed by motion detection in a restricted corridor — the PSIM presents the operator with a consolidated alert, displays the relevant camera feeds automatically, shows the floor plan with affected zones highlighted, and provides guided response procedures. In large, complex data centers with dozens of security subsystems from multiple vendors, a PSIM dramatically reduces the operator cognitive load of monitoring separate interfaces and enables faster, more coordinated incident response. The distinction from a VMS (Video Management System) or PACS (Physical Access Control System) is important: those are individual subsystem platforms, while the PSIM is the integration layer that sits above them all and creates unified operational intelligence from their combined data.'
+            },
+            q2: {
+                answer: 'c',
+                question: 'Which protocol is specifically designed for IP camera integration?',
+                correctLabel: 'ONVIF',
+                explanation: 'ONVIF (Open Network Video Interface Forum) is the industry standard protocol specifically designed for interoperability between IP-based physical security devices — primarily IP cameras, video encoders, video management systems, and access control devices. ONVIF was founded in 2008 by Axis, Bosch, and Sony and has since grown to over 500 member companies, with the ONVIF Profile S (Streaming) standard now supported by the vast majority of IP cameras and VMS platforms worldwide. The protocol defines standardised web service interfaces that allow any ONVIF-compliant camera to be discovered, configured, and streamed by any ONVIF-compliant VMS without requiring proprietary drivers or vendor-specific integration work. ONVIF Profile G extends this to recording and storage; Profile T adds H.265 video and metadata streaming; Profile A covers access control integration. For data center security integration projects, specifying ONVIF conformance in camera and VMS procurement ensures genuine interoperability and avoids the vendor lock-in that plagued proprietary camera ecosystems. BACnet is a building automation protocol used for HVAC, lighting, and environmental control systems — not video. Modbus is an industrial/electrical monitoring protocol also not related to video. SNMP (Simple Network Management Protocol) is an IT network device management protocol used to monitor switches, routers, and servers — not security cameras.'
+            },
+            q3: {
+                answer: 'b',
+                question: 'What is the primary benefit of integrating access control with video surveillance?',
+                correctLabel: 'Visual verification of access events',
+                explanation: 'The primary security benefit of integrating access control with video surveillance is visual verification of access events — the ability to automatically associate video footage of the physical event with the corresponding access control transaction record, enabling operators to see exactly who or what triggered each access event and verify that the credential presentation matched a legitimate authorised person. When a credential is presented at a reader, the integrated system automatically retrieves the camera feed covering that door and creates a video bookmark or clip linked to the access event in the audit log. This integration enables several critical security functions: real-time verification allows operators to visually confirm that the person using a credential is the authorised holder and not someone who found or stole the card; tailgating detection becomes possible by comparing the number of people visible on camera passing through a door against the number of access transactions recorded; post-incident investigation is dramatically accelerated because investigators can immediately pull the video clip for any access event rather than manually scrubbing through hours of footage; and access denial events automatically trigger camera recording to capture who was attempting unauthorised entry. Reduced equipment costs, simplified wiring, and lower bandwidth usage are not primary benefits of this integration — in fact, integration typically increases system complexity and data volumes rather than simplifying or reducing them.'
+            },
+            q4: {
+                answer: 'b',
+                question: 'In fire alarm integration, what happens to access-controlled egress doors?',
+                correctLabel: 'They automatically unlock for evacuation',
+                explanation: 'Access-controlled egress doors must automatically unlock for evacuation when a fire alarm activates — this is a mandatory life safety requirement under NFPA 101 (Life Safety Code), NFPA 72 (National Fire Alarm and Signaling Code), and the International Building Code, without exception. The integration between the fire alarm system and access control system is therefore one of the most critical and non-negotiable integration requirements in any data center. The mechanism works as follows: when the fire alarm control panel detects an alarm condition and enters the alarm state, it sends a contact closure or network signal to the access control system (and/or directly cuts power to fail-safe magnetic locks), causing all designated egress doors to immediately release to an unlocked, freely openable state — without requiring any credential presentation, operator action, or network communication. This ensures that occupants can always exit freely regardless of access control system availability. The integration must be tested as part of commissioning by verifying that every egress door releases within an acceptable timeframe (typically within seconds) following an actual or simulated fire alarm signal. Keeping egress doors locked during a fire alarm would be a serious life safety violation that could trap occupants. Requiring manual override would create unacceptable delays. Switching to card-only access would still impede evacuation for anyone without a credential. Only automatic unlock satisfies the life safety requirement.'
+            },
+            q5: {
+                answer: 'b',
+                question: 'What is the recommended pre/post recording time for access events?',
+                correctLabel: '10-30 seconds',
+                explanation: 'A pre/post recording buffer of 10–30 seconds is the industry-accepted best practice for event-driven video recording associated with access control events. Pre-event recording (buffering) captures footage from before the triggering event — in integrated systems, cameras continuously buffer a rolling window of video (typically 10–30 seconds) that is retained and saved when an event is triggered, ensuring that footage of the approach to the door, the credential presentation, and any suspicious activity immediately preceding the event is captured along with the event itself. Post-event recording continues capturing for 10–30 seconds after the event to record the person passing through the door, the door closing and securing, and any activity in the immediate aftermath. This duration is carefully balanced: too short (1–5 seconds) and the footage may not capture the full context of the access event — a person approaching the reader, presenting a card, and walking through could easily take 5–10 seconds, and suspicious activity before presentation needs to be captured; too long (1–2 minutes or more) and storage requirements increase significantly, and large volumes of long clips become impractical to review efficiently. For high-security access points such as server room entrances, cage doors, or mantrap entries, the 10–30 second window provides sufficient context for security review while keeping storage consumption manageable across a facility with potentially hundreds of access points generating thousands of daily events.'
+            },
+            q6: {
+                answer: 'd',
+                question: 'Which integration level includes AI-driven analytics and predictions?',
+                correctLabel: 'Level 4 - Intelligent',
+                explanation: 'Level 4 — Intelligent — is the highest tier of the security integration maturity model and is defined by the incorporation of AI-driven analytics, machine learning, predictive capabilities, and autonomous response functions that go beyond rule-based automation. At Level 4, the integrated security platform does not merely correlate events from connected systems (as at Level 3 — Advanced) but applies artificial intelligence to identify anomalies, predict threats, and recommend or automatically execute responses based on learned patterns of normal behaviour. Capabilities characteristic of Level 4 intelligence include: AI-powered video analytics detecting unusual behaviour patterns (loitering, abandoned objects, crowd formation, perimeter intrusion) without requiring pre-programmed rules; machine learning models that establish baseline access patterns for each user and flag deviations (after-hours access, access from unusual locations, sequences of access events inconsistent with normal movement patterns); predictive risk scoring that identifies elevated-risk credential holders based on behavioural indicators; and automated response orchestration that executes multi-system response sequences without operator initiation. Level 1 — Basic — involves standalone systems with no integration. Level 2 — Enhanced — adds basic event-driven integrations such as access-triggered camera recording. Level 3 — Advanced — implements cross-system correlation, automated workflows, and unified management. Level 4 adds AI and predictive intelligence as the defining capability that distinguishes it from rule-based Level 3 automation.'
+            },
+            q7: {
+                answer: 'a',
+                question: 'What is the primary purpose of zone-based intrusion detection integration?',
+                correctLabel: 'Reduce false alarms through correlation',
+                explanation: 'The primary purpose of zone-based intrusion detection integration — where intrusion detection sensor zones are logically linked to the access control and video surveillance systems — is to reduce false alarms through multi-sensor event correlation. Intrusion detection systems generate significant numbers of false alarms when operated in isolation: a single PIR motion sensor in a data center server hall may trigger on equipment heat signatures, airflow patterns, or cleaning staff with valid access but no armed-zone notification. Zone-based integration addresses this by requiring correlated confirmation from multiple sources before generating a genuine security alert: an intrusion alarm in a zone is only escalated if the access control system confirms no valid access event has occurred in that zone recently; conversely, a motion event in a zone where no access has been recorded prompts automatic camera retrieval to visually confirm whether a person is present. This correlation logic dramatically reduces the alarm-to-incident ratio — a critical operational metric because high false alarm rates cause alarm fatigue, where operators begin to discount or delay responding to alarms after experiencing repeated false positives, ultimately undermining the security value of the entire system. While integration can also enable higher sensitivity detection (by correlating lower-confidence sensor readings that would individually be sub-threshold), reduce equipment redundancy in some configurations, and simplify operational procedures, reducing false alarms through correlation is consistently identified as the primary driver for implementing zone-based integration in data center environments.'
+            },
+            q8: {
+                answer: 'b',
+                question: 'Which protocol is commonly used for building automation integration?',
+                correctLabel: 'BACnet',
+                explanation: 'BACnet (Building Automation and Control Networks) is the standard protocol for integrating security systems with building automation and HVAC infrastructure in data center environments. When physical security systems need to exchange data with the BMS — for example, triggering HVAC shutdown on fire alarm, reading environmental sensor data from building controllers, or coordinating power management responses with security events — BACnet provides the standardised communication interface. BACnet is published as ANSI/ASHRAE Standard 135 and is the dominant open protocol in building automation, supported by virtually all major HVAC controllers, chiller plants, UPS management systems, and BMS platforms. In a converged security and facilities integration architecture, the PSIM or security management platform connects to the BMS via BACnet to receive environmental alarms, control HVAC responses to security events, and incorporate facility status data into the unified operational picture. ONVIF is the correct protocol for IP camera integration (as addressed in Q2) but is not used for building automation. Modbus is used for electrical power monitoring and simple device integration but is not a building automation protocol per se. H.264 is a video compression codec standard, not a communication protocol. OAuth is an authorisation framework for web application APIs — used for identity and access management in software, not building control integration.'
+            },
+            q9: {
+                answer: 'c',
+                question: 'What is a key benefit of converged security operations?',
+                correctLabel: 'Unified threat response across physical and cyber',
+                explanation: 'The defining benefit of converged security operations — where physical security and cybersecurity functions are brought together under unified management, shared situational awareness, and coordinated response — is the ability to mount a unified threat response across physical and cyber domains simultaneously. Modern sophisticated attacks increasingly exploit both domains in combination: an attacker may use a phishing email to steal credentials and gain logical network access while simultaneously using physical tailgating to enter a restricted area and connect a rogue device directly to internal network infrastructure. In a non-converged organisation, the physical security team managing access control and the cybersecurity team monitoring network activity operate independently with no shared visibility — the physical tailgating event and the concurrent network anomaly may each be insufficient individually to trigger an investigation, but together they form a clear indicator of compromise that would be immediately apparent to a converged security operations team. Converged security also enables cross-domain correlation in the SIEM: a physical access event to a server room at 2 AM correlated with a simultaneous privileged login from that same user\'s credentials can trigger an immediate investigation. Additional benefits include elimination of organisational silos that slow response, shared intelligence between teams, unified compliance reporting, and more efficient resource utilisation — but the ability to detect and respond to threats that span both domains is the primary strategic justification for convergence.'
+            },
+            q10: {
+                answer: 'c',
+                question: 'What is the highest level in the Integration Maturity Model?',
+                correctLabel: 'Adaptive',
+                explanation: 'Adaptive is the highest level in the Security Integration Maturity Model, representing the ultimate state of a fully mature, self-optimising integrated security programme that continuously learns, adapts, and improves based on operational experience, threat intelligence, and environmental changes. At the Adaptive level, the integrated security architecture goes beyond the intelligence and AI capabilities of Level 4 (Intelligent) to incorporate continuous self-assessment, dynamic policy adjustment, and proactive programme evolution. Characteristics of the Adaptive level include: security policies and detection rules that automatically adjust based on changing threat landscapes and operational patterns; integration architectures that self-heal and reconfigure when component failures or changes occur; continuous feedback loops between security operations, incident findings, and system configuration that progressively improve detection accuracy and response effectiveness; predictive resource allocation that anticipates security demands based on facility activity patterns; and governance processes that automatically identify and close gaps between the current security posture and evolving best practices and compliance requirements. The maturity model progression is: Level 1 (Siloed/Basic — standalone systems), Level 2 (Connected/Enhanced — basic integration), Level 3 (Integrated/Advanced — cross-system correlation and automation), Level 4 (Intelligent — AI and predictive analytics), and Level 5 (Adaptive — continuous self-optimisation). The Adaptive level is aspirational for most organisations and represents the convergence of advanced technology, mature processes, and organisational capability.'
+            }
         };
 
         function showSlide(n) {
             if (n >= totalSlides) { currentSlide = totalSlides - 1; }
             if (n < 0) { currentSlide = 0; }
-            
+
             for (let i = 0; i < slides.length; i++) {
                 slides[i].classList.remove('active');
             }
-            
+
             slides[currentSlide].classList.add('active');
-            
-            // Update navigation
+
             document.getElementById('prevBtn').disabled = currentSlide === 0;
             document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Update slide counter
             document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
+
             const progress = ((currentSlide + 1) / totalSlides) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
@@ -1463,43 +1509,94 @@
         // Quiz functionality
         document.getElementById('quizForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            for (let question in correctAnswers) {
+            const totalQuestions = Object.keys(quizData).length;
+            const userAnswers = {};
+
+            for (let question in quizData) {
                 const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
+                userAnswers[question] = selectedAnswer ? selectedAnswer.value : null;
+                if (userAnswers[question] === quizData[question].answer) {
                     score++;
                 }
             }
-            
+
             const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Hide form and show results
+
             document.getElementById('quizForm').style.display = 'none';
             document.getElementById('quizResults').style.display = 'block';
-            
-            // Display score
             document.getElementById('scoreDisplay').textContent = percentage + '%';
-            
-            // Display message based on score
-            let message = '';
+
             if (percentage >= 80) {
-                message = `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Security Integration.`;
+                document.getElementById('resultMessage').textContent =
+                    `Congratulations! You passed with ${score} out of ${totalQuestions} correct answers. You have demonstrated a strong understanding of Security Integration.`;
                 document.getElementById('scoreDisplay').style.color = '#28a745';
             } else {
-                message = `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the material and try again.`;
+                document.getElementById('resultMessage').textContent =
+                    `You scored ${score} out of ${totalQuestions}. You need 80% or higher to pass. Please review the explanations below and try again.`;
                 document.getElementById('scoreDisplay').style.color = '#dc3545';
             }
-            document.getElementById('resultMessage').textContent = message;
+
+            // Build per-question answer review
+            const reviewContainer = document.getElementById('answerReview');
+            reviewContainer.innerHTML = '<h3 style="color:#1565C0; font-size:1.5em; margin-bottom:20px; border-bottom:3px solid #1565C0; padding-bottom:10px;">Answer Review</h3>';
+
+            let qNum = 1;
+            for (let question in quizData) {
+                const data      = quizData[question];
+                const userAns   = userAnswers[question];
+                const isCorrect = userAns === data.answer;
+
+                let userAnswerLabel = 'No answer selected';
+                if (userAns) {
+                    const selectedInput = document.querySelector(`input[name="${question}"][value="${userAns}"]`);
+                    if (selectedInput) {
+                        userAnswerLabel = selectedInput.closest('label')
+                            ? selectedInput.closest('label').textContent.trim()
+                            : selectedInput.parentElement.textContent.trim();
+                    }
+                }
+
+                const boxStyle = isCorrect
+                    ? 'background:#d4edda; border-left:5px solid #28a745; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;'
+                    : 'background:#f8d7da; border-left:5px solid #dc3545; padding:20px; margin:15px 0; border-radius:0 8px 8px 0;';
+
+                const icon        = isCorrect ? '✅' : '❌';
+                const statusText  = isCorrect ? 'Correct'  : 'Incorrect';
+                const statusColor = isCorrect ? '#28a745'  : '#dc3545';
+
+                let html = `
+                    <div style="${boxStyle}">
+                        <p style="font-size:1.1em; font-weight:bold; color:#333; margin-bottom:10px;">
+                            ${icon} Q${qNum}: ${data.question}
+                        </p>
+                        <p style="margin-bottom:6px; color:${statusColor}; font-weight:bold;">${statusText}</p>`;
+
+                if (!isCorrect) {
+                    html += `<p style="margin-bottom:6px; color:#721c24;"><strong>Your answer:</strong> ${userAnswerLabel}</p>`;
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Correct answer:</strong> ${data.correctLabel}</p>`;
+                } else {
+                    html += `<p style="margin-bottom:10px; color:#155724;"><strong>Your answer:</strong> ${data.correctLabel}</p>`;
+                }
+
+                html += `<p style="color:#555; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; margin:0;">
+                            <strong>Explanation:</strong> ${data.explanation}
+                         </p>
+                    </div>`;
+
+                reviewContainer.innerHTML += html;
+                qNum++;
+            }
+
+            document.getElementById('quizResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         function retakeQuiz() {
-            // Reset form
             document.getElementById('quizForm').reset();
             document.getElementById('quizForm').style.display = 'block';
             document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('answerReview').innerHTML = '';
         }
 
         // Keyboard navigation
